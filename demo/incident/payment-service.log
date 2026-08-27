@@ -1,0 +1,11 @@
+2026-08-27T09:14:58.805Z ERROR payment_id=pay-1001 Redis connection acquisition timed out
+2026-08-27T09:14:58.818Z WARN payment_id=pay-1001 retry_scheduled attempt=1
+2026-08-27T09:14:58.831Z ERROR payment_id=pay-1002 Redis connection acquisition timed out
+2026-08-27T09:14:58.844Z WARN payment_id=pay-1002 retry_scheduled attempt=1
+2026-08-27T09:14:58.857Z ERROR payment_id=pay-1003 payment failed after retries
+2026-08-27T09:14:58.870Z ERROR payment_id=pay-1004 payment failed after retries
+2026-08-27T09:14:58.883Z WARN retry storm amplified Redis pool contention
+2026-08-27T09:14:58.896Z ERROR batch_status=degraded failed_payments=47
+2026-08-27T09:14:58.909Z INFO support_callback=+1-202-555-0147 queued=true
+2026-08-27T09:14:58.922Z INFO circuit_breaker=closed threshold=50
+

@@ -1,0 +1,1 @@
+"""Safe Context Capsule construction."""

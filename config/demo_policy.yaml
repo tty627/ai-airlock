@@ -1,0 +1,15 @@
+policy:
+  name: incident-demo
+  transform:
+    pii: pseudonymize
+    secrets: redact
+    internal_ips: pseudonymize
+  block:
+    private_keys: true
+    prompt_injection: true
+    credential_values: true
+  limits:
+    max_capsule_tokens: 4000
+    max_files: 100
+    max_file_bytes: 1048576
+    max_total_bytes: 10485760

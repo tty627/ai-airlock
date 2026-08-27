@@ -1,0 +1,14 @@
+{
+  "display_name": "AI Airlock",
+  "display_description": "在本地把私有、不可信文件编译为最小安全上下文",
+  "detail_describe": "确定性 v0.1 在本地检测并移除 Secret、伪名化 PII、隔离 Prompt Injection，并仅向 Agent 输出可追溯的 Safe Context Capsule。",
+  "name": "ai-airlock",
+  "use_cases": [
+    "安全分析生产日志与配置",
+    "在 AI 分析前净化私有工作区",
+    "生成最小 Safe Context Capsule"
+  ],
+  "author": "AI Airlock Team",
+  "version": "0.1.0"
+}
+

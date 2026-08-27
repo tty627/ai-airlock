@@ -1,0 +1,3 @@
+# Runtime dependencies only. Development tools live in pyproject.toml's `dev` extra.
+PyYAML>=6.0,<7.0
+

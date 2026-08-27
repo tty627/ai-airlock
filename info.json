@@ -1,0 +1,12 @@
+{
+  "name": "ai-airlock",
+  "version": "0.1.0",
+  "stage": "deterministic",
+  "inference_mode": "deterministic_rules",
+  "venv_name": "ai-airlock",
+  "python_version": "3.12",
+  "mem_need_gb": 0.25,
+  "server_alive_timeout": 0,
+  "models": []
+}
+

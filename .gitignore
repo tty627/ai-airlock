@@ -1,0 +1,21 @@
+.DS_Store
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Runtime audit output may contain security metadata and is never source material.
+*.jsonl
+
+# Local credentials. Keep only explicit examples under version control.
+.env
+.env.*
+!.env.example
+!demo/incident/.env.example
+

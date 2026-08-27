@@ -1,0 +1,14 @@
+service:
+  name: payment-service
+  worker_count: 32
+redis:
+  endpoint: 192.0.2.44
+  port: 6379
+  pool:
+    max_connections: 100
+    acquire_timeout_ms: 250
+  retry:
+    max_attempts: 8
+    initial_backoff_ms: 10
+    max_backoff_ms: 200
+
