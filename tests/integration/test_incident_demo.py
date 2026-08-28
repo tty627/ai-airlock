@@ -44,6 +44,8 @@ def test_incident_capsule_retains_diagnostic_evidence_without_authored_summary()
     assert "100/100" in evidence
     assert "connection pool exhaustion" in evidence
     assert "retry storm" in evidence
+    assert "upstream_timeout" in evidence
+    assert "status=503" in evidence
     assert all(fact["local_ref"].startswith("L") for fact in context["facts"])
     assert not any(
         fact["text"] == "Redis pool exhaustion triggered a retry storm."

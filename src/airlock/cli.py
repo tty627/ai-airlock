@@ -7,8 +7,7 @@ import sys
 from collections.abc import Sequence
 from typing import Any, NoReturn
 
-from airlock.errors import AirlockError
-from airlock.pipeline import analyze, health, scan
+from airlock.errors import AirlockError, RuntimeUnavailableError
 from airlock.serialization import stable_json
 
 
@@ -20,6 +19,30 @@ class _UsageError(AirlockError):
 class _SafeArgumentParser(argparse.ArgumentParser):
     def error(self, message: str) -> NoReturn:  # noqa: ARG002
         raise _UsageError()
+
+
+def health() -> dict[str, Any]:
+    """Load the runtime inside ``main``'s safe exception boundary."""
+
+    from airlock.pipeline import health as pipeline_health
+
+    return pipeline_health()
+
+
+def scan(**kwargs: Any) -> dict[str, Any]:
+    """Load the runtime lazily so missing dependencies never expose a traceback."""
+
+    from airlock.pipeline import scan as pipeline_scan
+
+    return pipeline_scan(**kwargs)
+
+
+def analyze(**kwargs: Any) -> dict[str, Any]:
+    """Load the runtime lazily so missing dependencies never expose a traceback."""
+
+    from airlock.pipeline import analyze as pipeline_analyze
+
+    return pipeline_analyze(**kwargs)
 
 
 def _add_output_flag(parser: argparse.ArgumentParser) -> None:
@@ -49,6 +72,16 @@ def build_parser() -> argparse.ArgumentParser:
 
     analyze_parser = subparsers.add_parser("analyze", help="compile task-conditioned safe context")
     analyze_parser.add_argument("--task", required=True, help="downstream user task")
+    analyze_parser.add_argument(
+        "--relevance-backend",
+        choices=("lexical", "openvino"),
+        default="lexical",
+        help="explicit evidence selector; OpenVINO never falls back silently",
+    )
+    analyze_parser.add_argument(
+        "--model-dir",
+        help="prepared local OpenVINO model directory",
+    )
     _add_scan_options(analyze_parser)
     return parser
 
@@ -61,7 +94,7 @@ def _human_report(command: str, result: dict[str, Any]) -> str:
                 "AI Airlock: ok",
                 f"Version: {result['version']}",
                 f"Mode: {inference['mode']}",
-                "OpenVINO available: no",
+                f"OpenVINO available: {'yes' if inference['openvino_available'] else 'no'}",
             )
         )
 
@@ -121,6 +154,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                 path=namespace.path,
                 policy_path=namespace.policy,
                 audit_log=namespace.audit_log,
+                relevance_backend=namespace.relevance_backend,
+                model_dir=namespace.model_dir,
             )
         output = stable_json(result) if namespace.json else _human_report(command, result)
         sys.stdout.write(output + "\n")
@@ -128,6 +163,9 @@ def main(argv: Sequence[str] | None = None) -> int:
     except AirlockError as error:
         _emit_error(error, json_requested)
         return 1
+    except ModuleNotFoundError:
+        _emit_error(RuntimeUnavailableError(), json_requested)
+        return 2
     except Exception:
         error = AirlockError()
         error.code = "INTERNAL_ERROR"

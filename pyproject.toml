@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=75"]
+requires = ["setuptools>=75,<81"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,7 +7,7 @@ name = "ai-airlock"
 version = "0.1.0"
 description = "Deterministic local compiler for minimal, safe AI context capsules"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.13"
 authors = [{ name = "AI Airlock Team" }]
 dependencies = [
   "PyYAML>=6.0,<7.0",
@@ -17,6 +17,15 @@ dependencies = [
 dev = [
   "pytest>=8.3,<9.0",
   "ruff>=0.11,<1.0",
+]
+openvino = [
+  "huggingface-hub==1.28.0",
+  "numpy==2.5.2",
+  "openvino==2026.3.1",
+  "openvino-genai==2026.3.1.0",
+  "openvino-tokenizers==2026.3.1.0",
+  "tiktoken==0.14.0",
+  "transformers[sentencepiece]==5.16.1",
 ]
 
 [project.scripts]

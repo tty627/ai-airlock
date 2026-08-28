@@ -1,0 +1,838 @@
+{
+  "schema_version": "1.0",
+  "description": "Synthetic chunk-level relevance judgments for deterministic and embedding-based retrieval comparison.",
+  "label_definitions": {
+    "relevant": "The chunk contains evidence needed to answer the task or establish its likely root cause.",
+    "irrelevant": "The chunk is plausible repository or operations context but does not help answer the task."
+  },
+  "tasks": [
+    {
+      "id": "relevance_task_payment_redis_en_001",
+      "task": "Why did the payment service fail during the 09:42 incident?",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t01_redis_pool_capacity",
+          "source": "t01_redis_pool_capacity.txt",
+          "label": "relevant",
+          "text": "09:42:11 payment-api ERROR Redis connection pool reached its maximum capacity of 64; pool acquisition failed."
+        },
+        {
+          "id": "t01_payment_timeout_spike",
+          "source": "t01_payment_timeout_spike.txt",
+          "label": "relevant",
+          "text": "Payment request timeout rate increased from 1.2 percent to 37 percent between 09:42 and 09:47."
+        },
+        {
+          "id": "t01_retry_traffic_surge",
+          "source": "t01_retry_traffic_surge.txt",
+          "label": "relevant",
+          "text": "Client retry traffic rose twelvefold after Redis pool waits crossed the two-second timeout."
+        },
+        {
+          "id": "t01_worker_pool_wait",
+          "source": "t01_worker_pool_wait.txt",
+          "label": "relevant",
+          "text": "All payment workers were blocked waiting for Redis connections, so new authorization requests could not complete."
+        },
+        {
+          "id": "t01_frontend_css_build",
+          "source": "t01_frontend_css_build.txt",
+          "label": "irrelevant",
+          "text": "The storefront CSS bundle compiled successfully in 18 seconds."
+        },
+        {
+          "id": "t01_repository_license",
+          "source": "t01_repository_license.txt",
+          "label": "irrelevant",
+          "text": "The sample repository is distributed under the MIT License."
+        },
+        {
+          "id": "t01_team_roster",
+          "source": "t01_team_roster.txt",
+          "label": "irrelevant",
+          "text": "The payments team added two new on-call engineers this quarter."
+        },
+        {
+          "id": "t01_backup_success",
+          "source": "t01_backup_success.txt",
+          "label": "irrelevant",
+          "text": "The nightly object-storage backup completed successfully at 03:00."
+        },
+        {
+          "id": "t01_mobile_release",
+          "source": "t01_mobile_release.txt",
+          "label": "irrelevant",
+          "text": "Mobile application version 8.2 was submitted to the beta channel."
+        },
+        {
+          "id": "t01_analytics_refresh",
+          "source": "t01_analytics_refresh.txt",
+          "label": "irrelevant",
+          "text": "The weekly marketing analytics dashboard refreshed without errors."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_checkout_failure_zh_002",
+      "task": "为什么结账服务从 14:05 开始出现大量失败？",
+      "task_language": "zh-CN",
+      "cross_lingual": true,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t02_checkout_pool_exhausted",
+          "source": "t02_checkout_pool_exhausted.txt",
+          "label": "relevant",
+          "text": "14:05:03 checkout-service WARN Redis pool exhausted: active=80 idle=0 pending=412."
+        },
+        {
+          "id": "t02_checkout_timeout_rate",
+          "source": "t02_checkout_timeout_rate.txt",
+          "label": "relevant",
+          "text": "Checkout timeout rate climbed to 41 percent immediately after connection acquisition latency spiked."
+        },
+        {
+          "id": "t02_checkout_retry_amplification",
+          "source": "t02_checkout_retry_amplification.txt",
+          "label": "relevant",
+          "text": "Automatic retries amplified checkout traffic by 9.6 times and kept the connection pool saturated."
+        },
+        {
+          "id": "t02_checkout_recovery",
+          "source": "t02_checkout_recovery.txt",
+          "label": "relevant",
+          "text": "Errors returned to baseline after retry backoff was enabled and the Redis pool limit was increased."
+        },
+        {
+          "id": "t02_docs_spelling",
+          "source": "t02_docs_spelling.txt",
+          "label": "irrelevant",
+          "text": "Documentation spell checking reported three capitalization warnings."
+        },
+        {
+          "id": "t02_image_cache_hit",
+          "source": "t02_image_cache_hit.txt",
+          "label": "irrelevant",
+          "text": "Product image cache hit rate remained stable at 96 percent."
+        },
+        {
+          "id": "t02_email_template",
+          "source": "t02_email_template.txt",
+          "label": "irrelevant",
+          "text": "The order-confirmation email template was translated into French."
+        },
+        {
+          "id": "t02_code_coverage",
+          "source": "t02_code_coverage.txt",
+          "label": "irrelevant",
+          "text": "Unit-test line coverage increased from 82 percent to 83 percent."
+        },
+        {
+          "id": "t02_catalog_import",
+          "source": "t02_catalog_import.txt",
+          "label": "irrelevant",
+          "text": "The catalog import job processed 12,000 synthetic products successfully."
+        },
+        {
+          "id": "t02_design_tokens",
+          "source": "t02_design_tokens.txt",
+          "label": "irrelevant",
+          "text": "Design tokens for button border radii were updated in the UI package."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_kubernetes_crashloop_en_003",
+      "task": "Find the likely cause of the checkout pods entering CrashLoopBackOff after deployment.",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t03_pod_crashloop_event",
+          "source": "t03_pod_crashloop_event.txt",
+          "label": "relevant",
+          "text": "Kubernetes event: checkout-7d9f restarted six times and entered CrashLoopBackOff after release 2026.08.27."
+        },
+        {
+          "id": "t03_missing_region_error",
+          "source": "t03_missing_region_error.txt",
+          "label": "relevant",
+          "text": "Application startup failed with KeyError: required environment variable PAYMENT_REGION is missing."
+        },
+        {
+          "id": "t03_configmap_missing_key",
+          "source": "t03_configmap_missing_key.txt",
+          "label": "relevant",
+          "text": "The production checkout ConfigMap does not contain the payment_region key referenced by the deployment."
+        },
+        {
+          "id": "t03_previous_release_has_key",
+          "source": "t03_previous_release_has_key.txt",
+          "label": "relevant",
+          "text": "The previous deployment manifest populated PAYMENT_REGION; the new Helm values file removed that mapping."
+        },
+        {
+          "id": "t03_node_disk_capacity",
+          "source": "t03_node_disk_capacity.txt",
+          "label": "irrelevant",
+          "text": "Worker-node disk utilization is 44 percent with no pressure condition."
+        },
+        {
+          "id": "t03_ingress_certificate",
+          "source": "t03_ingress_certificate.txt",
+          "label": "irrelevant",
+          "text": "The ingress TLS certificate remains valid for another 73 days."
+        },
+        {
+          "id": "t03_search_index",
+          "source": "t03_search_index.txt",
+          "label": "irrelevant",
+          "text": "The product-search index refresh completed before the deployment."
+        },
+        {
+          "id": "t03_linter_warning",
+          "source": "t03_linter_warning.txt",
+          "label": "irrelevant",
+          "text": "The Python linter reported an unused import in a test helper."
+        },
+        {
+          "id": "t03_support_schedule",
+          "source": "t03_support_schedule.txt",
+          "label": "irrelevant",
+          "text": "Customer support updated its weekend staffing schedule."
+        },
+        {
+          "id": "t03_database_backup",
+          "source": "t03_database_backup.txt",
+          "label": "irrelevant",
+          "text": "The PostgreSQL backup completed and passed its checksum verification."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_memory_leak_zh_004",
+      "task": "订单服务为什么每隔大约两小时就会被系统重启？",
+      "task_language": "zh-CN",
+      "cross_lingual": true,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t04_memory_growth",
+          "source": "t04_memory_growth.txt",
+          "label": "relevant",
+          "text": "order-service resident memory grew steadily from 420 MiB to 1.9 GiB over 118 minutes without returning to baseline."
+        },
+        {
+          "id": "t04_oom_kill",
+          "source": "t04_oom_kill.txt",
+          "label": "relevant",
+          "text": "Kernel event: process order-service was killed by the OOM cgroup after exceeding the 2 GiB memory limit."
+        },
+        {
+          "id": "t04_cache_entries_unbounded",
+          "source": "t04_cache_entries_unbounded.txt",
+          "label": "relevant",
+          "text": "Heap sampling shows the in-process quote_cache retained every order identifier and had no eviction policy."
+        },
+        {
+          "id": "t04_restart_cycle",
+          "source": "t04_restart_cycle.txt",
+          "label": "relevant",
+          "text": "Container restarts align with the moment quote_cache size reaches approximately 1.4 million entries."
+        },
+        {
+          "id": "t04_cpu_normal",
+          "source": "t04_cpu_normal.txt",
+          "label": "irrelevant",
+          "text": "Average order-service CPU utilization remained below 35 percent."
+        },
+        {
+          "id": "t04_payment_latency",
+          "source": "t04_payment_latency.txt",
+          "label": "irrelevant",
+          "text": "The separate payment gateway reported a stable 80 millisecond median latency."
+        },
+        {
+          "id": "t04_marketing_export",
+          "source": "t04_marketing_export.txt",
+          "label": "irrelevant",
+          "text": "A marketing export generated a CSV containing synthetic campaign statistics."
+        },
+        {
+          "id": "t04_ui_snapshot",
+          "source": "t04_ui_snapshot.txt",
+          "label": "irrelevant",
+          "text": "Frontend visual snapshot tests passed on all supported viewport sizes."
+        },
+        {
+          "id": "t04_dns_ttl",
+          "source": "t04_dns_ttl.txt",
+          "label": "irrelevant",
+          "text": "The public DNS record uses a 300-second time to live."
+        },
+        {
+          "id": "t04_release_notes",
+          "source": "t04_release_notes.txt",
+          "label": "irrelevant",
+          "text": "Release notes mention new invoice formatting and accessibility improvements."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_ci_typescript_en_005",
+      "task": "Why did the web application's CI build fail on the latest commit?",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t05_build_exit_code",
+          "source": "t05_build_exit_code.txt",
+          "label": "relevant",
+          "text": "The npm build step exited with code 2 while running tsc --noEmit."
+        },
+        {
+          "id": "t05_typescript_error",
+          "source": "t05_typescript_error.txt",
+          "label": "relevant",
+          "text": "TypeScript error TS2339: Property totalAmount does not exist on type CheckoutResponse at src/cart/summary.ts line 48."
+        },
+        {
+          "id": "t05_schema_renamed",
+          "source": "t05_schema_renamed.txt",
+          "label": "relevant",
+          "text": "The generated API schema renamed CheckoutResponse.totalAmount to total_amount in the latest commit."
+        },
+        {
+          "id": "t05_stale_client_code",
+          "source": "t05_stale_client_code.txt",
+          "label": "relevant",
+          "text": "summary.ts still references the old camelCase field, causing compile-time type checking to fail."
+        },
+        {
+          "id": "t05_unit_tests_passed",
+          "source": "t05_unit_tests_passed.txt",
+          "label": "irrelevant",
+          "text": "The backend Python unit tests completed with no failures."
+        },
+        {
+          "id": "t05_container_scan",
+          "source": "t05_container_scan.txt",
+          "label": "irrelevant",
+          "text": "The container image scan found no critical operating-system packages."
+        },
+        {
+          "id": "t05_docs_preview",
+          "source": "t05_docs_preview.txt",
+          "label": "irrelevant",
+          "text": "The documentation preview deployed to its temporary URL."
+        },
+        {
+          "id": "t05_runner_disk",
+          "source": "t05_runner_disk.txt",
+          "label": "irrelevant",
+          "text": "The CI runner had 61 GiB of free disk space during the job."
+        },
+        {
+          "id": "t05_dependency_audit",
+          "source": "t05_dependency_audit.txt",
+          "label": "irrelevant",
+          "text": "The dependency audit reported one low-severity advisory in a development-only package."
+        },
+        {
+          "id": "t05_branch_name",
+          "source": "t05_branch_name.txt",
+          "label": "irrelevant",
+          "text": "The build ran from branch feature/synthetic-cart-copy."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_postgres_lock_en_006",
+      "task": "Explain the sudden PostgreSQL latency increase affecting order creation.",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t06_order_insert_wait",
+          "source": "t06_order_insert_wait.txt",
+          "label": "relevant",
+          "text": "Order INSERT statements spent up to 28 seconds waiting on a row-level transaction lock."
+        },
+        {
+          "id": "t06_open_transaction",
+          "source": "t06_open_transaction.txt",
+          "label": "relevant",
+          "text": "Session 8142 remained idle in transaction for 31 minutes after updating the inventory_reservations table."
+        },
+        {
+          "id": "t06_blocking_pid",
+          "source": "t06_blocking_pid.txt",
+          "label": "relevant",
+          "text": "pg_stat_activity identified session 8142 as the blocker for 186 order-creation sessions."
+        },
+        {
+          "id": "t06_latency_recovered",
+          "source": "t06_latency_recovered.txt",
+          "label": "relevant",
+          "text": "Order latency returned to normal immediately after the stale transaction was rolled back."
+        },
+        {
+          "id": "t06_replica_backup",
+          "source": "t06_replica_backup.txt",
+          "label": "irrelevant",
+          "text": "A read-replica base backup completed four hours before the incident."
+        },
+        {
+          "id": "t06_table_comments",
+          "source": "t06_table_comments.txt",
+          "label": "irrelevant",
+          "text": "Database table comments were added for the analytics schema."
+        },
+        {
+          "id": "t06_cache_memory",
+          "source": "t06_cache_memory.txt",
+          "label": "irrelevant",
+          "text": "Redis memory utilization was 38 percent and evictions remained zero."
+        },
+        {
+          "id": "t06_frontend_latency",
+          "source": "t06_frontend_latency.txt",
+          "label": "irrelevant",
+          "text": "Static JavaScript assets loaded from the CDN in 45 milliseconds."
+        },
+        {
+          "id": "t06_timezone_setting",
+          "source": "t06_timezone_setting.txt",
+          "label": "irrelevant",
+          "text": "The reporting database displays timestamps in UTC."
+        },
+        {
+          "id": "t06_extension_upgrade",
+          "source": "t06_extension_upgrade.txt",
+          "label": "irrelevant",
+          "text": "The staging database upgraded a text-search extension last week."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_kafka_lag_zh_007",
+      "task": "为什么库存事件出现了持续增长的消费积压？",
+      "task_language": "zh-CN",
+      "cross_lingual": true,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t07_consumer_lag_growth",
+          "source": "t07_consumer_lag_growth.txt",
+          "label": "relevant",
+          "text": "Kafka consumer lag for inventory-events increased from 300 to 840,000 messages in 22 minutes."
+        },
+        {
+          "id": "t07_poison_message",
+          "source": "t07_poison_message.txt",
+          "label": "relevant",
+          "text": "Consumer logs repeatedly failed on partition 7 offset 55120 because the event omitted the required sku field."
+        },
+        {
+          "id": "t07_no_dead_letter",
+          "source": "t07_no_dead_letter.txt",
+          "label": "relevant",
+          "text": "The consumer retried the malformed event indefinitely because no dead-letter policy was configured."
+        },
+        {
+          "id": "t07_partition_stalled",
+          "source": "t07_partition_stalled.txt",
+          "label": "relevant",
+          "text": "Partition 7 made no offset progress until the malformed synthetic event was skipped."
+        },
+        {
+          "id": "t07_broker_disk",
+          "source": "t07_broker_disk.txt",
+          "label": "irrelevant",
+          "text": "Kafka broker disk utilization remained below 52 percent on every node."
+        },
+        {
+          "id": "t07_topic_retention",
+          "source": "t07_topic_retention.txt",
+          "label": "irrelevant",
+          "text": "The audit-events topic retains records for seven days."
+        },
+        {
+          "id": "t07_product_images",
+          "source": "t07_product_images.txt",
+          "label": "irrelevant",
+          "text": "Product image thumbnails were regenerated at three resolutions."
+        },
+        {
+          "id": "t07_schema_docs",
+          "source": "t07_schema_docs.txt",
+          "label": "irrelevant",
+          "text": "Schema documentation now includes examples for warehouse locations."
+        },
+        {
+          "id": "t07_email_queue",
+          "source": "t07_email_queue.txt",
+          "label": "irrelevant",
+          "text": "The transactional-email queue contained twelve pending messages."
+        },
+        {
+          "id": "t07_feature_flag",
+          "source": "t07_feature_flag.txt",
+          "label": "irrelevant",
+          "text": "A storefront color experiment was enabled for five percent of synthetic users."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_tls_expiry_en_008",
+      "task": "Determine why API clients began rejecting the public endpoint at midnight UTC.",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t08_tls_verify_failure",
+          "source": "t08_tls_verify_failure.txt",
+          "label": "relevant",
+          "text": "Clients reported TLS verification failed: certificate has expired when connecting to api.example.invalid."
+        },
+        {
+          "id": "t08_certificate_not_after",
+          "source": "t08_certificate_not_after.txt",
+          "label": "relevant",
+          "text": "The endpoint certificate NotAfter timestamp was 2026-08-27T00:00:00Z."
+        },
+        {
+          "id": "t08_renewal_job_failed",
+          "source": "t08_renewal_job_failed.txt",
+          "label": "relevant",
+          "text": "The scheduled certificate renewal job failed because its DNS challenge record was never created."
+        },
+        {
+          "id": "t08_new_certificate_recovery",
+          "source": "t08_new_certificate_recovery.txt",
+          "label": "relevant",
+          "text": "Client success rate recovered after a newly issued certificate was installed on the ingress."
+        },
+        {
+          "id": "t08_api_cpu",
+          "source": "t08_api_cpu.txt",
+          "label": "irrelevant",
+          "text": "API server CPU utilization was 21 percent at midnight UTC."
+        },
+        {
+          "id": "t08_database_connections",
+          "source": "t08_database_connections.txt",
+          "label": "irrelevant",
+          "text": "Database connections remained below half of the configured limit."
+        },
+        {
+          "id": "t08_dark_mode",
+          "source": "t08_dark_mode.txt",
+          "label": "irrelevant",
+          "text": "Dark-mode icons were added to the mobile settings screen."
+        },
+        {
+          "id": "t08_log_rotation",
+          "source": "t08_log_rotation.txt",
+          "label": "irrelevant",
+          "text": "Application logs rotate daily and retain seven compressed archives."
+        },
+        {
+          "id": "t08_readme_badge",
+          "source": "t08_readme_badge.txt",
+          "label": "irrelevant",
+          "text": "The README build-status badge was updated to use a new image URL."
+        },
+        {
+          "id": "t08_worker_deploy",
+          "source": "t08_worker_deploy.txt",
+          "label": "irrelevant",
+          "text": "A background invoice worker deployed successfully at 23:30 UTC."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_frontend_blank_en_009",
+      "task": "Why did users see a blank page immediately after the frontend release?",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t09_browser_chunk_error",
+          "source": "t09_browser_chunk_error.txt",
+          "label": "relevant",
+          "text": "Browser console: ChunkLoadError loading /assets/app.8fa1.js after the release."
+        },
+        {
+          "id": "t09_html_old_asset",
+          "source": "t09_html_old_asset.txt",
+          "label": "relevant",
+          "text": "The CDN served cached index.html that referenced app.8fa1.js from the previous build."
+        },
+        {
+          "id": "t09_asset_removed",
+          "source": "t09_asset_removed.txt",
+          "label": "relevant",
+          "text": "Deployment cleanup removed old JavaScript assets before cached HTML documents expired."
+        },
+        {
+          "id": "t09_cache_purge_recovery",
+          "source": "t09_cache_purge_recovery.txt",
+          "label": "relevant",
+          "text": "The blank page stopped occurring after index.html was purged from the CDN cache."
+        },
+        {
+          "id": "t09_api_health",
+          "source": "t09_api_health.txt",
+          "label": "irrelevant",
+          "text": "The backend health endpoint returned HTTP 200 throughout the release."
+        },
+        {
+          "id": "t09_database_query",
+          "source": "t09_database_query.txt",
+          "label": "irrelevant",
+          "text": "Median database query duration remained at 14 milliseconds."
+        },
+        {
+          "id": "t09_translation_update",
+          "source": "t09_translation_update.txt",
+          "label": "irrelevant",
+          "text": "The release added German translations for account preferences."
+        },
+        {
+          "id": "t09_test_users",
+          "source": "t09_test_users.txt",
+          "label": "irrelevant",
+          "text": "Synthetic test accounts were reset before the staging test run."
+        },
+        {
+          "id": "t09_worker_queue",
+          "source": "t09_worker_queue.txt",
+          "label": "irrelevant",
+          "text": "The invoice worker queue depth was zero after the release."
+        },
+        {
+          "id": "t09_license_header",
+          "source": "t09_license_header.txt",
+          "label": "irrelevant",
+          "text": "A missing license header was added to a development script."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_disk_full_en_010",
+      "task": "Identify why image uploads started returning HTTP 500 errors.",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t10_upload_write_error",
+          "source": "t10_upload_write_error.txt",
+          "label": "relevant",
+          "text": "image-service ERROR write /var/lib/images/tmp/upload-1842: no space left on device."
+        },
+        {
+          "id": "t10_volume_full",
+          "source": "t10_volume_full.txt",
+          "label": "relevant",
+          "text": "The image volume reached 100 percent utilization at 18:16, matching the first HTTP 500 response."
+        },
+        {
+          "id": "t10_orphan_thumbnails",
+          "source": "t10_orphan_thumbnails.txt",
+          "label": "relevant",
+          "text": "A disabled cleanup job left 2.3 million orphaned thumbnail files on the image volume."
+        },
+        {
+          "id": "t10_cleanup_recovery",
+          "source": "t10_cleanup_recovery.txt",
+          "label": "relevant",
+          "text": "Uploads succeeded after orphaned thumbnails were removed and free space returned above 20 percent."
+        },
+        {
+          "id": "t10_database_storage",
+          "source": "t10_database_storage.txt",
+          "label": "irrelevant",
+          "text": "The database volume had 340 GiB of free space."
+        },
+        {
+          "id": "t10_image_dimensions",
+          "source": "t10_image_dimensions.txt",
+          "label": "irrelevant",
+          "text": "The style guide recommends 1200 by 1200 pixel product images."
+        },
+        {
+          "id": "t10_cdn_hit_rate",
+          "source": "t10_cdn_hit_rate.txt",
+          "label": "irrelevant",
+          "text": "CDN cache hit rate was 94 percent for existing images."
+        },
+        {
+          "id": "t10_auth_success",
+          "source": "t10_auth_success.txt",
+          "label": "irrelevant",
+          "text": "Authentication succeeded for all synthetic upload test accounts."
+        },
+        {
+          "id": "t10_metadata_schema",
+          "source": "t10_metadata_schema.txt",
+          "label": "irrelevant",
+          "text": "Image metadata schema documentation gained an optional alt_text field."
+        },
+        {
+          "id": "t10_mobile_cropper",
+          "source": "t10_mobile_cropper.txt",
+          "label": "irrelevant",
+          "text": "The mobile image cropper passed its user-interface tests."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_dns_failure_zh_011",
+      "task": "内部报表服务为什么突然无法访问用户资料接口？",
+      "task_language": "zh-CN",
+      "cross_lingual": true,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t11_profile_dns_error",
+          "source": "t11_profile_dns_error.txt",
+          "label": "relevant",
+          "text": "report-service ERROR request failed: lookup profile-api.service.internal returned NXDOMAIN."
+        },
+        {
+          "id": "t11_service_record_deleted",
+          "source": "t11_service_record_deleted.txt",
+          "label": "relevant",
+          "text": "The profile-api.service.internal DNS record was deleted during an infrastructure cleanup at 11:20."
+        },
+        {
+          "id": "t11_direct_ip_success",
+          "source": "t11_direct_ip_success.txt",
+          "label": "relevant",
+          "text": "A request sent directly to the profile API service IP succeeded, while hostname resolution failed."
+        },
+        {
+          "id": "t11_dns_restore_recovery",
+          "source": "t11_dns_restore_recovery.txt",
+          "label": "relevant",
+          "text": "Report generation recovered after the missing internal DNS record was restored."
+        },
+        {
+          "id": "t11_profile_cpu",
+          "source": "t11_profile_cpu.txt",
+          "label": "irrelevant",
+          "text": "The profile API used 16 percent CPU during the incident."
+        },
+        {
+          "id": "t11_report_font",
+          "source": "t11_report_font.txt",
+          "label": "irrelevant",
+          "text": "The PDF report template switched to a new open-source font."
+        },
+        {
+          "id": "t11_database_backup",
+          "source": "t11_database_backup.txt",
+          "label": "irrelevant",
+          "text": "User-profile database backups passed restore verification."
+        },
+        {
+          "id": "t11_dashboard_color",
+          "source": "t11_dashboard_color.txt",
+          "label": "irrelevant",
+          "text": "Dashboard charts use a revised accessible color palette."
+        },
+        {
+          "id": "t11_batch_duration",
+          "source": "t11_batch_duration.txt",
+          "label": "irrelevant",
+          "text": "The nightly billing batch completed in 19 minutes."
+        },
+        {
+          "id": "t11_log_retention",
+          "source": "t11_log_retention.txt",
+          "label": "irrelevant",
+          "text": "Report-service logs are retained for fourteen days."
+        }
+      ]
+    },
+    {
+      "id": "relevance_task_jwt_clock_en_012",
+      "task": "What caused the spike in JWT authentication failures after the node replacement?",
+      "task_language": "en",
+      "cross_lingual": false,
+      "recommended_k": 4,
+      "chunks": [
+        {
+          "id": "t12_jwt_not_yet_valid",
+          "source": "t12_jwt_not_yet_valid.txt",
+          "label": "relevant",
+          "text": "auth-gateway rejected tokens with error JWT not yet valid: nbf is 287 seconds in the future."
+        },
+        {
+          "id": "t12_node_clock_offset",
+          "source": "t12_node_clock_offset.txt",
+          "label": "relevant",
+          "text": "The replacement node clock was 291 seconds behind the cluster time reference."
+        },
+        {
+          "id": "t12_timesync_inactive",
+          "source": "t12_timesync_inactive.txt",
+          "label": "relevant",
+          "text": "Time synchronization was inactive on the new node because the NTP service was not enabled in its image."
+        },
+        {
+          "id": "t12_auth_recovery",
+          "source": "t12_auth_recovery.txt",
+          "label": "relevant",
+          "text": "JWT failures stopped after the node clock synchronized with the cluster time source."
+        },
+        {
+          "id": "t12_signing_key_age",
+          "source": "t12_signing_key_age.txt",
+          "label": "irrelevant",
+          "text": "The synthetic JWT signing key is scheduled for routine rotation next month."
+        },
+        {
+          "id": "t12_auth_cpu",
+          "source": "t12_auth_cpu.txt",
+          "label": "irrelevant",
+          "text": "Authentication gateway CPU utilization remained below 25 percent."
+        },
+        {
+          "id": "t12_login_copy",
+          "source": "t12_login_copy.txt",
+          "label": "irrelevant",
+          "text": "The login page updated its password-reset help text."
+        },
+        {
+          "id": "t12_database_index",
+          "source": "t12_database_index.txt",
+          "label": "irrelevant",
+          "text": "A new index improved account-history queries in staging."
+        },
+        {
+          "id": "t12_session_retention",
+          "source": "t12_session_retention.txt",
+          "label": "irrelevant",
+          "text": "Anonymous web sessions expire after thirty minutes of inactivity."
+        },
+        {
+          "id": "t12_mobile_biometrics",
+          "source": "t12_mobile_biometrics.txt",
+          "label": "irrelevant",
+          "text": "The mobile application added a synthetic biometric-login test fixture."
+        }
+      ]
+    }
+  ]
+}

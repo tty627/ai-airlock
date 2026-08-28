@@ -137,6 +137,8 @@ def _safe_relative(path: Path, root: Path) -> str:
     try:
         resolved = path.resolve(strict=True)
         relative = resolved.relative_to(root)
+    except PermissionError:
+        raise InputIncomplete("INPUT_PERMISSION_DENIED") from None
     except (OSError, RuntimeError, ValueError):
         raise InputIncomplete() from None
     return relative.as_posix()
@@ -146,7 +148,9 @@ def _collect_directory(root_path: Path, root: Path) -> tuple[list[tuple[str, Pat
     candidates: list[tuple[str, Path]] = []
     skipped = 0
 
-    def abort_walk(_error: OSError) -> None:
+    def abort_walk(error: OSError) -> None:
+        if isinstance(error, PermissionError):
+            raise InputIncomplete("INPUT_PERMISSION_DENIED")
         raise InputIncomplete()
 
     try:
@@ -170,6 +174,8 @@ def _collect_directory(root_path: Path, root: Path) -> tuple[list[tuple[str, Pat
                 candidate = directory_path / name
                 try:
                     metadata = candidate.lstat()
+                except PermissionError:
+                    raise InputIncomplete("INPUT_PERMISSION_DENIED") from None
                 except OSError:
                     raise InputIncomplete() from None
 
@@ -187,6 +193,8 @@ def _collect_directory(root_path: Path, root: Path) -> tuple[list[tuple[str, Pat
                     skipped += 1
     except InputIncomplete:
         raise
+    except PermissionError:
+        raise InputIncomplete("INPUT_PERMISSION_DENIED") from None
     except OSError:
         raise InputIncomplete() from None
 
@@ -212,6 +220,8 @@ def _read_utf8_file(path: Path, limits: IngestionLimits) -> tuple[str, int]:
             after = os.fstat(stream.fileno())
     except InputIncomplete:
         raise
+    except PermissionError:
+        raise InputIncomplete("INPUT_PERMISSION_DENIED") from None
     except OSError:
         raise InputIncomplete() from None
     finally:
@@ -263,6 +273,10 @@ def load_path(
         resolved = requested.resolve(strict=True)
     except InputIncomplete:
         raise
+    except FileNotFoundError:
+        raise InputIncomplete("INPUT_PATH_NOT_FOUND") from None
+    except PermissionError:
+        raise InputIncomplete("INPUT_PERMISSION_DENIED") from None
     except (OSError, RuntimeError):
         raise InputIncomplete() from None
 

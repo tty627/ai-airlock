@@ -1,7 +1,7 @@
 {
   "name": "ai-airlock",
   "version": "0.1.0",
-  "stage": "deterministic",
+  "stage": "deterministic_with_opt_in_openvino_challenger",
   "inference_mode": "deterministic_rules",
   "venv_name": "ai-airlock",
   "python_version": "3.12",
@@ -9,4 +9,3 @@
   "server_alive_timeout": 0,
   "models": []
 }
-

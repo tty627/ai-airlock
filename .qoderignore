@@ -1,0 +1,3 @@
+# Keep the flagship raw incident fixture out of Qoder's automatic codebase index.
+# This is an indexing guard, not an operating-system access-control boundary.
+demo/incident/

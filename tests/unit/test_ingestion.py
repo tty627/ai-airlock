@@ -99,11 +99,11 @@ def test_unknown_single_file_is_counted_as_skipped(tmp_path: Path) -> None:
     assert result.skipped_files == 1
 
 
-def test_missing_or_symlink_root_has_fixed_safe_error(tmp_path: Path) -> None:
+def test_missing_root_has_specific_safe_error(tmp_path: Path) -> None:
     missing = tmp_path / "private-name-that-must-not-leak"
     with pytest.raises(InputIncomplete) as captured:
         load_path(missing)
-    assert str(captured.value) == "INPUT_INCOMPLETE"
+    assert str(captured.value) == "INPUT_PATH_NOT_FOUND"
     assert "private-name" not in str(captured.value)
 
 
@@ -120,7 +120,7 @@ def test_supported_file_read_error_aborts_without_echoing_os_error(
     with pytest.raises(InputIncomplete) as captured:
         load_path(tmp_path)
 
-    assert str(captured.value) == "INPUT_INCOMPLETE"
+    assert str(captured.value) == "INPUT_PERMISSION_DENIED"
     assert "customer" not in str(captured.value)
 
 

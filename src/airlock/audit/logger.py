@@ -31,6 +31,7 @@ def build_audit_event(
     risk_level: str,
     security_counts: dict[str, int],
     duration_ms: int,
+    inference_mode: str = "deterministic_rules",
 ) -> dict[str, Any]:
     return {
         "schema_version": "0.1",
@@ -42,7 +43,7 @@ def build_audit_event(
         "decision": decision,
         "risk_level": risk_level,
         "security": security_counts,
-        "inference_mode": "deterministic_rules",
+        "inference_mode": inference_mode,
         "duration_ms": max(0, duration_ms),
     }
 

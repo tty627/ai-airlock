@@ -1,5 +1,10 @@
 # AI Airlock — Codex Project Spec
 
+> **历史设计草案（非运行合同）**：本文保留早期目标、示例和备选方案，其中的 JSON、命令、
+> fallback 与目录结构可能已过时。评委/外部用户应以 [`README.md`](README.md)、
+> [`SKILL.md`](SKILL.md)、[`docs/qoder_acceptance.md`](docs/qoder_acceptance.md) 和公开 CLI
+> `python -m airlock.cli --help` 为当前规范；本文中的示例数字不得作为 release claim。
+
 > **定位**：Local Context Gateway / Context Compiler for AI Agents  
 > **比赛**：ModelScope × Intel × OpenVINO Production AI Skills 2026  
 > **主验证宿主**：Qoder  

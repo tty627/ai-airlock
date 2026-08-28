@@ -23,6 +23,7 @@ def _build():
         ],
         original_bytes=2000,
         max_capsule_tokens=1000,
+        sensitive_values=(),
     )
 
 
@@ -46,6 +47,7 @@ def test_capsule_reports_no_relevant_context_without_fallback_disclosure() -> No
         evidence=[],
         original_bytes=100,
         max_capsule_tokens=1000,
+        sensitive_values=(),
         coverage_warning="NO_RELEVANT_CONTEXT",
     )
 

@@ -18,6 +18,26 @@ class InputIncompleteError(AirlockError):
     public_message = "The input could not be scanned completely; no result was released."
 
 
+class InputPathNotFoundError(AirlockError):
+    code = "INPUT_PATH_NOT_FOUND"
+    public_message = "The requested input path does not exist."
+
+
+class InputPermissionDeniedError(AirlockError):
+    code = "INPUT_PERMISSION_DENIED"
+    public_message = "AI Airlock does not have permission to read the complete input."
+
+
+class AuditLogWriteError(AirlockError):
+    code = "AUDIT_LOG_WRITE_FAILED"
+    public_message = "AI Airlock could not write the requested audit log."
+
+
+class RuntimeUnavailableError(AirlockError):
+    code = "AIRLOCK_RUNTIME_UNAVAILABLE"
+    public_message = "The AI Airlock runtime or a required dependency is unavailable."
+
+
 class ConfigurationError(AirlockError):
     code = "INVALID_CONFIGURATION"
     public_message = "The policy configuration is invalid."
@@ -41,3 +61,8 @@ class PolicyLimitError(AirlockError):
 class LeakageGuardError(AirlockError):
     code = "LEAKAGE_GUARD_FAILED"
     public_message = "The output safety check failed; no result was released."
+
+
+class InferenceUnavailableError(AirlockError):
+    code = "INFERENCE_UNAVAILABLE"
+    public_message = "The requested local inference backend is unavailable."

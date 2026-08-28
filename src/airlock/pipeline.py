@@ -12,14 +12,35 @@ from typing import Any
 from airlock.audit import append_audit_event, build_audit_event
 from airlock.audit.logger import validate_audit_path
 from airlock.capsule.builder import Evidence, build_capsule
-from airlock.capsule.leak_guard import enforce_no_sensitive_leaks
+from airlock.capsule.leak_guard import (
+    enforce_no_sensitive_leaks,
+    enforce_public_payload_is_safe,
+    inspect_public_payload,
+)
 from airlock.capsule.pseudonymizer import ConsistentPseudonymizer
 from airlock.capsule.redactor import transform_text
 from airlock.detectors import InternalFinding, Sensitivity, detect_all
-from airlock.errors import ConfigurationError, InputIncompleteError
+from airlock.errors import (
+    AuditLogWriteError,
+    ConfigurationError,
+    InferenceUnavailableError,
+    InputIncompleteError,
+    InputPathNotFoundError,
+    InputPermissionDeniedError,
+    LeakageGuardError,
+)
 from airlock.ingestion import IngestionResult, InputIncomplete, load_path
 from airlock.policy import Policy, PolicyError, load_policy
-from airlock.relevance import RankingError, rank_evidence
+from airlock.relevance import (
+    INFERENCE_MODE,
+    SELECTION_METHOD,
+    OpenVINORankingUnavailable,
+    RankingError,
+    openvino_inference_metadata,
+    openvino_ready,
+    rank_evidence,
+    rank_openvino_evidence,
+)
 from airlock.schemas import (
     SCHEMA_VERSION,
     Decision,
@@ -67,6 +88,16 @@ def _inference_metadata() -> dict[str, Any]:
         "mode": "deterministic_rules",
         "warning": "OpenVINO semantic inference is not enabled in v0.1.",
     }
+
+
+def _health_inference_metadata() -> dict[str, Any]:
+    if openvino_ready():
+        return {
+            "openvino_available": True,
+            "mode": "deterministic_rules",
+            "warning": "OpenVINO embedding challenger is ready and remains opt-in.",
+        }
+    return _inference_metadata()
 
 
 def _security_summary(findings: tuple[InternalFinding, ...]) -> SecuritySummary:
@@ -151,7 +182,11 @@ def _prepare_workspace(
 ) -> _PreparedWorkspace:
     try:
         ingestion = load_path(path, policy.limits.to_ingestion_limits())
-    except InputIncomplete:
+    except InputIncomplete as error:
+        if error.code == "INPUT_PATH_NOT_FOUND":
+            raise InputPathNotFoundError() from None
+        if error.code == "INPUT_PERMISSION_DENIED":
+            raise InputPermissionDeniedError() from None
         raise InputIncompleteError() from None
 
     all_findings: list[InternalFinding] = []
@@ -238,6 +273,7 @@ def _finalize(
     risk_level: RiskLevel,
     security: SecuritySummary,
     started_ns: int,
+    inference_mode: str = "deterministic_rules",
 ) -> dict[str, Any]:
     audit_event = build_audit_event(
         operation=operation,
@@ -248,13 +284,25 @@ def _finalize(
         risk_level=risk_level.value,
         security_counts=asdict(security),
         duration_ms=(monotonic_ns() - started_ns) // 1_000_000,
+        inference_mode=inference_mode,
     )
     payloads = [stable_json(result)]
     if audit_path is not None:
         payloads.append(stable_json(audit_event))
+    inspection = inspect_public_payload(result, sensitive_values)
+    privacy = result.get("privacy")
+    if isinstance(privacy, dict) and privacy.get("raw_sensitive_spans_forwarded") != (
+        inspection.raw_sensitive_spans_forwarded
+    ):
+        raise LeakageGuardError()
+    enforce_public_payload_is_safe(result, sensitive_values)
+    enforce_public_payload_is_safe(audit_event, sensitive_values)
     enforce_no_sensitive_leaks(payloads, sensitive_values)
     if audit_path is not None:
-        append_audit_event(audit_path, audit_event)
+        try:
+            append_audit_event(audit_path, audit_event)
+        except OSError:
+            raise AuditLogWriteError() from None
     return result
 
 
@@ -305,8 +353,14 @@ def analyze(
     path: str | Path,
     policy_path: str | Path | None = None,
     audit_log: str | Path | None = None,
+    relevance_backend: str = "lexical",
+    model_dir: str | Path | None = None,
 ) -> dict[str, Any]:
     started_ns = monotonic_ns()
+    if not isinstance(task, str) or not task.strip():
+        raise ConfigurationError()
+    if relevance_backend not in {"lexical", "openvino"}:
+        raise ConfigurationError()
     policy = _policy(policy_path)
     audit_path = _audit_target(audit_log, path)
     pseudonymizer = ConsistentPseudonymizer()
@@ -340,16 +394,38 @@ def analyze(
 
     evidence: list[Evidence] = []
     coverage_warning: str | None = None
+    selection_method = "deterministic_lexical_v1"
+    inference = _inference_metadata()
+    inference_mode = "deterministic_rules"
     if decision is Decision.BLOCK:
         coverage_warning = "TASK_BLOCKED" if task_blocked else "NO_SAFE_CONTEXT"
     else:
         try:
-            ranked = rank_evidence(
-                safe_task_result.text,
-                workspace.transformed_documents,
-                max_tokens=policy.limits.max_capsule_tokens,
-                reserved_tokens=min(1000, policy.limits.max_capsule_tokens // 2),
-            )
+            ranking_kwargs = {
+                "max_facts": 8,
+                "max_tokens": policy.limits.max_capsule_tokens,
+                "reserved_tokens": min(1000, policy.limits.max_capsule_tokens // 2),
+            }
+            if relevance_backend == "openvino":
+                ranked = rank_openvino_evidence(
+                    safe_task_result.text,
+                    workspace.transformed_documents,
+                    model_dir=model_dir,
+                    **ranking_kwargs,
+                )
+                selection_method = SELECTION_METHOD
+                inference = openvino_inference_metadata(
+                    chunks_processed=ranked.candidate_windows,
+                )
+                inference_mode = INFERENCE_MODE
+            else:
+                ranked = rank_evidence(
+                    safe_task_result.text,
+                    workspace.transformed_documents,
+                    **ranking_kwargs,
+                )
+        except OpenVINORankingUnavailable:
+            raise InferenceUnavailableError() from None
         except RankingError:
             raise InputIncompleteError() from None
         evidence = [
@@ -374,7 +450,10 @@ def analyze(
         evidence=evidence,
         original_bytes=workspace.ingestion.total_bytes,
         max_capsule_tokens=policy.limits.max_capsule_tokens,
+        sensitive_values=all_sensitive_values,
         coverage_warning=coverage_warning,
+        selection_method=selection_method,
+        inference=inference,
     )
     return _finalize(
         result=capsule.to_dict(),
@@ -386,6 +465,7 @@ def analyze(
         risk_level=risk_level,
         security=workspace.security,
         started_ns=started_ns,
+        inference_mode=inference_mode,
     )
 
 
@@ -395,5 +475,5 @@ def health() -> dict[str, Any]:
         "status": "ok",
         "version": "0.1.0",
         "commands": ["health", "scan", "analyze"],
-        "inference": _inference_metadata(),
+        "inference": _health_inference_metadata(),
     }

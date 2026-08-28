@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package and development dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install ".[dev]"
+
+      - name: Run tests
+        run: pytest
+
+      - name: Run Ruff
+        run: |
+          ruff check .
+          ruff format --check .
+
+      - name: Run benchmark smoke test
+        run: python benchmark/run_benchmark.py --smoke

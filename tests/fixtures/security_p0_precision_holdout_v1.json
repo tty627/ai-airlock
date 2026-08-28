@@ -1,0 +1,192 @@
+{
+  "schema_version": "1.0",
+  "fixture_id": "security_p0_precision_holdout_v1",
+  "description": "Frozen benign-negative and adjacent-positive oracle for credential state values and symbolic TOKEN constants. It is independent from benchmark data and production detectors.",
+  "benign_assignment_cases": [
+    "token=disabled",
+    "{\"token\":\"disabled\"}",
+    "{\"token\":\"disa\\u0062led\"}",
+    "TOKEN=NULL",
+    "authToken=none",
+    "githubToken=unset",
+    "clientSecret=undefined",
+    "password=disabled",
+    "dbPassword=\"not configured\"",
+    "api_key=<unset>",
+    "AWS_SECRET_ACCESS_KEY=missing",
+    "refresh_token=absent",
+    "accessToken=unknown",
+    "token=redacted",
+    "token=masked",
+    "token=false",
+    "token=off",
+    "token=NOT_CONFIGURED",
+    "password: ~"
+  ],
+  "benign_symbol_cases": [
+    "ERROR_TOKEN_404NOTFOUND",
+    "ERR_TOKEN_500FAILED",
+    "HTTP_TOKEN_401UNAUTHORIZED",
+    "STATUS_TOKEN_503UNAVAILABLE",
+    "RESULT_TOKEN_200OK",
+    "CODE_TOKEN_403FORBIDDEN",
+    "EVENT_TOKEN_410GONE",
+    "RESPONSE_TOKEN_429RATELIMITED",
+    "PAYMENT_TOKEN_404NOTFOUND",
+    "ERROR_SECRET_500FAILED",
+    "ERROR_SECRET_E500FAILED",
+    "HTTP_PASSWORD_E401UNAUTHORIZED",
+    "PASSWORD_POLICY_SHA256"
+  ],
+  "positive_cases": [
+    {
+      "id": "ordinary_token_assignment",
+      "text": "token=ordinary-random-value-123456",
+      "value": "ordinary-random-value-123456",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "state_word_inside_real_token",
+      "text": "{\"token\":\"disabled-Z7K4P9X2\"}",
+      "value": "disabled-Z7K4P9X2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "camel_provider_token_assignment",
+      "text": "githubToken=ghpSyntheticR7M4V9Q2Z5",
+      "value": "ghpSyntheticR7M4V9Q2Z5",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "state_phrase_inside_real_password",
+      "text": "password=not-configured-R7M4V9Q2",
+      "value": "not-configured-R7M4V9Q2",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "error_named_token_assignment",
+      "text": "ERROR_TOKEN=R7M4V9Q2Z5",
+      "value": "R7M4V9Q2Z5",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "symbol_constant_in_assignment_is_conservatively_redacted",
+      "text": "token=ERROR_TOKEN_404NOTFOUND",
+      "value": "ERROR_TOKEN_404NOTFOUND",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "prefixed_status_secret_in_assignment",
+      "text": "clientSecret=ERROR_SECRET_E500FAILED",
+      "value": "ERROR_SECRET_E500FAILED",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "prefixed_status_password_in_assignment",
+      "text": "dbPassword=HTTP_PASSWORD_E401UNAUTHORIZED",
+      "value": "HTTP_PASSWORD_E401UNAUTHORIZED",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "status_word_inside_low_transition_token",
+      "text": "token=REAL_SECRET_DISABLED_123456",
+      "value": "REAL_SECRET_DISABLED_123456",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "status_word_inside_low_transition_password",
+      "text": "password=prod_password_unset_2026",
+      "value": "prod_password_unset_2026",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "state_word_with_arbitrary_separators_is_not_allowlisted",
+      "text": "password=not/configured/value-2026",
+      "value": "not/configured/value-2026",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "yaml_null_prefix_inside_real_password",
+      "text": "password: ~real-secret-123",
+      "value": "~real-secret-123",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "task_specific_token_marker",
+      "text": "FINAL_REVIEW_TOKEN_Z7K4P9X2",
+      "value": "FINAL_REVIEW_TOKEN_Z7K4P9X2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "non_error_namespace_token_marker",
+      "text": "PAYMENT_TOKEN_Z7K4P9X2",
+      "value": "PAYMENT_TOKEN_Z7K4P9X2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "error_recovery_high_entropy_marker",
+      "text": "ERROR_RECOVERY_TOKEN_Z7K4P9X2",
+      "value": "ERROR_RECOVERY_TOKEN_Z7K4P9X2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "error_namespace_high_entropy_marker",
+      "text": "ERROR_TOKEN_Z7K4P9X2",
+      "value": "ERROR_TOKEN_Z7K4P9X2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "status_review_high_entropy_marker",
+      "text": "STATUS_REVIEW_TOKEN_M8Q4Z7N2",
+      "value": "STATUS_REVIEW_TOKEN_M8Q4Z7N2",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "labeled_secret_marker",
+      "text": "INTEGRATOR_SECRET_X91Q7",
+      "value": "INTEGRATOR_SECRET_X91Q7",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "labeled_password_marker",
+      "text": "INTEGRATOR_PASSWORD_4AB92",
+      "value": "INTEGRATOR_PASSWORD_4AB92",
+      "expected_type": "PASSWORD"
+    },
+    {
+      "id": "status_shaped_secret_marker_counterexample",
+      "text": "FINAL_REVIEW_SECRET_ABCD1234EFGH",
+      "value": "FINAL_REVIEW_SECRET_ABCD1234EFGH",
+      "expected_type": "API_KEY"
+    },
+    {
+      "id": "status_shaped_password_marker_counterexample",
+      "text": "INTEGRATOR_PASSWORD_ABCD1234EFGH",
+      "value": "INTEGRATOR_PASSWORD_ABCD1234EFGH",
+      "expected_type": "PASSWORD"
+    }
+  ],
+  "forbidden_values": [
+    "ordinary-random-value-123456",
+    "disabled-Z7K4P9X2",
+    "ghpSyntheticR7M4V9Q2Z5",
+    "not-configured-R7M4V9Q2",
+    "R7M4V9Q2Z5",
+    "ERROR_TOKEN_404NOTFOUND",
+    "ERROR_SECRET_E500FAILED",
+    "HTTP_PASSWORD_E401UNAUTHORIZED",
+    "REAL_SECRET_DISABLED_123456",
+    "prod_password_unset_2026",
+    "not/configured/value-2026",
+    "~real-secret-123",
+    "FINAL_REVIEW_TOKEN_Z7K4P9X2",
+    "PAYMENT_TOKEN_Z7K4P9X2",
+    "ERROR_RECOVERY_TOKEN_Z7K4P9X2",
+    "ERROR_TOKEN_Z7K4P9X2",
+    "STATUS_REVIEW_TOKEN_M8Q4Z7N2",
+    "INTEGRATOR_SECRET_X91Q7",
+    "INTEGRATOR_PASSWORD_4AB92",
+    "FINAL_REVIEW_SECRET_ABCD1234EFGH",
+    "INTEGRATOR_PASSWORD_ABCD1234EFGH"
+  ]
+}

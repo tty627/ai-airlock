@@ -1,5 +1,9 @@
 .DS_Store
 .venv/
+.venv-openvino/
+models/
+.release-evidence/
+benchmark/results/
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -9,6 +13,7 @@ htmlcov/
 build/
 dist/
 *.egg-info/
+.qoder/settings.local.json
 
 # Runtime audit output may contain security metadata and is never source material.
 *.jsonl
@@ -18,4 +23,3 @@ dist/
 .env.*
 !.env.example
 !demo/incident/.env.example
-

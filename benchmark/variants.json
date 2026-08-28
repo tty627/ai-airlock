@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "variants": {
+    "rules-only": {
+      "enabled": true,
+      "command": [
+        "{python}",
+        "-m",
+        "airlock.cli"
+      ],
+      "subcommand_arguments": [],
+      "arguments_by_command": {
+        "analyze": [
+          "--relevance-backend",
+          "lexical"
+        ]
+      },
+      "environment": {},
+      "expected_modes_by_command": {
+        "health": [
+          "deterministic_rules"
+        ],
+        "scan": [
+          "deterministic_rules"
+        ],
+        "analyze": [
+          "deterministic_rules"
+        ]
+      },
+      "requires_openvino_available": false
+    },
+    "openvino": {
+      "enabled": true,
+      "command": [
+        "{python}",
+        "-m",
+        "airlock.cli"
+      ],
+      "subcommand_arguments": [],
+      "arguments_by_command": {
+        "analyze": [
+          "--relevance-backend",
+          "openvino"
+        ]
+      },
+      "environment": {},
+      "expected_modes_by_command": {
+        "health": [
+          "deterministic_rules"
+        ],
+        "scan": [
+          "deterministic_rules"
+        ],
+        "analyze": [
+          "openvino_embedding"
+        ]
+      },
+      "requires_openvino_available": true,
+      "unavailable_reason": "Prepared OpenVINO model or runtime is not available."
+    },
+    "raw-context": {
+      "enabled": false,
+      "command": [],
+      "subcommand_arguments": [],
+      "arguments_by_command": {},
+      "environment": {},
+      "expected_modes_by_command": {},
+      "requires_openvino_available": false,
+      "unavailable_reason": "Raw-context adapter is reserved for a future disclosure baseline."
+    },
+    "simple-redaction": {
+      "enabled": false,
+      "command": [],
+      "subcommand_arguments": [],
+      "arguments_by_command": {},
+      "environment": {},
+      "expected_modes_by_command": {},
+      "requires_openvino_available": false,
+      "unavailable_reason": "Simple-redaction adapter is reserved for a future disclosure baseline."
+    }
+  }
+}
