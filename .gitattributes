@@ -1,0 +1,5 @@
+# Keep source and fixture bytes deterministic on every platform.
+* text=auto eol=lf
+
+# Tracked raster assets are binary.
+*.png binary

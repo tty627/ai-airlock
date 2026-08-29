@@ -10,12 +10,38 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 15
 
     steps:
+      - name: Configure Windows checkout line endings
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: git config --global core.autocrlf true
+
       - name: Check out repository
         uses: actions/checkout@v4
+
+      - name: Verify portable checkout bytes
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $eol = @(git ls-files --eol)
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Git could not inspect the checkout line endings.'
+          }
+          $invalid = @($eol | Select-String 'w/(crlf|mixed)')
+          if ($invalid.Count -ne 0) {
+            $invalid | Write-Error
+            throw 'Tracked files were not checked out with canonical LF bytes.'
+          }
 
       - name: Set up Python 3.12
         uses: actions/setup-python@v5
