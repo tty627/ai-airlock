@@ -182,7 +182,8 @@ wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule �
 - Windows PowerShell 5.1/7 cold/warm、中文与带空格路径、故障注入和进程清理；
 - Qoder Skill 自动发现、12+12 triggers、Capsule-only non-bypass、真实最终回答；
 - Intel AI PC、GPU/NPU 使用、跨硬件性能；
-- 远端 CI、公开仓库、ModelScope 页面、文章和视频 URL；
+- tagged source snapshot 不自证的外部 post-push CI、ModelScope 页面、文章和视频 URL；公开 GitHub
+  source 已存在，精确候选 CI 必须从绑定 SHA 的 GitHub run 核对；
 - 未知 Secret、规避式 Injection、真实生产分布和跨领域 Agent utility。
 
 ## 10. 可复现方法

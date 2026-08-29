@@ -23,7 +23,8 @@ read、索引和附件旁路仍待 Qoder 验收，不能外推为通用安全保
 | Python Qoder strict response gate | **PASS** | `safe_context` JSON 的严格字段、模式和 OpenVINO metadata gate 已验证 | 不是 Qoder 界面、Skill 自动发现或 Capsule-only 宿主行为 |
 | Windows PowerShell 5.1 / 7 | **PENDING** | 规范、脚本和验收矩阵已准备 | 没有 Windows 实机结果 |
 | Qoder host / Agent Task Completed | **PENDING** | 12 个正向和 12 个负向触发 oracle 已定义 | 正向与负向均为 `0/12 REAL_QODER_EXECUTED` |
-| Intel hardware / remote CI | **PENDING / NOT RUN** | — | 没有 Intel 性能、NPU/GPU 或公开 CI 结论 |
+| GitHub Python CI | **PASS · scoped** | Windows/Ubuntu Python 3.12、LF checkout、Ruff、benchmark smoke 已通过 | 不是 PowerShell wrapper、OpenVINO/Qoder host 或 Intel evidence |
+| Intel hardware | **PENDING / NOT RUN** | — | 没有 Intel 性能、NPU/GPU 或硬件加速结论 |
 
 完整冻结证据见 [release evidence protocol](docs/release-evidence.md)；本次机器可读结果由
 [Claims Ledger](docs/claims-ledger.md) 约束。
@@ -148,8 +149,8 @@ warning 时必须停止。完整安装、参数限制和 12+12 触发矩阵见
 - 合成 relevance micro-fixtures 的聚合 Capsule 会因 JSON 元数据而膨胀，不能把 flagship 的
   estimated-token 缩减率外推为通用 context reduction。
 - `.qoderignore`、`SKILL.md` 和权限设置是行为约束，不是 OS sandbox；真实宿主 non-bypass 仍是 PENDING。
-- 当前没有 Windows、Intel、Qoder host、Capsule-only Agent Task Success、公开比赛页面或硬件性能证据；
-  tagged source snapshot 也不自证其 post-push 远端 CI，须以外部 GitHub run 结果为准。
+- 当前没有正式 Windows PowerShell wrapper、Intel、Qoder host、Capsule-only Agent Task Success、公开比赛页面或硬件性能证据；
+  tagged source snapshot 不自证其 post-push CI，具体结论须以 [STATUS](STATUS.md) 中绑定 SHA 的外部 GitHub run 为准。
 - 项目 LICENSE、author 与公开源码仓库已确认；ModelScope URL、提交身份和独立模型托管方式仍待决定。
 
 更多细节见 [architecture](docs/architecture.md)、[threat model](docs/threat-model.md) 和

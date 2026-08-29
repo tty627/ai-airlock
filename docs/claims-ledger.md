@@ -49,7 +49,7 @@
 - Intel AI PC 性能、设备选择、NPU/GPU 使用情况；
 - Qoder 自动发现、12 个 positive triggers、12 个 negative triggers、Capsule-only non-bypass；
 - 真实 Qoder Agent 的最终回答、Task Completed、workspace bypass 次数和任务期网络计数；
-- 远端 CI、公开 GitHub / ModelScope / 研习社 URL、真实截图和最终视频。
+- 精确 rc.3 tag/SHA 的外部 post-push CI 记录、ModelScope / 研习社 URL、真实截图和最终视频。
 
 ## 使用规则
 

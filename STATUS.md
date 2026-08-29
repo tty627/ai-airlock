@@ -1,6 +1,6 @@
 # AI Airlock Project Status
 
-> Last reviewed: 2026-08-29 (Asia/Shanghai)
+> Last reviewed: 2026-08-30 (Asia/Shanghai)
 >
 > This file is the current project-state entry point. It records what is verified, pending, or blocked.
 > Numerical release claims remain authoritative only in
@@ -14,16 +14,19 @@ Core commit:    495f89c6349afbdd741576439b3b85369d26671a
 Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
-Windows candidate tag:     v0.1.0-rc.2 (immutable Windows validation candidate)
-Windows candidate commit:  aca0c112f3d70752185b50f95191187548537798
-Windows candidate tree:    80b8c2d8bcd336bb338b3864925c9c459ce2b472
-GitHub remote:              https://github.com/tty627/ai-airlock (public)
+Previous Windows candidate: v0.1.0-rc.2 (immutable; superseded for Windows validation)
+Windows candidate tag:      v0.1.0-rc.3
+Windows candidate commit:   [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Windows candidate tree:     [OWNER_HANDOFF_AFTER_TAG_CREATION]
+GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1` is immutable. `v0.1.0-rc.2` freezes the reviewed documentation, visual, metadata, publication,
-and Windows-handoff work created after that core tag. Run formal Windows acceptance only from the immutable
-`v0.1.0-rc.2` tag and cross-check its resolved commit against the owner's handoff prompt; do not validate the
-floating `main` branch. If that candidate fails, create a new tag rather than moving the old one.
+`v0.1.0-rc.1` and `v0.1.0-rc.2` remain immutable. `v0.1.0-rc.2` is superseded for formal Windows validation
+because canonical-LF checkout and Windows legacy-code-page benchmark defects were corrected after that tag.
+`v0.1.0-rc.3` freezes those portability corrections plus the reviewed documentation and Windows handoff. Run
+formal Windows acceptance only from the immutable `v0.1.0-rc.3` tag, and cross-check the resolved commit and tree
+against the owner's post-tag handoff; do not validate floating `main`. If this candidate fails, create a new tag
+rather than moving an existing one.
 
 ## Status summary
 
@@ -37,7 +40,7 @@ floating `main` branch. If that candidate fails, create a new tag rather than mo
 | Qoder host integration | `NOT_RUN` | 12 positive and 12 negative trigger specifications | Real discovery, tool trace, Capsule-only and non-bypass evidence |
 | Intel hardware | `NOT_RUN` | None | Named device and cold/warm performance evidence, or explicit limitation |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / remote CI | `VERIFIED` | Public repository, exact remote tag, two successful candidate-SHA CI runs and anonymous fresh-clone QA | Preserve run URLs and re-check availability from Windows |
+| GitHub / Python CI | `VERIFIED_WITH_SCOPE` | Public repository, immutable rc.2 evidence, and successful Windows/Ubuntu Python 3.12 portability CI on pre-candidate commit `7c06769` | Require exact rc.3 main/tag CI before owner handoff; this is not wrapper/Qoder evidence |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -77,6 +80,18 @@ See [Claims Ledger](docs/claims-ledger.md) for definitions, JSON paths, denomina
 These checks prove source publication and Linux/macOS automation only. They do not prove Windows wrapper,
 PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task Success.
 
+## Pre-candidate portability evidence for rc.3
+
+- Commit `7c067699` passed [GitHub Actions run 33262724723](https://github.com/tty627/ai-airlock/actions/runs/33262724723)
+  on both Windows and Ubuntu with Python 3.12: each job reported `210 passed / 8 skipped`, and Ruff plus the
+  benchmark smoke test passed.
+- The Windows job verified canonical LF checkout bytes even with `core.autocrlf=true`; the benchmark acceptance
+  regression launched its parent process with a legacy code page and verified the Chinese task through an
+  explicitly UTF-8 child CLI.
+- This run predates the rc.3 release-preparation documentation commit. It is supporting portability evidence,
+  not exact rc.3 main/tag CI, formal `scripts/run.ps1` evidence, PowerShell 5.1/7 acceptance, real OpenVINO on
+  Windows, Qoder host evidence or Intel hardware evidence.
+
 ## Current blockers and decisions
 
 ### Confirmed public GitHub identity
@@ -85,7 +100,7 @@ PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task
 - Project license: Apache-2.0.
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
-- Candidate Tag: immutable `v0.1.0-rc.2` after local QA.
+- Candidate Tag: immutable `v0.1.0-rc.3` after exact-SHA main CI; `v0.1.0-rc.2` is never moved.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -119,10 +134,12 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. On Windows, clone and detach at the exact candidate tag; follow the Windows handoff without editing it.
-2. Return a sanitized validation report. A failure or inconclusive result creates a new candidate; it never
-   changes an already tested tag.
-3. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
+1. Commit the rc.3 release-preparation documents and require Windows/Ubuntu CI on that exact SHA.
+2. Create and publish the annotated `v0.1.0-rc.3` tag without moving prior tags; verify the remote tag object,
+   peeled commit, tree and tag-triggered CI externally.
+3. Provide the exact commit/tree in the owner handoff. On Windows, clone and detach at that exact tag and return
+   a sanitized validation report. A failure or inconclusive result creates a new candidate.
+4. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
    same run identity.
 
 ## Update rules

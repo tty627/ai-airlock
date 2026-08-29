@@ -6,14 +6,14 @@
 
 > 包装基线：`v0.1.0-rc.1` · `495f89c6349afbdd741576439b3b85369d26671a`
 > 用户已授权创建公开 `tty627/ai-airlock`、使用 Apache-2.0、署名“谭天晔”并创建不可变
-> `v0.1.0-rc.2`。必须从 clean candidate 完成；ModelScope、文章、视频和比赛表单尚未授权发布。
+> `v0.1.0-rc.3`；既有 rc.1/rc.2 不移动。必须从 clean candidate 完成；ModelScope、文章、视频和比赛表单尚未授权发布。
 
 ## 当前结论
 
-技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，不再处于“没有 frozen
-evidence”的状态。当前阻断比赛最终发布的主要缺口是：项目 LICENSE 与署名决策、`icon` / 内存 /
-timeout / 模型托管等 release metadata、公开托管信息，以及真实 Windows / PowerShell / Qoder /
-Intel evidence。
+技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，并已有公开 GitHub source
+与 Windows/Ubuntu Python 3.12 portability CI。当前阻断比赛最终发布的主要缺口是：`icon` / 内存 /
+timeout / 模型托管等 release metadata、ModelScope 等未授权发布，以及真实 Windows / PowerShell /
+Qoder / Intel evidence。
 
 ```text
 OFFICIAL CLEAN CHECKOUT             PASS
@@ -23,8 +23,10 @@ PYTHON QODER STRICT RESPONSE GATE   PASS
 WINDOWS POWERSHELL                  PENDING / NOT RUN
 QODER HOST CAPSULE-ONLY             PENDING / NOT RUN
 INTEL DEVICE                        NOT RUN
-REMOTE CI                           NOT RUN
-PUBLICATION                         NOT AUTHORIZED
+PRE-CANDIDATE PYTHON CI             PASS / WINDOWS + UBUNTU
+EXACT RC.3 MAIN/TAG CI              PENDING
+GITHUB SOURCE                       PUBLIC / AUTHORIZED
+OTHER PUBLICATION                   NOT AUTHORIZED
 ```
 
 包装 readiness flag 已在本文末尾根据本地 QA 回填；它们不代表最终比赛提交 ready。
@@ -48,30 +50,32 @@ PUBLICATION                         NOT AUTHORIZED
 
 | Gate | 当前状态 | 发布前所需证据 |
 |---|---|---|
-| G0 · Source identity | **PASS** | tag/commit/tree 保持不变；包装 diff 不改核心 RC |
+| G0 · Source identity | **PENDING_TAG** | exact-SHA main CI 后创建 rc.3 annotated tag；回填 tag object、commit 与 tree |
 | G1 · Evidence integrity | **PASS** | SHA256SUMS 与 JSON parse 持续通过 |
 | G2 · Mac OpenVINO path | **PASS** | rc.1 evidence 已覆盖固定模型、CPU、无 fallback、A/B |
 | G3 · Public claims | **PASS** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描 |
 | G4 · Packaging assets | **PASS** | SVG/PNG 全部渲染、解码与逐图检查；未见敏感信息 |
 | G5 · Article | **PASS** | 成稿完整，Windows/Qoder 均为明确占位 |
-| G6 · Project LICENSE / author | **BLOCKED BY USER DECISION** | 用户确认 LICENSE、版权主体、公开署名 |
+| G6 · Project LICENSE / author | **PASS** | Apache-2.0；2026 谭天晔；公开 author/byline 已确认并同步 |
 | G6B · Release metadata | **BLOCKED** | icon URL、实测 `mem_need_gb`、timeout 语义、`models=[]` 平台接受度、额外字段 parser 行为 |
 | G7 · Windows PowerShell | **PENDING** | 5.1/7 cold/warm、中文/空格路径、错误和残留进程证据 |
 | G8 · Qoder host | **PENDING** | discovery、12+12 triggers、Capsule-only non-bypass、最终回答 |
 | G9 · Intel hardware | **PENDING** | 设备、runtime、cold/warm latency、失败数 |
-| G10 · Remote/publication | **NOT AUTHORIZED / NOT RUN** | 公开 URL、远端 CI、提交页面与发布回执 |
+| G10 · GitHub source / Python CI | **VERIFIED_WITH_SCOPE** | 公共仓库与 pre-candidate Windows/Ubuntu Python CI 已验证；exact rc.3 main/tag CI 待完成 |
+| G10B · ModelScope / media / submission | **NOT AUTHORIZED / NOT RUN** | 平台 preflight、公开页面、文章/视频发布与比赛提交回执 |
 
-最终发布必须等待 G6–G10；本轮目标仅是让 Mac packaging 可审核、可回填。
+最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；本轮只创建可追溯的 GitHub Windows 候选。
 
 ## 1. Diff 与冻结边界
 
-- [x] `git diff --name-only` 不包含 `src/airlock/`。
-- [x] 不包含 `benchmark/`、`tests/fixtures/`、其他 tests、models 或模型准备逻辑的改动。
+- [x] rc.2 → rc.3 diff 不包含 `src/airlock/`、`tests/fixtures/`、models 或模型准备逻辑的改动。
+- [x] rc.3 明确包含 `.gitattributes`、Windows/Ubuntu CI matrix、benchmark child-CLI UTF-8 环境和对应
+  acceptance 回归测试；这些是跨平台可移植性改动，不冒充核心算法或数值提升。
 - [x] 不修改、移动或重打 `v0.1.0-rc.1`。
-- [x] 不修改 fixture、测试答案、detector、pipeline、ranker 或 OpenVINO backend。
+- [x] 不修改 fixture、冻结期望值、detector、pipeline、ranker、token estimator 或 OpenVINO backend。
 - [x] `meta.json` 与 `info.json` 仍可解析；`meta.json` 只收窄能力描述，未猜测 author、icon URL、
   model hosting、内存、timeout 或版本策略。
-- [x] 包装 diff 只包含 README、docs、THIRD_PARTY_NOTICES、`assets/competition/` 与允许的 `meta.json`。
+- [x] 候选 diff 已按功能、CI、测试与文档逐项公开记录；不再沿用“packaging-only”范围断言。
 
 ## 2. Claims Ledger 与 frozen results
 
@@ -170,7 +174,7 @@ PUBLICATION                         NOT AUTHORIZED
 - [x] **项目 LICENSE**：Apache-2.0；根目录标准文本已创建。
 - [x] **版权主体与年份**：谭天晔 / 2026。
 - [x] **公开 author**：谭天晔；`pyproject.toml` 与 `meta.json` 已同步。
-- [x] **版本展示**：package `0.1.0`；Windows 候选 Tag `v0.1.0-rc.2`；不移动 rc.1。
+- [x] **版本展示**：package `0.1.0`；Windows 候选 Tag `v0.1.0-rc.3`；不移动 rc.1/rc.2。
 - [ ] **用户确认模型托管**：继续固定上游 revision + 本地转换，或另建公开转换模型仓库。
 - [ ] **只在 `meta.json` 填真实公开 icon URL**；不得使用本机路径或添加到 `info.json`。
 - [ ] **实测 `mem_need_gb`**：必须覆盖模型驻留 + 推理峰值；当前 `0.25` 不构成发布依据。
@@ -204,25 +208,24 @@ PUBLICATION                         NOT AUTHORIZED
   `1024×1024 RGBA`，其余六张为 `1600×900`。
 - [x] `meta.json`、`info.json`、evidence `benchmark/latest.json` 与本项目其他 JSON 均可解析。
 - [x] tracked diff 与未跟踪 Markdown/SVG 的 whitespace check 均通过。
-- [x] 本地 Markdown 链接目标全部存在；本轮 submission-facing 材料无旧 SHA、旧结果占位符或过期 negative-trigger 总数。
+- [x] 本地 Markdown 链接目标全部存在；rc.2 SHA 只保留在明确标注的历史证据中，rc.3 自引用字段使用阻断式 owner-handoff 占位符。
 - [x] 公开文本无本机用户名、绝对路径、账号、远程主机、真实 endpoint 或未限定“零泄漏”。
 - [x] Secret / PII 扫描覆盖 submission-facing Markdown；SVG 做文本扫描，7 个 PNG 做逐图目检与字符串扫描。
-- [x] 原始 `HEAD`、tag commit 与 tree 未变化；工作区只含预期包装 diff。
+- [x] rc.1/rc.2 tag、commit 与 tree 未变化；rc.3 候选准备 diff 只含已审查的 portability、CI、回归测试和文档改动。
 
 ## 11. 发布 Runbook
 
 [Publication runbook](publication-runbook.md) 已包含 tracked/allowlist 打包、denylist、全新目录复验、
-SHA-256 manifest、公开 evidence 与 ModelScope 下载后复验。当前在用户决策与 clean candidate 完成前
-不得执行：
+SHA-256 manifest、公开 evidence 与 ModelScope 下载后复验。GitHub candidate commit/push/tag 已获授权；
+仍不得在没有单独授权和相应硬门证据时执行：
 
-- Git commit / push / tag mutation；
-- GitHub、ModelScope、研习社、视频平台或社交媒体发布；
-- 公开 URL 回填；
+- 移动、删除或重打任何既有 RC 标签；
+- ModelScope、研习社、视频平台、比赛表单或社交媒体发布；
+- 捏造或提前回填尚不存在的公开 URL、平台回执或实机证据；
 - 用 Mac 结果替代 Windows/Qoder/Intel；
-- 在未确认 LICENSE/author 前对外发布 source package。
+- 改写已确认的 LICENSE、author 或 candidate identity。
 
-用户确认 GitHub owner/repository、visibility、LICENSE、author 与候选 Tag 后，可按 runbook 只执行
-GitHub candidate 同步；这不自动授权 ModelScope、文章、视频或比赛提交。
+当前仅按 runbook 执行 GitHub candidate 同步；这不自动授权 ModelScope、文章、视频或比赛提交。
 
 ## 本轮最终 readiness flags
 
@@ -241,4 +244,5 @@ WINDOWS_CANDIDATE_IDENTITY_READY = NO
 ```
 
 `RELEASE_METADATA_READY=NO` 是因为未测内存、icon URL、timeout、模型托管与 parser 接受度尚未关闭；
-`FINAL_PUBLICATION_READY=NO` 还包括 LICENSE/author/公开 URL/授权及 Windows/Qoder/Intel/远端 CI 缺口。
+`FINAL_PUBLICATION_READY=NO` 还包括 release metadata、未授权平台发布及 Windows/Qoder/Intel 实机缺口；
+公开 GitHub source 与 scoped Python CI 已完成，不能再列为“未运行”。

@@ -49,7 +49,8 @@ Agent 要解决生产问题
 | Python Qoder gate | **PASS** | response shape、OpenVINO metadata 与 fail-closed gate 通过；不是 Qoder host |
 | Windows / PowerShell | **PENDING** | wrapper 代码与 oracle 已准备，未运行 PowerShell 5.1/7 实机验收 |
 | Qoder host | **PENDING** | 12 个 positive 与 12 个 negative trigger spec 已定义；两组均 `0/12 REAL_QODER_EXECUTED` |
-| Intel / remote CI | **NOT RUN** | 无 Intel 性能、NPU/GPU 或公开 CI 证据 |
+| GitHub Python CI | **PASS（范围受限）** | Windows/Ubuntu Python 3.12、LF checkout、Ruff 与 benchmark smoke 已通过；不是宿主验收 |
+| Intel hardware | **NOT RUN** | 无 Intel 性能、NPU/GPU 或硬件加速证据 |
 
 ## 为什么必须在本地做第一跳
 

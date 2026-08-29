@@ -1,7 +1,7 @@
 # AI Airlock Publication Runbook
 
 > 状态：GitHub candidate 发布阶段。用户已授权创建公开 `tty627/ai-airlock`、使用 Apache-2.0、署名
-> “谭天晔”并创建不可变 `v0.1.0-rc.2`。该授权不包含 ModelScope、研习社、视频、比赛表单或
+> “谭天晔”并创建不可变 `v0.1.0-rc.3`；既有 `v0.1.0-rc.1` 和 `v0.1.0-rc.2` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
 > 社交媒体发布。
 
 当前项目状态以 [`../STATUS.md`](../STATUS.md) 为入口。tagged commit 不能安全地把自己的 commit/tree
@@ -26,7 +26,7 @@ Core source tag:    v0.1.0-rc.1
 Core source commit: 495f89c6349afbdd741576439b3b85369d26671a
 Core source tree:   4fe991ded88f38a6c1952c506d20005d2956a915
 Local evidence:     .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
-Candidate tag:      v0.1.0-rc.2
+Candidate tag:      v0.1.0-rc.3
 Release commit:     resolve from the immutable candidate tag; verify against the owner handoff
 ```
 
@@ -60,7 +60,7 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 Project LICENSE:          Apache-2.0
 Copyright holder/year:    谭天晔 / 2026
 Public author/byline:     谭天晔
-Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.2
+Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.3
 ModelScope owner:         [USER CONFIRM REQUIRED]
 ModelScope skill_name:    [USER CONFIRM REQUIRED; immutable after create]
 Category:                 [USER CONFIRM REQUIRED]
@@ -154,7 +154,7 @@ docs/windows-validation-report-template.md
 
 ```bash
 set -euo pipefail
-RELEASE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.2)"
+RELEASE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.3)"
 PACKAGE_OUT="$(mktemp -d)"
 ARCHIVE="$PACKAGE_OUT/ai-airlock-skill.zip"
 
