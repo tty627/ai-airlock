@@ -15,14 +15,15 @@ Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
 Windows candidate tag:     v0.1.0-rc.2 (immutable Windows validation candidate)
-Windows candidate commit:  resolve with `git rev-list -n 1 v0.1.0-rc.2`; cross-check the owner handoff
-GitHub remote:              https://github.com/tty627/ai-airlock (authorized public destination)
+Windows candidate commit:  aca0c112f3d70752185b50f95191187548537798
+Windows candidate tree:    80b8c2d8bcd336bb338b3864925c9c459ce2b472
+GitHub remote:              https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1` is immutable. This status snapshot prepares the reviewed documentation, visual, metadata,
-publication, and Windows-handoff work created after that core tag. Run formal Windows acceptance only from
-the immutable `v0.1.0-rc.2` tag and cross-check its resolved commit against the owner's handoff prompt; do not
-validate the floating `main` branch. If that candidate fails, create a new tag rather than moving the old one.
+`v0.1.0-rc.1` is immutable. `v0.1.0-rc.2` freezes the reviewed documentation, visual, metadata, publication,
+and Windows-handoff work created after that core tag. Run formal Windows acceptance only from the immutable
+`v0.1.0-rc.2` tag and cross-check its resolved commit against the owner's handoff prompt; do not validate the
+floating `main` branch. If that candidate fails, create a new tag rather than moving the old one.
 
 ## Status summary
 
@@ -36,7 +37,7 @@ validate the floating `main` branch. If that candidate fails, create a new tag r
 | Qoder host integration | `NOT_RUN` | 12 positive and 12 negative trigger specifications | Real discovery, tool trace, Capsule-only and non-bypass evidence |
 | Intel hardware | `NOT_RUN` | None | Named device and cold/warm performance evidence, or explicit limitation |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / remote CI | `PENDING_POST_PUSH_VERIFICATION` | Public `tty627/ai-airlock` and immutable `v0.1.0-rc.2` are declared candidate identities | Verify the external remote, fresh clone and CI results supplied with the handoff |
+| GitHub / remote CI | `VERIFIED` | Public repository, exact remote tag, two successful candidate-SHA CI runs and anonymous fresh-clone QA | Preserve run URLs and re-check availability from Windows |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -54,6 +55,27 @@ The following are bounded rc.1 facts, not general product guarantees:
   stderr and audit surfaces. This is not a universal zero-leakage claim.
 
 See [Claims Ledger](docs/claims-ledger.md) for definitions, JSON paths, denominators and limitations.
+
+## GitHub publication evidence for rc.2
+
+- Public repository: `https://github.com/tty627/ai-airlock`; anonymous API check reported `public`, default
+  branch `main`, and detected license `Apache-2.0`.
+- Remote `v0.1.0-rc.2^{}` resolves to commit `aca0c112f3d70752185b50f95191187548537798`; its tree is
+  `80b8c2d8bcd336bb338b3864925c9c459ce2b472`.
+- Candidate tag CI: [GitHub Actions run 33258339574](https://github.com/tty627/ai-airlock/actions/runs/33258339574),
+  `success`.
+- Candidate-SHA main CI: [GitHub Actions run 33258339207](https://github.com/tty627/ai-airlock/actions/runs/33258339207),
+  `success`.
+- An anonymous fresh clone detached at the exact candidate passed `212 passed / 6 skipped` on the recorded Mac;
+  all six skips were PowerShell-only. It also passed the benchmark smoke test and imported `airlock` from the
+  fresh clone rather than the development checkout.
+- The controlled candidate archive contained 130 entries, exactly one `SKILL.md`, was 1,251,636 bytes, passed
+  the documented denylist/5 MB checks, and had SHA-256
+  `ccf04f0d7ad7e461d61420bd946f1d2be85c3e034e3bc07630ed1d2044105544`. This local QA artifact has not been
+  published as a release asset.
+
+These checks prove source publication and Linux/macOS automation only. They do not prove Windows wrapper,
+PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task Success.
 
 ## Current blockers and decisions
 
@@ -97,12 +119,10 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Resolve `v0.1.0-rc.2` to its exact commit/tree and verify that `v0.1.0-rc.1` did not move.
-2. Verify the public remote, remote CI and a fresh clone of the exact candidate.
-3. On Windows, clone and detach at the exact candidate tag; follow the Windows handoff without editing it.
-4. Return a sanitized validation report. A failure or inconclusive result creates a new candidate; it never
+1. On Windows, clone and detach at the exact candidate tag; follow the Windows handoff without editing it.
+2. Return a sanitized validation report. A failure or inconclusive result creates a new candidate; it never
    changes an already tested tag.
-5. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
+3. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
    same run identity.
 
 ## Update rules

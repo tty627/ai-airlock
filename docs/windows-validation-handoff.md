@@ -1,7 +1,7 @@
 # AI Airlock Windows Validation Handoff
 
-> Status: public repository and candidate Tag are authorized. Commit and tree will be supplied out of band after
-> the immutable Tag is created; they cannot be embedded in the commit that identifies itself.
+> Status: public repository, immutable candidate Tag, commit and tree are fixed. The Windows Agent prompt must
+> repeat these values, and the tested checkout must reproduce them exactly.
 
 ## 1. Mission and authority
 
@@ -27,14 +27,14 @@ identity and evidence handling; it does not replace that oracle.
 ```text
 SOURCE_REPOSITORY_URL:   https://github.com/tty627/ai-airlock
 CANDIDATE_TAG:           v0.1.0-rc.2
-CANDIDATE_COMMIT:        [OWNER_HANDOFF_AFTER_TAG_CREATION]
-CANDIDATE_TREE:          [OWNER_HANDOFF_AFTER_TAG_CREATION]
+CANDIDATE_COMMIT:        aca0c112f3d70752185b50f95191187548537798
+CANDIDATE_TREE:          80b8c2d8bcd336bb338b3864925c9c459ce2b472
 CORE_EVIDENCE_COMMIT:    495f89c6349afbdd741576439b3b85369d26671a
 EXPECTED_PROJECT_NAME:   ai-airlock
 ```
 
-Do not infer or guess the commit/tree. Formal validation is `BLOCKED` until the owner provides both exact values
-in the Windows Agent prompt after Tag creation. The tested checkout must reproduce those values.
+Do not infer or replace the commit/tree. Formal validation is `BLOCKED` if the Windows Agent prompt does not
+repeat both exact values or if the tested checkout does not reproduce them.
 
 ## 3. Read before running
 
@@ -50,13 +50,13 @@ Do not use `PROJECT_SPEC.md` or historical audit reports as the current runtime 
 
 ## 4. Clone and identity verification
 
-Use a new directory that Qoder has never opened. Replace placeholders with the approved values from section 2:
+Use a new directory that Qoder has never opened. Use the fixed values from section 2 exactly:
 
 ```powershell
-$RepositoryUrl = '<SOURCE_REPOSITORY_URL>'
-$CandidateTag = '<CANDIDATE_TAG>'
-$ExpectedCommit = '<CANDIDATE_COMMIT>'
-$ExpectedTree = '<CANDIDATE_TREE>'
+$RepositoryUrl = 'https://github.com/tty627/ai-airlock'
+$CandidateTag = 'v0.1.0-rc.2'
+$ExpectedCommit = 'aca0c112f3d70752185b50f95191187548537798'
+$ExpectedTree = '80b8c2d8bcd336bb338b3864925c9c459ce2b472'
 $CheckoutRoot = 'C:\AI-Airlock-Acceptance\source'
 
 git clone --no-tags $RepositoryUrl $CheckoutRoot
