@@ -132,6 +132,10 @@ class BlackBoxClient:
         ]
         environment = os.environ.copy()
         environment.update(dict(self.spec.environment))
+        # The benchmark consumes UTF-8 JSON regardless of the Windows runner's
+        # active ANSI code page. Keep every child CLI on that byte contract.
+        environment["PYTHONUTF8"] = "1"
+        environment["PYTHONIOENCODING"] = "utf-8"
         started = perf_counter()
         try:
             completed = subprocess.run(

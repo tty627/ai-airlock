@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -9,10 +10,18 @@ ROOT = Path(__file__).resolve().parents[2]
 RUNNER = ROOT / "benchmark" / "run_benchmark.py"
 
 
+def _legacy_windows_pipe_environment() -> dict[str, str]:
+    environment = os.environ.copy()
+    environment["PYTHONUTF8"] = "0"
+    environment["PYTHONIOENCODING"] = "cp1252"
+    return environment
+
+
 def test_blackbox_smoke_enforces_flagship_and_secret_gates(tmp_path: Path) -> None:
     completed = subprocess.run(
         [sys.executable, str(RUNNER), "--smoke", "--output-dir", str(tmp_path)],
         cwd=ROOT,
+        env=_legacy_windows_pipe_environment(),
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -40,6 +49,10 @@ def test_blackbox_smoke_enforces_flagship_and_secret_gates(tmp_path: Path) -> No
     assert rules["security"]["prompt_injection"]["quality_gate"]["pass"] is True
     assert rules["utility"]["required_facts_retained"] == 3
     assert rules["utility"]["required_facts_total"] == 3
+    cross_lingual = [
+        case for case in rules["relevance"]["cases"] if case["task_language"] == "zh-CN"
+    ]
+    assert cross_lingual and all(case["invocation_valid"] for case in cross_lingual)
     assert rules["context"]["measurement_source"] == "benchmark_computed_from_cli_io"
     assert rules["context"]["cli_reported_metrics_match"] is True
 
@@ -48,6 +61,7 @@ def test_generated_benchmark_reports_do_not_contain_secret_sentinels(tmp_path: P
     completed = subprocess.run(
         [sys.executable, str(RUNNER), "--smoke", "--output-dir", str(tmp_path)],
         cwd=ROOT,
+        env=_legacy_windows_pipe_environment(),
         capture_output=True,
         text=True,
         encoding="utf-8",
