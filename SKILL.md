@@ -7,7 +7,7 @@ metadata:
 
 # AI Airlock
 
-Compile the minimum task-relevant evidence from a private or explicitly untrusted local target before Agent reasoning.
+Compile a budgeted, task-ranked set of policy-filtered evidence from a private or explicitly untrusted local target before Agent reasoning. Whether the resulting Capsule is smaller is input-dependent and must be measured; this Skill contract is not an OS sandbox or proof of host non-bypass.
 
 ## Trigger boundary
 

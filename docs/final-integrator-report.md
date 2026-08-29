@@ -34,7 +34,7 @@ SUBMIT: NO
 
 - OpenVINO 真实进入 Python CLI 和正式 Skill 的设计路径；metadata、固定模型、CPU device、chunk 数和 `fallback_state=not_used` 可验证。
 - OpenVINO 缺模型或缺 runtime 时 fail closed，未发现静默回退到 lexical。
-- 标准 synthetic benchmark 中，OpenVINO Recall@K、Precision@K、MRR、cross-lingual recall 和旗舰 context reduction 明显优于 lexical。
+- 标准 synthetic benchmark 中，OpenVINO 的 Mean Recall@K、Precision@K、MRR、Cross-lingual Mean Recall@K 和旗舰 estimated-token context reduction 数值高于 lexical。
 - 把当前候选内容冻结到隔离临时 commit 后，可以从 clean copy 安装、准备模型、运行 `128 passed, 6 skipped`、旗舰和完整 A/B。
 
 这些正面证据证明“实现有实质进展”，但不能覆盖已经观察到的安全泄漏、注入绕过、高噪声 utility 失败和正式 release identity 缺失。
@@ -323,7 +323,7 @@ high relevance != permission to bypass safety
 | `raw_sensitive_spans_forwarded` | 0，但该字段不是独立证明 |
 | Raw tokens estimated | 3627 |
 | Capsule tokens estimated | 894 |
-| Context reduction | 75.3515% |
+| Estimated-token context reduction | 75.3515% |
 | chunks processed | 71 |
 | wall-clock | 1.240 s |
 | stdout SHA-256 | `b86b251794a3d7737e567eb2928075ada1a9ee70fbc10575f5870eab7d734374` |
@@ -346,13 +346,13 @@ high relevance != permission to bypass safety
 | Irrelevant selected, new high-noise top-8 | 7/8 | 6/8 |
 | Mean Recall@K, standard synthetic | 0.583333 | 0.937500 |
 | Mean Precision@K, standard synthetic | 0.729167 | 0.937500 |
-| Cross-lingual Recall@K | 0.437500 | 1.000000 |
+| Cross-lingual Mean Recall@K | 0.437500 | 1.000000 |
 | Secret leakage, existing fixtures | 0 | 0 |
 | Secret leakage, novel quoted JSON | 1 | 1 |
 | Injection TP/FP/TN/FN, existing fixtures | 13/0/12/0 | 13/0/12/0 |
 | Novel sanitizer-bypass handling | missed | missed |
 | Flagship Capsule tokens | 1213 | 894 |
-| Flagship context reduction | 66.5564% | 75.3515% |
+| Flagship estimated-token context reduction | 66.5564% | 75.3515% |
 | Flagship wall-clock, same dev run | 69.992 ms | 1251.299 ms |
 | 42 CLI total, clean run | 3327.774 ms | 17851.427 ms |
 | P95, clean run | 70.212 ms | 1179.772 ms |
@@ -363,7 +363,9 @@ high relevance != permission to bypass safety
 PARTIAL
 ```
 
-理由：标准 synthetic 与 cross-lingual 指标显著改善，旗舰 Capsule 更小；但新 high-noise 仍漏 1/3 必需事实，order holdout 不优于 lexical，安全漏检与 backend 无关且同样会穿过 OpenVINO，延迟显著上升。
+理由：该轮标准 synthetic 与 cross-lingual 指标数值上升，旗舰 Capsule 的 estimated-token 数更小；
+但新 high-noise 仍漏 1/3 必需事实，order holdout 不优于 lexical，安全漏检与 backend 无关且同样会
+穿过 OpenVINO，该轮延迟数值也上升。这里没有统计显著性检验。
 
 ## 11. run.ps1 production audit
 
@@ -500,7 +502,7 @@ OFFICIAL HEAD CLEAN CHECKOUT: FAIL
 | Python/OpenVINO 在 Apple Silicon CPU 运行 | VERIFIED | clean candidate 已实测 |
 | 固定 model/revision、manifest、真实 inference | VERIFIED | cached-source clean setup 通过 |
 | OpenVINO unavailable 不 silent fallback | VERIFIED，Python；PowerShell 静态 | Windows runtime 未验证 |
-| Flagship 3/3、75.3515% reduction | VERIFIED，仅 synthetic fixture | 不能外推为通用 minimization |
+| Flagship 3/3、75.3515% estimated-token reduction | VERIFIED，仅 synthetic fixture | 不能外推为通用 minimization |
 | Recall/Precision `0.583333/0.729167 -> 0.9375/0.9375` | VERIFIED，仅 12 个 synthetic tasks | benchmark gate 本身没有 relevance 最低阈值 |
 | Cross-lingual `0.4375 -> 1.0` | VERIFIED，仅 4 个 synthetic cross-lingual tasks | 未证明跨领域泛化 |
 | “zero leakage” | MISLEADING，若不限定 fixtures | 新 quoted JSON 已实际泄漏 |
@@ -523,8 +525,8 @@ OFFICIAL HEAD CLEAN CHECKOUT: FAIL
 | Core functionality | 7.0 | CLI、Capsule、测试、旗舰可运行 | 安全与高噪声 failure 会破坏核心承诺 |
 | OpenVINO integration | 8.0 | 真实 inference、metadata、fail-closed、clean candidate | Windows/Qoder 与 Intel 未验证 |
 | Security | 3.0 | 现有 fixture 通过 | 已观察 JSON Secret 泄漏与 injection bypass |
-| Relevance quality | 5.0 | 标准/cross-lingual 显著提升 | 新 hard-negative 仅 2/3，top-8 多数无关 |
-| Context minimization | 4.0 | 旗舰缩减 75.3515% | high-noise FAIL；小 holdout 膨胀 |
+| Relevance quality | 5.0 | 标准/cross-lingual 指标数值上升 | 新 hard-negative 仅 2/3，top-8 多数无关 |
+| Context minimization | 4.0 | 旗舰 estimated-token 缩减 75.3515% | high-noise FAIL；小 holdout 膨胀 |
 | Benchmark credibility | 5.5 | 黑盒 CLI、hash、clean candidate provenance | relevance PASS 无质量阈值；覆盖窄；无真实 Agent |
 | Production Skill packaging | 6.0 | Skill 合同和 wrapper 静态设计较完整 | PowerShell 未运行；scan bootstrap 过重 |
 | Qoder integration | 2.0 | 文档与静态入口存在 | discovery/trigger/Capsule-only/Task Completed 全未验证 |

@@ -99,7 +99,7 @@ Frozen manifest：`c6aea202aa1f60b773b77aa1c3f7ee819fe255158c3357f24513750f5bd5d
 | Mean Recall@K | 0.9375 | **0.9375** |
 | Mean Precision@K | 0.9375 | **0.9375** |
 | Mean reciprocal rank | 1.0 | **1.0** |
-| Cross-lingual Recall@K | 1.0 | **1.0** |
+| Cross-lingual Mean Recall@K | 1.0 | **1.0** |
 | Flagship required facts | 3/3 | **3/3** |
 | Flagship Capsule tokens | 894 | **894** |
 

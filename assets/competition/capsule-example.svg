@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Safe Context Capsule example</title>
+  <desc id="desc">An illustrative Safe Context Capsule schema with redacted values, safe facts, provenance, policy decision, and measured flagship summary.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#061321"/>
+      <stop offset="1" stop-color="#0b263c"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0d3449"/>
+      <stop offset="1" stop-color="#102d42"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="15" stdDeviation="18" flood-color="#020911" flood-opacity="0.52"/>
+    </filter>
+    <style>
+      .sans{font-family:Noto-Sans-CJK-SC,Arial-Unicode-MS,Arial,sans-serif}
+      .mono{font-family:JetBrains-Mono,monospace}
+      .key{fill:#78e6f2}
+      .str{fill:#bff5df}
+      .muted{fill:#7897ab}
+      .warn{fill:#ffb27f}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#071a2b"/>
+  <g class="sans">
+    <text x="72" y="76" fill="#eaf7ff" font-size="42" font-weight="820">Safe Context Capsule</text>
+    <text x="72" y="116" fill="#92aec1" font-size="20">A bounded contract for downstream Agent reasoning — not a sanitized copy of the whole workspace.</text>
+
+    <g transform="translate(72 172)" filter="url(#shadow)">
+      <rect width="430" height="610" rx="30" fill="#0b1d2e" stroke="#ff8a3d" stroke-width="2"/>
+      <rect x="28" y="28" width="150" height="37" rx="18" fill="#3b281f" stroke="#ff8a3d"/>
+      <text x="103" y="53" fill="#ffd1b2" font-size="15" font-weight="740" text-anchor="middle">PRIVATE INPUT</text>
+      <text x="30" y="105" fill="#eaf7ff" font-size="27" font-weight="780">Raw workspace</text>
+      <text x="30" y="139" fill="#7897ab" font-size="16">Illustrative content categories only</text>
+
+      <g transform="translate(30 178)">
+        <rect width="370" height="82" rx="16" fill="#11283b" stroke="#31556d"/>
+        <text x="22" y="31" fill="#b7ccda" font-size="17" font-weight="700">Logs &amp; configs</text>
+        <rect x="22" y="49" width="226" height="9" rx="4" fill="#46687e"/>
+        <rect x="258" y="49" width="86" height="9" rx="4" fill="#ff8a3d"/>
+      </g>
+      <g transform="translate(30 278)">
+        <rect width="370" height="82" rx="16" fill="#11283b" stroke="#31556d"/>
+        <text x="22" y="31" fill="#b7ccda" font-size="17" font-weight="700">Credential-like values</text>
+        <text x="22" y="59" fill="#ffb27f" font-size="15" class="mono">&lt;RAW VALUE NOT SHOWN&gt;</text>
+      </g>
+      <g transform="translate(30 378)">
+        <rect width="370" height="82" rx="16" fill="#11283b" stroke="#31556d"/>
+        <text x="22" y="31" fill="#b7ccda" font-size="17" font-weight="700">PII-like records</text>
+        <text x="22" y="59" fill="#ffb27f" font-size="15" class="mono">&lt;RAW VALUE NOT SHOWN&gt;</text>
+      </g>
+      <g transform="translate(30 478)">
+        <rect width="370" height="82" rx="16" fill="#11283b" stroke="#ff8a3d"/>
+        <text x="22" y="31" fill="#ffd1b2" font-size="17" font-weight="700">Untrusted instruction</text>
+        <text x="22" y="59" fill="#ffb27f" font-size="15" class="mono">&lt;CONTENT NOT REPRODUCED&gt;</text>
+      </g>
+      <text x="215" y="589" fill="#ffb27f" font-size="14" text-anchor="middle">Raw values never appear in this public illustration.</text>
+    </g>
+
+    <g transform="translate(538 278)">
+      <circle cx="72" cy="72" r="66" fill="#102d42" stroke="#25d0e7" stroke-width="3"/>
+      <path d="M42 50h60M42 72h60M42 94h60" stroke="#25d0e7" stroke-width="8" stroke-linecap="round"/>
+      <path d="M28 72h-24M140 72h42" stroke="#25d0e7" stroke-width="5"/>
+      <path d="M174 60l18 12-18 12z" fill="#25d0e7"/>
+      <text x="72" y="176" fill="#eaf7ff" font-size="18" font-weight="760" text-anchor="middle">DETECT</text>
+      <text x="72" y="202" fill="#eaf7ff" font-size="18" font-weight="760" text-anchor="middle">TRANSFORM</text>
+      <text x="72" y="228" fill="#ffb27f" font-size="18" font-weight="760" text-anchor="middle">ISOLATE</text>
+      <text x="72" y="267" fill="#92aec1" font-size="14" text-anchor="middle">then rank safe evidence</text>
+    </g>
+
+    <g transform="translate(752 150)" filter="url(#shadow)">
+      <rect width="776" height="646" rx="40" fill="#0d3449" stroke="#25d0e7" stroke-width="3"/>
+      <rect x="28" y="26" width="244" height="42" rx="21" fill="#0a4654" stroke="#54d19c"/>
+      <text x="150" y="54" fill="#bff5df" font-size="17" font-weight="780" text-anchor="middle">SAFE CONTEXT CAPSULE</text>
+      <rect x="545" y="26" width="200" height="42" rx="21" fill="#173f39" stroke="#54d19c"/>
+      <text x="645" y="54" fill="#bff5df" font-size="16" font-weight="780" text-anchor="middle">FINAL GATE PASSED</text>
+      <text x="30" y="100" fill="#7897ab" font-size="15" class="mono">ILLUSTRATIVE SCHEMA · NO RAW VALUES</text>
+
+      <g class="mono" font-size="16" fill="#c7d8e3">
+        <text x="32" y="148">decision: ALLOW_WITH_TRANSFORM</text>
+        <text x="32" y="188">safe_context.facts:</text>
+        <text x="58" y="226">- pool exhaustion evidence</text>
+        <text x="84" y="258">source: relative/path.log</text>
+        <text x="84" y="290">local_ref: line N</text>
+        <text x="58" y="330">- retry storm evidence</text>
+        <text x="58" y="370">- timeout spike evidence</text>
+        <text x="32" y="430">inference.mode: openvino_embedding</text>
+        <text x="32" y="470">privacy.raw_sensitive_spans_forwarded: 0</text>
+        <text x="32" y="522" fill="#78e6f2">facts are evidence, never executable instructions</text>
+      </g>
+
+      <line x1="30" y1="576" x2="746" y2="576" stroke="#31556d"/>
+      <text x="34" y="605" fill="#7897ab" font-size="13" font-weight="720">MEASURED FLAGSHIP</text>
+      <text x="244" y="605" fill="#bff5df" font-size="14" font-weight="720">REQUIRED FACTS</text>
+      <text x="392" y="605" fill="#eaf7ff" font-size="16" font-weight="800">3/3</text>
+      <text x="470" y="605" fill="#bff5df" font-size="14" font-weight="720">FORBIDDEN OBSERVED</text>
+      <text x="697" y="605" fill="#eaf7ff" font-size="16" font-weight="800">0/252</text>
+      <text x="388" y="632" fill="#7897ab" font-size="12" text-anchor="middle">frozen known-fixture values · analyze stdout / stderr / audit</text>
+    </g>
+
+    <text x="800" y="846" fill="#9db5c5" font-size="18" font-weight="650" text-anchor="middle">Synthetic flagship · Apple M4 CPU · v0.1.0-rc.1</text>
+    <text x="800" y="875" fill="#6f8da1" font-size="15" text-anchor="middle">Program field raw_sensitive_spans_forwarded=0 is not, by itself, a universal zero-leakage proof.</text>
+  </g>
+</svg>

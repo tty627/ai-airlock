@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Airlock video end card</title>
+  <desc id="desc">End card with the slogan Your data stays. Your Agent works., scoped to the Airlock-controlled path, plus honest Mac-ready and Windows/Qoder-pending status.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#05111e"/>
+      <stop offset="0.55" stop-color="#0a2034"/>
+      <stop offset="1" stop-color="#0d314a"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#25d0e7" stop-opacity="0.26"/>
+      <stop offset="1" stop-color="#25d0e7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#25d0e7"/>
+      <stop offset="1" stop-color="#54d19c"/>
+    </linearGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="14" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .sans{font-family:Noto-Sans-CJK-SC,Arial-Unicode-MS,Arial,sans-serif}
+      .mono{font-family:JetBrains-Mono,monospace}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#071a2b"/>
+  <circle cx="800" cy="360" r="520" fill="#0d4053" opacity="0.20"/>
+  <path d="M0 790c310-90 524 41 797-20 340-76 527-205 803-126v256H0z" fill="#061522" opacity="0.85"/>
+
+  <g transform="translate(672 92)">
+    <circle cx="128" cy="128" r="112" fill="#091b2d" stroke="#25d0e7" stroke-width="8"/>
+    <path d="M76 58h66c37 0 67 30 67 67v21c0 37-30 67-67 67H76z" fill="#0d263c" stroke="#92aec1" stroke-width="8"/>
+    <path d="M128 58v155" stroke="#25d0e7" stroke-width="8" stroke-dasharray="9 10"/>
+    <rect x="84" y="105" width="88" height="48" rx="24" fill="#25d0e7" stroke="#eaf7ff" stroke-width="5"/>
+    <path d="M172 129h43" stroke="#25d0e7" stroke-width="12" stroke-linecap="round"/>
+    <path d="M214 113l23 16-23 16z" fill="#25d0e7"/>
+  </g>
+
+  <g class="sans" text-anchor="middle">
+    <text x="800" y="398" fill="#eaf7ff" font-size="72" font-weight="840">AI AIRLOCK</text>
+    <text x="800" y="488" fill="#25d0e7" font-size="49" font-weight="760">Your data stays.</text>
+    <text x="800" y="550" fill="#eaf7ff" font-size="49" font-weight="760">Your Agent works.</text>
+    <text x="800" y="615" fill="#9db5c5" font-size="24">Local Context Gateway / Context Compiler for AI Agents</text>
+    <text x="800" y="652" fill="#7897ab" font-size="20" font-family="Noto Sans CJK SC">本地检测 · 变换隔离 · OpenVINO 相关性 · Safe Context Capsule</text>
+    <text x="800" y="681" fill="#7897ab" font-size="15" font-weight="600">Airlock-controlled path · real host non-bypass pending</text>
+
+    <g transform="translate(408 704)">
+      <rect width="360" height="54" rx="27" fill="#0d3444" stroke="#54d19c"/>
+      <circle cx="30" cy="27" r="7" fill="#54d19c"/>
+      <text x="52" y="35" fill="#bff5df" font-size="18" font-weight="720" text-anchor="start">Mac / OpenVINO evidence ready</text>
+      <rect x="384" width="400" height="54" rx="27" fill="#3b281f" stroke="#ff8a3d"/>
+      <circle cx="414" cy="27" r="7" fill="#ff8a3d"/>
+      <text x="436" y="35" fill="#ffd1b2" font-size="18" font-weight="720" text-anchor="start">Windows / Qoder evidence pending</text>
+    </g>
+    <text x="800" y="817" fill="#6f8da1" font-size="17" class="mono">v0.1.0-rc.1 · synthetic evidence scope · no public URL yet</text>
+  </g>
+</svg>

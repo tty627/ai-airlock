@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Airlock flagship payment incident flow</title>
+  <desc id="desc">A synthetic payment incident flows through AI Airlock into three retained facts. The real Qoder Agent answer remains pending.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#061321"/>
+      <stop offset="1" stop-color="#0b263c"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#25d0e7"/>
+      <stop offset="1" stop-color="#54d19c"/>
+    </linearGradient>
+    <filter id="shadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#020911" flood-opacity="0.48"/>
+    </filter>
+    <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M0 0l12 6-12 6z" fill="#25d0e7"/>
+    </marker>
+    <style>
+      .sans{font-family:Noto-Sans-CJK-SC,Arial-Unicode-MS,Arial,sans-serif}
+      .mono{font-family:JetBrains-Mono,monospace}
+      .stage{font-size:16px;font-weight:750;letter-spacing:1.3px}
+      .title{font-size:25px;font-weight:790}
+      .body{font-size:17px}
+      .small{font-size:14px}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#071a2b"/>
+  <g class="sans">
+    <text x="72" y="76" fill="#eaf7ff" font-size="42" font-weight="820">Flagship: diagnose a synthetic payment incident</text>
+    <text x="72" y="116" fill="#92aec1" font-size="20">Keep the root-cause evidence. Quarantine risk. Do not hand the entire workspace to the Agent.</text>
+
+    <rect x="54" y="156" width="1130" height="606" rx="34" fill="#081b2c" stroke="#1e526e" stroke-width="2"/>
+    <rect x="1214" y="156" width="332" height="606" rx="34" fill="#102235" stroke="#ff8a3d" stroke-width="2"/>
+    <text x="82" y="199" fill="#78e6f2" class="stage">PRIVATE ZONE · MAC EVIDENCE AVAILABLE</text>
+    <text x="1244" y="199" fill="#ffb27f" class="stage">AGENT ZONE · PENDING</text>
+    <line x1="1199" y1="178" x2="1199" y2="740" stroke="#ff8a3d" stroke-width="4" stroke-dasharray="12 14"/>
+
+    <g transform="translate(82 256)" filter="url(#shadow)">
+      <rect width="270" height="402" rx="28" fill="#0d263a" stroke="#31556d" stroke-width="2"/>
+      <rect x="22" y="21" width="160" height="34" rx="17" fill="#3b281f" stroke="#ff8a3d"/>
+      <text x="102" y="44" fill="#ffd1b2" font-size="12" font-weight="760" text-anchor="middle">SYNTHETIC FIXTURE</text>
+      <text x="24" y="94" fill="#eaf7ff" class="title">Private incident</text>
+      <text x="24" y="122" fill="#7897ab" class="small">Raw values are never shown here.</text>
+      <g transform="translate(24 153)">
+        <rect width="222" height="43" rx="12" fill="#112e43"/>
+        <circle cx="19" cy="21" r="6" fill="#6d91a7"/>
+        <text x="37" y="28" fill="#b7ccda" class="body">payment logs</text>
+        <rect y="55" width="222" height="43" rx="12" fill="#112e43"/>
+        <circle cx="19" cy="76" r="6" fill="#6d91a7"/>
+        <text x="37" y="83" fill="#b7ccda" class="body">application config</text>
+        <rect y="110" width="222" height="43" rx="12" fill="#112e43"/>
+        <circle cx="19" cy="131" r="6" fill="#ff8a3d"/>
+        <text x="37" y="138" fill="#ffd1b2" class="body">credential / PII-like</text>
+        <rect y="165" width="222" height="43" rx="12" fill="#112e43" stroke="#ff8a3d"/>
+        <circle cx="19" cy="186" r="6" fill="#ff8a3d"/>
+        <text x="37" y="193" fill="#ffd1b2" class="body">untrusted instruction</text>
+      </g>
+      <text x="135" y="377" fill="#92aec1" class="small" text-anchor="middle">Task: find root cause + remediation</text>
+    </g>
+
+    <g transform="translate(416 256)" filter="url(#shadow)">
+      <rect width="280" height="402" rx="28" fill="#0d2b42" stroke="#25d0e7" stroke-width="2"/>
+      <text x="140" y="50" fill="#78e6f2" class="stage" text-anchor="middle">AI AIRLOCK</text>
+      <g transform="translate(28 78)">
+        <rect width="224" height="57" rx="15" fill="#12384f"/>
+        <text x="112" y="35" fill="#eaf7ff" class="body" font-weight="740" text-anchor="middle">1 · Detect</text>
+        <rect y="72" width="224" height="69" rx="15" fill="#12384f"/>
+        <text x="112" y="100" fill="#eaf7ff" class="body" font-weight="740" text-anchor="middle">2 · Transform</text>
+        <text x="112" y="125" fill="#ffb27f" class="small" text-anchor="middle">+ isolate instructions</text>
+        <rect y="156" width="224" height="69" rx="15" fill="#12384f"/>
+        <text x="112" y="184" fill="#eaf7ff" class="body" font-weight="740" text-anchor="middle">3 · OpenVINO rank</text>
+        <text x="112" y="209" fill="#78e6f2" class="small" text-anchor="middle">transformed text only</text>
+        <rect y="240" width="224" height="57" rx="15" fill="#12384f"/>
+        <text x="112" y="275" fill="#eaf7ff" class="body" font-weight="740" text-anchor="middle">4 · Final leak gate</text>
+      </g>
+      <text x="140" y="383" fill="#54d19c" class="small" font-weight="700" text-anchor="middle">Mac / Apple M4 CPU verified</text>
+    </g>
+
+    <line x1="352" y1="458" x2="396" y2="458" stroke="#25d0e7" stroke-width="5"/>
+    <path d="M396 450l12 8-12 8z" fill="#25d0e7"/>
+
+    <g transform="translate(760 226)" filter="url(#shadow)">
+      <rect width="374" height="463" rx="30" fill="#0d2e43" stroke="#54d19c" stroke-width="2"/>
+      <rect x="25" y="22" width="324" height="52" rx="26" fill="#25d0e7"/>
+      <text x="187" y="55" fill="#071525" font-size="19" font-weight="830" text-anchor="middle">SAFE CONTEXT CAPSULE</text>
+      <text x="28" y="113" fill="#eaf7ff" class="title">Required facts retained 3/3</text>
+      <g transform="translate(28 143)">
+        <circle cx="18" cy="24" r="18" fill="#173f39" stroke="#54d19c"/>
+        <text x="18" y="31" fill="#bff5df" font-size="18" font-weight="800" text-anchor="middle">1</text>
+        <text x="50" y="20" fill="#eaf7ff" class="body" font-weight="720">Redis pool exhausted</text>
+        <text x="50" y="45" fill="#92aec1" class="small">connection acquisition exhausted</text>
+        <path d="M18 49v32" stroke="#54d19c" stroke-width="3"/>
+
+        <circle cx="18" cy="101" r="18" fill="#173f39" stroke="#54d19c"/>
+        <text x="18" y="108" fill="#bff5df" font-size="18" font-weight="800" text-anchor="middle">2</text>
+        <text x="50" y="97" fill="#eaf7ff" class="body" font-weight="720">Retry storm</text>
+        <text x="50" y="122" fill="#92aec1" class="small">aggressive retries amplify pressure</text>
+        <path d="M18 126v32" stroke="#54d19c" stroke-width="3"/>
+
+        <circle cx="18" cy="178" r="18" fill="#173f39" stroke="#54d19c"/>
+        <text x="18" y="185" fill="#bff5df" font-size="18" font-weight="800" text-anchor="middle">3</text>
+        <text x="50" y="174" fill="#eaf7ff" class="body" font-weight="720">Timeout / latency spike</text>
+        <text x="50" y="199" fill="#92aec1" class="small">upstream impact remains visible</text>
+      </g>
+      <line x1="28" y1="388" x2="346" y2="388" stroke="#31556d"/>
+      <text x="28" y="421" fill="#bff5df" class="small" font-weight="700">Forbidden values observed</text>
+      <text x="346" y="421" fill="#eaf7ff" font-size="19" font-weight="800" text-anchor="end">0 / 252</text>
+      <text x="187" y="450" fill="#92aec1" font-size="11" text-anchor="middle">known-fixture · analyze stdout / stderr / audit</text>
+    </g>
+
+    <line x1="696" y1="458" x2="740" y2="458" stroke="#25d0e7" stroke-width="5"/>
+    <path d="M740 450l12 8-12 8z" fill="#25d0e7"/>
+    <line x1="1134" y1="458" x2="1230" y2="458" stroke="#25d0e7" stroke-width="6"/>
+    <path d="M1230 449l14 9-14 9z" fill="#25d0e7"/>
+    <rect x="1126" y="394" width="128" height="34" rx="17" fill="#0b2437" stroke="#25d0e7"/>
+    <text x="1190" y="417" fill="#bdeff5" class="small" font-weight="700" text-anchor="middle">ONLY CAPSULE</text>
+
+    <g transform="translate(1246 278)" filter="url(#shadow)">
+      <rect width="268" height="360" rx="28" fill="#132c42" stroke="#ff8a3d" stroke-width="2"/>
+      <circle cx="134" cy="75" r="51" fill="#0b1f32" stroke="#25d0e7" stroke-width="3"/>
+      <circle cx="134" cy="61" r="15" fill="#bdeff5"/>
+      <path d="M101 101c9-27 57-27 66 0" fill="#bdeff5"/>
+      <text x="134" y="154" fill="#eaf7ff" class="title" text-anchor="middle">Qoder / Agent</text>
+      <text x="134" y="188" fill="#92aec1" class="small" text-anchor="middle">Target outcome</text>
+      <text x="134" y="217" fill="#eaf7ff" class="body" text-anchor="middle">root cause + remediation</text>
+      <rect x="19" y="252" width="230" height="50" rx="25" fill="#3b281f" stroke="#ff8a3d"/>
+      <text x="134" y="283" fill="#ffd1b2" font-size="13" font-weight="780" text-anchor="middle">HOST ACCEPTANCE PENDING</text>
+      <text x="134" y="329" fill="#ffb27f" class="small" text-anchor="middle">No real Agent answer claimed</text>
+    </g>
+
+    <rect x="80" y="794" width="1436" height="56" rx="28" fill="#0c2639" stroke="#31556d"/>
+    <text x="798" y="828" fill="#b7ccda" font-size="17" font-weight="660" text-anchor="middle">Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1 · 3/3 is a Capsule fact-retention proxy, not Agent Task Success</text>
+  </g>
+</svg>

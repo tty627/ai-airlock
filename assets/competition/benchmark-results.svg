@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Airlock frozen benchmark results</title>
+  <desc id="desc">Rules-only versus OpenVINO mean relevance and flagship estimated-token context reduction shown together with the CLI P95 latency cost.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#061321"/>
+      <stop offset="1" stop-color="#0b263c"/>
+    </linearGradient>
+    <linearGradient id="ov" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#25d0e7"/>
+      <stop offset="1" stop-color="#54d19c"/>
+    </linearGradient>
+    <linearGradient id="cost" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffb36e"/>
+      <stop offset="1" stop-color="#ff7043"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#020911" flood-opacity="0.46"/>
+    </filter>
+    <style>
+      .sans{font-family:Noto-Sans-CJK-SC,Arial-Unicode-MS,Arial,sans-serif}
+      .mono{font-family:JetBrains-Mono,monospace}
+      .panel-title{font-size:23px;font-weight:760}
+      .value{font-size:27px;font-weight:820}
+      .small{font-size:15px}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#071a2b"/>
+  <g class="sans">
+    <text x="76" y="78" fill="#eaf7ff" font-size="36" font-weight="820">Frozen A/B: relevance values, latency cost</text>
+    <text x="76" y="118" fill="#92aec1" font-size="20">rules-only baseline → OpenVINO semantic relevance · same commit, data, CLI and environment</text>
+
+    <g transform="translate(872 54)">
+      <rect width="185" height="48" rx="24" fill="#102a40" stroke="#54d19c"/>
+      <text x="92.5" y="31" fill="#bff5df" font-size="14" font-weight="700" text-anchor="middle">Required facts 3/3</text>
+      <rect x="197" width="225" height="48" rx="24" fill="#102a40" stroke="#25d0e7"/>
+      <text x="309.5" y="31" fill="#bdeff5" font-size="13.5" font-weight="700" text-anchor="middle">Secret P/R 1.0/1.0 · 6+2 files</text>
+      <rect x="434" width="225" height="48" rx="24" fill="#102a40" stroke="#25d0e7"/>
+      <text x="546.5" y="31" fill="#bdeff5" font-size="13.5" font-weight="700" text-anchor="middle">Injection P/R 1.0/1.0 · n=25</text>
+    </g>
+
+    <g transform="translate(62 166)" filter="url(#shadow)">
+      <rect width="475" height="372" rx="28" fill="#0a1d30" stroke="#274c64" stroke-width="2"/>
+      <text x="32" y="48" fill="#eaf7ff" class="panel-title">Mean Recall@K</text>
+      <text x="32" y="76" fill="#7897ab" class="small">arithmetic mean · 12 synthetic tasks · K=4</text>
+      <text x="32" y="128" fill="#92aec1" font-size="16" font-weight="700">RULES-ONLY</text>
+      <rect x="32" y="145" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="145" width="240" height="34" rx="17" fill="#6d91a7"/>
+      <text x="425" y="171" fill="#c7d8e3" class="value" text-anchor="end">0.583333</text>
+      <text x="32" y="229" fill="#78e6f2" font-size="16" font-weight="700">OPENVINO</text>
+      <rect x="32" y="246" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="246" width="385" height="34" rx="17" fill="#25d0e7"/>
+      <text x="425" y="272" fill="#eaf7ff" class="value" text-anchor="end">0.9375</text>
+      <line x1="32" y1="313" x2="443" y2="313" stroke="#274c64"/>
+      <text x="32" y="347" fill="#54d19c" font-size="19" font-weight="760">Arithmetic mean on fixed set</text>
+    </g>
+
+    <g transform="translate(562 166)" filter="url(#shadow)">
+      <rect width="475" height="372" rx="28" fill="#0a1d30" stroke="#274c64" stroke-width="2"/>
+      <text x="32" y="48" fill="#eaf7ff" class="panel-title">Cross-lingual Mean Recall@K</text>
+      <text x="32" y="76" fill="#7897ab" class="small">arithmetic mean · 4 marked tasks · K=4</text>
+      <text x="32" y="128" fill="#92aec1" font-size="16" font-weight="700">RULES-ONLY</text>
+      <rect x="32" y="145" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="145" width="180" height="34" rx="17" fill="#6d91a7"/>
+      <text x="425" y="171" fill="#c7d8e3" class="value" text-anchor="end">0.4375</text>
+      <text x="32" y="229" fill="#78e6f2" font-size="16" font-weight="700">OPENVINO</text>
+      <rect x="32" y="246" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="246" width="411" height="34" rx="17" fill="#25d0e7"/>
+      <text x="425" y="272" fill="#eaf7ff" class="value" text-anchor="end">1.0</text>
+      <line x1="32" y1="313" x2="443" y2="313" stroke="#274c64"/>
+      <text x="32" y="347" fill="#54d19c" font-size="19" font-weight="760">Arithmetic mean on fixed set</text>
+    </g>
+
+    <g transform="translate(1062 166)" filter="url(#shadow)">
+      <rect width="475" height="372" rx="28" fill="#0a1d30" stroke="#274c64" stroke-width="2"/>
+      <text x="32" y="48" fill="#eaf7ff" font-size="21" font-weight="760">Flagship estimated-token reduction</text>
+      <text x="32" y="76" fill="#7897ab" class="small">single incident · estimator: utf8_bytes_div_4_ceil_v1</text>
+      <text x="32" y="128" fill="#92aec1" font-size="16" font-weight="700">RULES-ONLY</text>
+      <rect x="32" y="145" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="145" width="274" height="34" rx="17" fill="#6d91a7"/>
+      <text x="425" y="171" fill="#c7d8e3" class="value" text-anchor="end">66.5564%</text>
+      <text x="32" y="229" fill="#78e6f2" font-size="16" font-weight="700">OPENVINO</text>
+      <rect x="32" y="246" width="411" height="34" rx="17" fill="#132d42"/>
+      <rect x="32" y="246" width="310" height="34" rx="17" fill="#25d0e7"/>
+      <text x="425" y="272" fill="#eaf7ff" class="value" text-anchor="end">75.3515%</text>
+      <line x1="32" y1="313" x2="443" y2="313" stroke="#274c64"/>
+      <text x="32" y="347" fill="#54d19c" font-size="19" font-weight="760">Single flagship measurement</text>
+    </g>
+
+    <g transform="translate(62 568)" filter="url(#shadow)">
+      <rect width="1475" height="228" rx="28" fill="#111d2a" stroke="#ff8a3d" stroke-width="2"/>
+      <text x="32" y="50" fill="#ffd1b2" font-size="24" font-weight="780">Latency trade-off · CLI P95 wall-clock</text>
+      <text x="32" y="79" fill="#b99d89" class="small">42 mixed CLI subprocess invocations per variant · nearest-rank P95 · lower is better</text>
+
+      <text x="32" y="128" fill="#92aec1" font-size="16" font-weight="700">RULES-ONLY</text>
+      <rect x="190" y="104" width="1085" height="34" rx="17" fill="#202c38"/>
+      <rect x="190" y="104" width="93" height="34" rx="17" fill="#6d91a7"/>
+      <text x="1308" y="130" fill="#c7d8e3" class="value">103.052 ms</text>
+
+      <text x="32" y="187" fill="#ffb27f" font-size="16" font-weight="700">OPENVINO</text>
+      <rect x="190" y="163" width="1085" height="34" rx="17" fill="#202c38"/>
+      <rect x="190" y="163" width="1085" height="34" rx="17" fill="#ff8a3d"/>
+      <text x="1308" y="189" fill="#ffd1b2" class="value">1204.529 ms</text>
+    </g>
+
+    <text x="800" y="844" fill="#9db5c5" font-size="18" font-weight="650" text-anchor="middle">Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1</text>
+    <text x="800" y="873" fill="#6f8da1" class="small" text-anchor="middle">Fixed fixtures only · not Windows/Qoder/Intel evidence · not a universal security or quality guarantee</text>
+  </g>
+</svg>

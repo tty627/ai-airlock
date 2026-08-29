@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">AI Airlock — Your data stays. Your Agent works.</title>
+  <desc id="desc">Hero banner showing an Airlock-controlled path that transforms private data into a budgeted, policy-filtered Safe Context Capsule; real host non-bypass remains pending.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#061321"/>
+      <stop offset="0.55" stop-color="#0a2034"/>
+      <stop offset="100%" stop-color="#0d2f49"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#25d0e7" stop-opacity="0.24"/>
+      <stop offset="100%" stop-color="#25d0e7" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#25d0e7"/>
+      <stop offset="100%" stop-color="#54d19c"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#020911" flood-opacity="0.52"/>
+    </filter>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .sans{font-family:Noto-Sans-CJK-SC,Arial-Unicode-MS,Arial,sans-serif}
+      .mono{font-family:JetBrains-Mono,monospace}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#071a2b"/>
+  <circle cx="1320" cy="110" r="430" fill="#0d4053" opacity="0.18"/>
+  <circle cx="930" cy="840" r="380" fill="#0d4053" opacity="0.14"/>
+  <path d="M0 748C330 665 496 856 820 780c294-69 486-229 780-160v280H0z" fill="#08192a" opacity="0.82"/>
+
+  <g class="sans">
+    <rect x="92" y="82" width="320" height="42" rx="21" fill="#0d3148" stroke="#25d0e7" stroke-opacity="0.65"/>
+    <text x="252" y="110" fill="#78e6f2" font-size="20" font-weight="700" text-anchor="middle">LOCAL CONTEXT GATEWAY</text>
+    <text x="90" y="246" fill="#eaf7ff" font-size="94" font-weight="800">AI AIRLOCK</text>
+    <text x="92" y="344" fill="#25d0e7" font-size="56" font-weight="720">Your data stays.</text>
+    <text x="92" y="410" fill="#eaf7ff" font-size="56" font-weight="720">Your Agent works.</text>
+    <text x="94" y="492" fill="#b7ccda" font-size="28" font-family="Noto Sans CJK SC">把私有、不可信的本地数据编译成</text>
+    <text x="94" y="535" fill="#b7ccda" font-size="28" font-family="Noto Sans CJK SC">受预算约束、策略过滤、可追溯的 Safe Context Capsule</text>
+    <text x="94" y="574" fill="#7897ab" font-size="16" font-weight="600">Airlock-controlled path · real host non-bypass pending</text>
+
+    <g transform="translate(94 606)">
+      <rect width="290" height="52" rx="26" fill="#0d3444" stroke="#54d19c"/>
+      <circle cx="27" cy="26" r="7" fill="#54d19c"/>
+      <text x="48" y="34" fill="#bff5df" font-size="18" font-weight="650">Mac / OpenVINO verified</text>
+      <rect x="310" width="330" height="52" rx="26" fill="#3b281f" stroke="#ff8a3d"/>
+      <circle cx="338" cy="26" r="7" fill="#ff8a3d"/>
+      <text x="359" y="34" fill="#ffd1b2" font-size="18" font-weight="650">Windows / Qoder pending</text>
+    </g>
+    <text x="96" y="712" fill="#7897ab" font-size="18" class="mono">v0.1.0-rc.1 · bounded synthetic evidence</text>
+  </g>
+
+  <g transform="translate(855 120)" filter="url(#shadow)">
+    <rect x="0" y="0" width="645" height="610" rx="42" fill="#091a2b" stroke="#1f506a" stroke-width="2"/>
+    <text x="48" y="65" fill="#92aec1" font-size="17" class="sans" font-weight="700">PRIVATE ZONE</text>
+    <text x="504" y="65" fill="#92aec1" font-size="17" class="sans" font-weight="700">AGENT ZONE</text>
+    <line x1="476" y1="92" x2="476" y2="548" stroke="#ff8a3d" stroke-width="3" stroke-dasharray="10 12"/>
+
+    <g transform="translate(50 132)">
+      <rect x="0" y="18" width="164" height="238" rx="24" fill="#102a40" stroke="#31556d"/>
+      <rect x="22" y="45" width="120" height="18" rx="9" fill="#37556a"/>
+      <rect x="22" y="82" width="88" height="12" rx="6" fill="#28485e"/>
+      <rect x="22" y="108" width="120" height="12" rx="6" fill="#28485e"/>
+      <rect x="22" y="134" width="104" height="12" rx="6" fill="#ff8a3d" opacity="0.8"/>
+      <rect x="22" y="160" width="120" height="12" rx="6" fill="#28485e"/>
+      <rect x="22" y="186" width="72" height="12" rx="6" fill="#ff8a3d" opacity="0.55"/>
+      <text x="82" y="292" fill="#92aec1" font-size="18" class="sans" text-anchor="middle">Raw workspace</text>
+      <text x="82" y="319" fill="#ffb27f" font-size="15" class="sans" text-anchor="middle">private · untrusted</text>
+    </g>
+
+    <g transform="translate(258 156)" class="sans">
+      <rect width="166" height="48" rx="14" fill="#102f45" stroke="#25d0e7"/>
+      <text x="83" y="31" fill="#bdeff5" font-size="17" text-anchor="middle" font-weight="700">DETECT</text>
+      <path d="M83 48v34" stroke="#25d0e7" stroke-width="3"/>
+      <rect y="82" width="166" height="68" rx="14" fill="#102f45" stroke="#25d0e7"/>
+      <text x="83" y="109" fill="#bdeff5" font-size="16" text-anchor="middle" font-weight="700">TRANSFORM</text>
+      <text x="83" y="132" fill="#ffb27f" font-size="14" text-anchor="middle">ISOLATE RISK</text>
+      <path d="M83 150v34" stroke="#25d0e7" stroke-width="3"/>
+      <rect y="184" width="166" height="68" rx="14" fill="#102f45" stroke="#25d0e7"/>
+      <text x="83" y="211" fill="#bdeff5" font-size="16" text-anchor="middle" font-weight="700">OPENVINO</text>
+      <text x="83" y="234" fill="#92aec1" font-size="14" text-anchor="middle">task relevance</text>
+      <path d="M83 252v12" stroke="#25d0e7" stroke-width="3"/>
+      <rect y="264" width="166" height="48" rx="14" fill="#102f45" stroke="#25d0e7"/>
+      <text x="83" y="294" fill="#bdeff5" font-size="15" text-anchor="middle" font-weight="700">FINAL LEAK GATE</text>
+    </g>
+
+    <path d="M216 278h36" stroke="#25d0e7" stroke-width="4"/>
+    <path d="M246 270l12 8-12 8z" fill="#25d0e7"/>
+
+    <g transform="translate(318 520)">
+      <rect x="-46" y="-48" width="240" height="76" rx="38" fill="#25d0e7" stroke="#eaf7ff" stroke-width="3"/>
+      <text x="74" y="-17" fill="#071525" font-size="17" class="sans" text-anchor="middle" font-weight="800">SAFE CONTEXT CAPSULE</text>
+      <text x="74" y="7" fill="#0b3340" font-size="13" class="sans" text-anchor="middle">facts · provenance · policy</text>
+    </g>
+
+    <path d="M514 510h52" stroke="#25d0e7" stroke-width="5"/>
+    <path d="M558 499l17 11-17 11z" fill="#25d0e7"/>
+    <g transform="translate(520 376)" class="sans">
+      <circle cx="48" cy="54" r="47" fill="#102a40" stroke="#25d0e7" stroke-width="3"/>
+      <circle cx="48" cy="42" r="14" fill="#bdeff5"/>
+      <path d="M20 77c8-22 48-22 56 0" fill="#bdeff5"/>
+      <text x="48" y="127" fill="#eaf7ff" font-size="18" text-anchor="middle" font-weight="700">AGENT</text>
+      <rect x="-19" y="146" width="134" height="33" rx="16" fill="#3b281f" stroke="#ff8a3d"/>
+      <text x="48" y="168" fill="#ffd1b2" font-size="12" text-anchor="middle" font-weight="700">HOST PENDING</text>
+    </g>
+  </g>
+</svg>

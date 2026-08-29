@@ -5,10 +5,11 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "ai-airlock"
 version = "0.1.0"
-description = "Deterministic local compiler for minimal, safe AI context capsules"
+description = "Local compiler for budgeted, policy-filtered AI context capsules"
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
-authors = [{ name = "AI Airlock Team" }]
+license = "Apache-2.0"
+authors = [{ name = "谭天晔" }]
 dependencies = [
   "PyYAML>=6.0,<7.0",
 ]
@@ -30,6 +31,11 @@ openvino = [
 
 [project.scripts]
 ai-airlock = "airlock.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/tty627/ai-airlock"
+Repository = "https://github.com/tty627/ai-airlock"
+Issues = "https://github.com/tty627/ai-airlock/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

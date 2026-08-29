@@ -94,7 +94,8 @@ git status --porcelain --untracked-files=all
 - base install、OpenVINO extra、`pip check`；
 - base/full pytest 的 passed/failed/skipped 与 skip 原因；
 - Ruff lint、Ruff format、`git diff --check`；
-- QP-01 flagship decision、3/3 required facts、stderr、OpenVINO metadata；
+- 与 QP-01 使用同一 task 的 macOS public-CLI flagship decision、3/3 required facts、stderr、
+  OpenVINO metadata；真实 Qoder QP-01 另行记录且不得由该项替代；
 - benchmark run ID、总体/两 variant 状态、输入 hashes、JSON/Markdown SHA-256；
 - 未验证边界，包括真实 Windows/PowerShell/Qoder、远端 CI 或 Intel device（如仍未执行）。
 
@@ -107,3 +108,8 @@ RELEASE CANDIDATE = YES | NO
 
 本地 source RC 可以与比赛 submission readiness 分开判断；不得用 macOS/Python evidence 冒充
 Windows/Qoder 或 Intel 实机验收。
+
+Windows/Qoder 验收必须从不可变候选 Tag 开始，按
+[`windows-validation-handoff.md`](windows-validation-handoff.md) 执行，并将
+[`windows-validation-report-template.md`](windows-validation-report-template.md) 复制到仓库外的 evidence
+目录填写。未经脱敏审阅的 Windows transcript、截图和录像不得提交到 source repository。
