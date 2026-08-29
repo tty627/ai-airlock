@@ -23,7 +23,7 @@ read、索引和附件旁路仍待 Qoder 验收，不能外推为通用安全保
 | Python Qoder strict response gate | **PASS** | `safe_context` JSON 的严格字段、模式和 OpenVINO metadata gate 已验证 | 不是 Qoder 界面、Skill 自动发现或 Capsule-only 宿主行为 |
 | Windows PowerShell 5.1 / 7 | **PENDING** | 规范、脚本和验收矩阵已准备 | 没有 Windows 实机结果 |
 | Qoder host / Agent Task Completed | **PENDING** | 12 个正向和 12 个负向触发 oracle 已定义 | 正向与负向均为 `0/12 REAL_QODER_EXECUTED` |
-| GitHub Python CI | **PASS · scoped** | Windows/Ubuntu Python 3.12、LF checkout、Ruff、benchmark smoke 已通过 | 不是 PowerShell wrapper、OpenVINO/Qoder host 或 Intel evidence |
+| GitHub Python CI | **PASS · scoped** | `v0.1.0-rc.3` 的 main/tag Windows/Ubuntu Python 3.12、LF checkout、Ruff、benchmark smoke 已通过 | 不是 PowerShell wrapper、OpenVINO/Qoder host 或 Intel evidence；见 [STATUS](STATUS.md) |
 | Intel hardware | **PENDING / NOT RUN** | — | 没有 Intel 性能、NPU/GPU 或硬件加速结论 |
 
 完整冻结证据见 [release evidence protocol](docs/release-evidence.md)；本次机器可读结果由

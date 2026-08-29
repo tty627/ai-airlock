@@ -15,9 +15,10 @@ Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
 Previous Windows candidate: v0.1.0-rc.2 (immutable; superseded for Windows validation)
-Windows candidate tag:      v0.1.0-rc.3
-Windows candidate commit:   [OWNER_HANDOFF_AFTER_TAG_CREATION]
-Windows candidate tree:     [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Windows candidate tag:      v0.1.0-rc.3 (annotated and published)
+Windows candidate tag object: 31679f3afb8e3010413b01d7a42df35695b294d3
+Windows candidate commit:   55eca4ceedb1f7e63e9444b86b32f58f2dccac3f
+Windows candidate tree:     a7392e3893eac83dddd53288785bed1defc1d5a0
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
@@ -25,8 +26,8 @@ GitHub remote:               https://github.com/tty627/ai-airlock (public)
 because canonical-LF checkout and Windows legacy-code-page benchmark defects were corrected after that tag.
 `v0.1.0-rc.3` freezes those portability corrections plus the reviewed documentation and Windows handoff. Run
 formal Windows acceptance only from the immutable `v0.1.0-rc.3` tag, and cross-check the resolved commit and tree
-against the owner's post-tag handoff; do not validate floating `main`. If this candidate fails, create a new tag
-rather than moving an existing one.
+plus the tag object against the owner's post-tag handoff; do not validate floating `main`. If this candidate
+fails, create a new tag rather than moving an existing one.
 
 ## Status summary
 
@@ -40,7 +41,7 @@ rather than moving an existing one.
 | Qoder host integration | `NOT_RUN` | 12 positive and 12 negative trigger specifications | Real discovery, tool trace, Capsule-only and non-bypass evidence |
 | Intel hardware | `NOT_RUN` | None | Named device and cold/warm performance evidence, or explicit limitation |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / Python CI | `VERIFIED_WITH_SCOPE` | Public repository, immutable rc.2 evidence, and successful Windows/Ubuntu Python 3.12 portability CI on pre-candidate commit `7c06769` | Require exact rc.3 main/tag CI before owner handoff; this is not wrapper/Qoder evidence |
+| GitHub / Python CI | `VERIFIED_WITH_SCOPE` | Remote annotated rc.3 identity plus successful exact-SHA main/tag CI on Windows and Ubuntu Python 3.12 | Preserve tag object and run URLs; this is not wrapper/Qoder evidence |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -92,6 +93,26 @@ PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task
   not exact rc.3 main/tag CI, formal `scripts/run.ps1` evidence, PowerShell 5.1/7 acceptance, real OpenVINO on
   Windows, Qoder host evidence or Intel hardware evidence.
 
+## GitHub publication evidence for rc.3
+
+- Remote annotated tag `v0.1.0-rc.3` has tag object
+  `31679f3afb8e3010413b01d7a42df35695b294d3`, peels to commit
+  `55eca4ceedb1f7e63e9444b86b32f58f2dccac3f`, and resolves to tree
+  `a7392e3893eac83dddd53288785bed1defc1d5a0`.
+- The tag is annotated but unsigned, and the repository had no GitHub ruleset at this review. “Immutable” is a
+  release-process rule rather than a server-enforced guarantee; every handoff therefore verifies the exact tag
+  object as well as its peeled commit and tree.
+- Exact-SHA main CI: [GitHub Actions run 33264778975](https://github.com/tty627/ai-airlock/actions/runs/33264778975),
+  `success`; Ubuntu job `99132798963` and Windows job `99132799076`.
+- Candidate tag CI: [GitHub Actions run 33264852242](https://github.com/tty627/ai-airlock/actions/runs/33264852242),
+  `success`; Ubuntu job `99132994364` and Windows job `99132994474`.
+- All four Python 3.12 jobs reported `210 passed / 8 skipped`, passed Ruff and format checks, and passed the
+  benchmark smoke test. Each set of eight skips was explicitly due to the prepared OpenVINO model/runtime being
+  unavailable. Both Windows jobs also passed the canonical-LF checkout gate with `core.autocrlf=true`.
+- This proves the published source identity and scoped Python portability CI. It does not run `scripts/run.ps1`,
+  PowerShell 5.1/7 wrapper acceptance, a prepared Windows OpenVINO model, Qoder host integration or Intel
+  hardware validation.
+
 ## Current blockers and decisions
 
 ### Confirmed public GitHub identity
@@ -134,12 +155,11 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Commit the rc.3 release-preparation documents and require Windows/Ubuntu CI on that exact SHA.
-2. Create and publish the annotated `v0.1.0-rc.3` tag without moving prior tags; verify the remote tag object,
-   peeled commit, tree and tag-triggered CI externally.
-3. Provide the exact commit/tree in the owner handoff. On Windows, clone and detach at that exact tag and return
-   a sanitized validation report. A failure or inconclusive result creates a new candidate.
-4. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
+1. Provide the exact rc.3 repository, tag object, tag, commit and tree in the owner handoff. On the formal
+   Windows/Qoder machine, clone and detach at that tag; do not test floating `main`.
+2. Return a sanitized validation report. A failure or inconclusive result creates a new candidate and never
+   moves rc.3.
+3. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
    same run identity.
 
 ## Update rules

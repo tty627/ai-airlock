@@ -24,7 +24,7 @@ WINDOWS POWERSHELL                  PENDING / NOT RUN
 QODER HOST CAPSULE-ONLY             PENDING / NOT RUN
 INTEL DEVICE                        NOT RUN
 PRE-CANDIDATE PYTHON CI             PASS / WINDOWS + UBUNTU
-EXACT RC.3 MAIN/TAG CI              PENDING
+EXACT RC.3 MAIN/TAG CI              PASS / WINDOWS + UBUNTU
 GITHUB SOURCE                       PUBLIC / AUTHORIZED
 OTHER PUBLICATION                   NOT AUTHORIZED
 ```
@@ -50,7 +50,7 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 
 | Gate | 当前状态 | 发布前所需证据 |
 |---|---|---|
-| G0 · Source identity | **PENDING_TAG** | exact-SHA main CI 后创建 rc.3 annotated tag；回填 tag object、commit 与 tree |
+| G0 · Source identity | **PASS_WITH_LIMITATION** | rc.3 annotated tag object `31679f3a…`；commit `55eca4ce…`；tree `a7392e38…`；既有标签未移动；无签名/ruleset，靠流程与对象核验保持不可变 |
 | G1 · Evidence integrity | **PASS** | SHA256SUMS 与 JSON parse 持续通过 |
 | G2 · Mac OpenVINO path | **PASS** | rc.1 evidence 已覆盖固定模型、CPU、无 fallback、A/B |
 | G3 · Public claims | **PASS** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描 |
@@ -61,7 +61,7 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 | G7 · Windows PowerShell | **PENDING** | 5.1/7 cold/warm、中文/空格路径、错误和残留进程证据 |
 | G8 · Qoder host | **PENDING** | discovery、12+12 triggers、Capsule-only non-bypass、最终回答 |
 | G9 · Intel hardware | **PENDING** | 设备、runtime、cold/warm latency、失败数 |
-| G10 · GitHub source / Python CI | **VERIFIED_WITH_SCOPE** | 公共仓库与 pre-candidate Windows/Ubuntu Python CI 已验证；exact rc.3 main/tag CI 待完成 |
+| G10 · GitHub source / Python CI | **PASS_WITH_SCOPE** | 公共仓库与 exact rc.3 main/tag Windows/Ubuntu Python 3.12 CI 均通过；不等于宿主/硬件验收 |
 | G10B · ModelScope / media / submission | **NOT AUTHORIZED / NOT RUN** | 平台 preflight、公开页面、文章/视频发布与比赛提交回执 |
 
 最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；本轮只创建可追溯的 GitHub Windows 候选。
@@ -208,7 +208,7 @@ OTHER PUBLICATION                   NOT AUTHORIZED
   `1024×1024 RGBA`，其余六张为 `1600×900`。
 - [x] `meta.json`、`info.json`、evidence `benchmark/latest.json` 与本项目其他 JSON 均可解析。
 - [x] tracked diff 与未跟踪 Markdown/SVG 的 whitespace check 均通过。
-- [x] 本地 Markdown 链接目标全部存在；rc.2 SHA 只保留在明确标注的历史证据中，rc.3 自引用字段使用阻断式 owner-handoff 占位符。
+- [x] 本地 Markdown 链接目标全部存在；rc.2 SHA 只保留在明确标注的历史证据中，rc.3 owner handoff 已回填精确 commit/tree。
 - [x] 公开文本无本机用户名、绝对路径、账号、远程主机、真实 endpoint 或未限定“零泄漏”。
 - [x] Secret / PII 扫描覆盖 submission-facing Markdown；SVG 做文本扫描，7 个 PNG 做逐图目检与字符串扫描。
 - [x] rc.1/rc.2 tag、commit 与 tree 未变化；rc.3 候选准备 diff 只含已审查的 portability、CI、回归测试和文档改动。
@@ -240,7 +240,7 @@ FINAL_PUBLICATION_READY = NO
 
 ARTICLE_DRAFT_READY = YES
 WINDOWS_HANDOFF_MATERIAL_READY = YES
-WINDOWS_CANDIDATE_IDENTITY_READY = NO
+WINDOWS_CANDIDATE_IDENTITY_READY = YES
 ```
 
 `RELEASE_METADATA_READY=NO` 是因为未测内存、icon URL、timeout、模型托管与 parser 接受度尚未关闭；

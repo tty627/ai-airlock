@@ -16,6 +16,7 @@
 | ID | Claim / 数值 | 指标定义 | Evidence / 位置 | 环境与样本范围 | 限制条件 | README | 文章 | 视频/图 |
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | C-TEST-01 | Full pytest：`212 passed / 6 skipped` | OpenVINO 模型准备完成后，在 clean checkout 运行完整 pytest 的结果；6 项 skip 均因 PowerShell 不可用 | `release-evidence.md` → “Install, model preparation, and tests” → “Full pytest after prepare” / “Full skip reason” | macOS 26.5.2、arm64、Apple M4、Python 3.12.14；source RC 全量测试 | 不是 Windows/PowerShell/Qoder、远端 CI 或 Intel 结果；不得写成 `218/218 passed` | 是 | 是 | 可选 |
+| C-CI-01 | rc.3 GitHub Python CI：Windows 与 Ubuntu 各 `210 passed / 8 skipped`；Ruff、format、benchmark smoke 均 PASS | 对同一 tagged source commit 先运行 main push CI，再运行 annotated-tag push CI；四个 matrix job 必须全部成功 | Main run [`33264778975`](https://github.com/tty627/ai-airlock/actions/runs/33264778975)，jobs `99132798963` / `99132799076`；tag run [`33264852242`](https://github.com/tty627/ai-airlock/actions/runs/33264852242)，jobs `99132994364` / `99132994474` | `v0.1.0-rc.3`；commit `55eca4ceedb1f7e63e9444b86b32f58f2dccac3f`；tag object `31679f3afb8e3010413b01d7a42df35695b294d3`；GitHub `ubuntu-latest` / `windows-latest`；Python 3.12 | 8 项均因 prepared OpenVINO model/runtime unavailable 而 skip；Windows checkout gate 使用 `core.autocrlf=true`；没有运行 `scripts/run.ps1`、PowerShell 5.1/7、真实 Windows OpenVINO、Qoder 或 Intel hardware | 是，须写 scoped Python CI | 可选 | 否 |
 | C-UTIL-01 | Flagship required facts：rules-only `3/3`；OpenVINO `3/3` | 合成支付事故 Capsule 中三个预注册事实是否被保留：Redis pool exhaustion、retry storm、timeout/latency spike | `benchmark/latest.json#$['variants']['rules-only']['utility']['required_facts_retained']`、`['required_facts_total']`；OpenVINO 路径把 variant 换为 `openvino` | 同一 flagship fixture、task、policy 与 commit；两 variant 各一次 benchmark workflow | 只证明预注册事实保留，不等于真实 Agent 完成任务，也不证明建议正确或修复已部署 | 是 | 是 | 是 |
 | C-SEC-01 | Secret precision / recall：rules-only `1.0 / 1.0`；OpenVINO `1.0 / 1.0` | 文件级 `precision=TP/(TP+FP)`，`recall=TP/(TP+FN)`；本次 `TP/FP/TN/FN=6/0/2/0` | `benchmark/latest.json#$['variants']['rules-only']['security']['secret_detection']['classification']`；OpenVINO 路径把 variant 换为 `openvino` | 6 个 positive source files、2 个 negative source files；两 variant；7 个命名输出面另行检查 | 不是 span/unique-value 级指标；不能外推到未知 Secret 格式或通用检测能力 | 是 | 是 | 是，须带样本范围 |
 | C-SEC-02 | Injection precision / recall：rules-only `1.0 / 1.0`；OpenVINO `1.0 / 1.0` | `precision=TP/(TP+FP)`，`recall=TP/(TP+FN)`；本次 `TP/FP/TN/FN=13/0/12/0` | `benchmark/latest.json#$['variants']['rules-only']['security']['prompt_injection']['classification']`；OpenVINO 路径把 variant 换为 `openvino` | 25 个合成用例：13 malicious、12 benign；invocation failures `0` | 这是当前固定数据集上的确定性 detector 结果；OpenVINO 不负责 Injection 分类；不能声称防住所有 Prompt Injection | 是 | 是 | 是，须带 `n=25` |
@@ -49,7 +50,7 @@
 - Intel AI PC 性能、设备选择、NPU/GPU 使用情况；
 - Qoder 自动发现、12 个 positive triggers、12 个 negative triggers、Capsule-only non-bypass；
 - 真实 Qoder Agent 的最终回答、Task Completed、workspace bypass 次数和任务期网络计数；
-- 精确 rc.3 tag/SHA 的外部 post-push CI 记录、ModelScope / 研习社 URL、真实截图和最终视频。
+- ModelScope / 研习社 URL、真实截图和最终视频。
 
 ## 使用规则
 

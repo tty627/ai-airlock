@@ -1,7 +1,7 @@
 # AI Airlock Windows Validation Handoff
 
-> Status: candidate identity is blocked until the annotated tag is created and the owner supplies its resolved
-> commit and tree. The Windows Agent prompt must repeat those post-tag values, and the tested checkout must
+> Status: public repository and annotated candidate tag are published and frozen by release policy; tag object,
+> commit and tree are fixed. The Windows Agent prompt must repeat these values, and the tested checkout must
 > reproduce them exactly.
 
 ## 1. Mission and authority
@@ -28,15 +28,16 @@ identity and evidence handling; it does not replace that oracle.
 ```text
 SOURCE_REPOSITORY_URL:   https://github.com/tty627/ai-airlock
 CANDIDATE_TAG:           v0.1.0-rc.3
-CANDIDATE_COMMIT:        [OWNER_HANDOFF_AFTER_TAG_CREATION]
-CANDIDATE_TREE:          [OWNER_HANDOFF_AFTER_TAG_CREATION]
+CANDIDATE_TAG_OBJECT:    31679f3afb8e3010413b01d7a42df35695b294d3
+CANDIDATE_COMMIT:        55eca4ceedb1f7e63e9444b86b32f58f2dccac3f
+CANDIDATE_TREE:          a7392e3893eac83dddd53288785bed1defc1d5a0
 CORE_EVIDENCE_COMMIT:    495f89c6349afbdd741576439b3b85369d26671a
 EXPECTED_PROJECT_NAME:   ai-airlock
 ```
 
-Do not infer or replace the commit/tree from floating `main`. Formal validation is `BLOCKED` until the owner
-resolves the published tag and supplies both exact values; it is also `BLOCKED` if the Windows Agent prompt does
-not repeat them or if the tested checkout does not reproduce them.
+Do not infer or replace identity values from floating `main`. Formal validation is `BLOCKED` if the Windows Agent
+prompt does not repeat all three exact tag object, commit and tree values or if the tested checkout does not
+reproduce them.
 
 ## 3. Read before running
 
@@ -57,8 +58,9 @@ Use a new directory that Qoder has never opened. Use the fixed values from secti
 ```powershell
 $RepositoryUrl = 'https://github.com/tty627/ai-airlock'
 $CandidateTag = 'v0.1.0-rc.3'
-$ExpectedCommit = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
-$ExpectedTree = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
+$ExpectedTagObject = '31679f3afb8e3010413b01d7a42df35695b294d3'
+$ExpectedCommit = '55eca4ceedb1f7e63e9444b86b32f58f2dccac3f'
+$ExpectedTree = 'a7392e3893eac83dddd53288785bed1defc1d5a0'
 $CheckoutRoot = 'C:\AI-Airlock-Acceptance\source'
 
 git clone --no-tags $RepositoryUrl $CheckoutRoot
@@ -67,17 +69,21 @@ git fetch --tags origin $CandidateTag
 git checkout --detach $CandidateTag
 
 $ActualCommit = (git rev-parse HEAD).Trim()
+$ActualTagObject = (git rev-parse "${CandidateTag}^{tag}").Trim()
 $TagCommit = (git rev-parse "${CandidateTag}^{commit}").Trim()
 $ActualTree = (git rev-parse 'HEAD^{tree}').Trim()
 $Dirty = @(git status --porcelain --untracked-files=all)
 
+$TagType = (git cat-file -t $CandidateTag).Trim()
+if ($TagType -cne 'tag') { throw 'Candidate is not an annotated tag.' }
+if ($ActualTagObject -cne $ExpectedTagObject) { throw 'Candidate tag object mismatch.' }
 if ($ActualCommit -cne $ExpectedCommit) { throw 'Candidate commit mismatch.' }
 if ($TagCommit -cne $ExpectedCommit) { throw 'Candidate tag mismatch.' }
 if ($ActualTree -cne $ExpectedTree) { throw 'Candidate tree mismatch.' }
 if ($Dirty.Count -ne 0) { throw 'Candidate checkout is not clean.' }
 ```
 
-Record the URL, tag, commit, tree and clone time in the report. If the repository is private, authenticate through
+Record the URL, tag object, tag, commit, tree and clone time in the report. If the repository is private, authenticate through
 Git Credential Manager or an existing secure session; never place a token in the URL, command history or report.
 
 ## 5. Evidence location and run identity
