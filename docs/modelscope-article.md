@@ -5,8 +5,8 @@
 > `495f89c6349afbdd741576439b3b85369d26671a`。
 > 实测范围：**Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1**。
 > exact `v0.1.0-rc.3` 的 Windows PowerShell 5.1/7 cold health 正式 verdict 为 `FAIL`，历史保持不变。
-> annotated、unsigned `v0.1.0-rc.4` 已发布且 scoped CI 通过；fresh-tag Windows regression subset
-> 通过，但 Windows full matrix 与 overall 仍为 `INCONCLUSIVE`。Intel 性能、真实 Qoder host 与
+> annotated、unsigned `v0.1.0-rc.4` 已发布且 scoped CI 通过；早期 fresh-tag Windows functional subset
+> 通过，但后续 required orphan-pipe fault `FAIL`，所以 rc.4 candidate 与 overall 为 `FAIL`。Intel 性能、真实 Qoder host 与
 > Capsule-only Agent Task Completed 为 `NOT_RUN`。
 
 ![AI Airlock Hero](../assets/competition/hero-banner.svg)
@@ -175,16 +175,18 @@ exact rc.3 在 Qoder 之前的 Windows cold health 已失败：两个 PowerShell
 handles 阻止 candidate model directory 原子 rename（`PermissionError` / WinError 5）；见
 [Claims Ledger · C-WIN-01](claims-ledger.md)。这不是 Windows PASS，也不是 rc.4 修复证据。
 
-rc.4 fresh-tag Windows 回传了一个受限但有价值的 regression subset：PowerShell 5.1/7 分别完成 cold +
+rc.4 fresh-tag Windows 先回传了一个受限但有价值的 functional subset：PowerShell 5.1/7 分别完成 cold +
 warm health，中文 task + 带空格路径 analyze、固定 invalid/missing errors、cross-shell concurrent cold
 通过，covered cases 的 residual process count 为 `0`；`252` markers × `26` stdout/stderr surfaces 为 `0 hits`。
-这些结论不能外推为通用“零泄漏”。更重要的是，source-artifact cache 已预填、网络为 `NOT_MEASURED`，
-remaining timeout/fault matrix 为 `NOT_RUN`，所以 **Windows full matrix 仍为 `INCONCLUSIVE`**。再加上
-Qoder 缺席/`NOT_RUN` 与 Intel performance `NOT_RUN`，overall 也为 `INCONCLUSIVE`。
+这些结论不能外推为通用“零泄漏”。随后同一 exact tag 的 orphan-pipe 故障 rerun 在 `32.164s` 返回
+exit `2`、空 stdout 和单一 `AIRLOCK_INVALID_JSON`，但 external cleanup 前/后 residual 为 `1/0`。
+无残留是必需 oracle，因此 **rc.4 Windows candidate 与 overall 均为 `FAIL`**。source-artifact cache
+预填、network `NOT_MEASURED`、其余 fault、Qoder 与 Intel `NOT_RUN` 是独立未知项，不是该 FAIL 的原因。
 
 外置脱敏报告没有 public URL；其记录的 manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
 `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。在匿名发布并复验前，公众无法
-独立下载这份报告。
+独立下载这份报告。后续 failure bundle 为 `29/29`，顶层 `SHA256SUMS` 文件 SHA-256 为
+`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`，同样无 public URL。
 
 真实验收矩阵已经定义 12 个 positive triggers 和 12 个 negative triggers；当前两组均为
 `0/12 REAL_QODER_EXECUTED`。还需要在真实 Windows/Qoder 上证明 Skill 自动发现、第一次内容访问就是
@@ -208,10 +210,12 @@ wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule �
 - exact rc.4 annotated tag object / commit / tree 与 scoped main/tag Windows/Ubuntu Python 3.12 CI；
 - exact rc.4 fresh-tag 的 Windows regression subset：5.1/7 独立 cold+warm health、中文/空格 analyze、
   invalid/missing errors、cross-shell concurrent cold、covered residual `0` 与 scoped marker scan `0 hits`。
+- exact rc.4 PowerShell 7 orphan-pipe required fault `FAIL`；不得被上面的早期 subset PASS 覆盖。
 
 尚未验证：
 
-- exact rc.4 的 clean source-artifact bootstrap/network、remaining timeout/fault matrix 与完整 Windows oracle；
+- 新 immutable post-rc.4 candidate 的 exact-tag isolation fix；以及 clean source-artifact bootstrap/network
+  和其余 timeout/fault cases；
 - Qoder Skill 自动发现、12+12 triggers、Capsule-only non-bypass、真实最终回答；
 - Intel AI PC、GPU/NPU 使用、跨硬件性能；
 - rc.4 外置脱敏报告、ModelScope 页面、文章和视频的可匿名访问 public URL；
@@ -260,13 +264,14 @@ trace、设置证据和未剪辑录像证明，而不是靠文档承诺。
 
 若面向商用，下一步优先级不是增加更多宣传数字，而是补足证据层：
 
-1. 为 exact rc.4 补做 clean source-artifact bootstrap/network、remaining timeout/fault matrix，并在命名
-   Intel AI PC 上完成可限定引用的设备与性能验收；
-2. 在 Qoder 新会话中完成 12+12 trigger matrix 和 Capsule-only flagship，并保存未剪辑证据；
-3. 建立独立 held-out 数据，覆盖更多 Secret、Injection、语言、任务和负缩减案例；
-4. 评估 latency budget，拆分 CLI 启动、tokenization、embedding、ranking 与 gate 的阶段成本；
-5. 冻结完整 transitive dependencies、LICENSE/NOTICE 和模型再分发方案；
-6. 根据组织环境补强宿主沙箱、审计、policy governance 与可轮换模型版本。
+1. 不移动 rc.4；先把当前 `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING` 冻结为新 candidate，重跑
+   exact-tag orphan-pipe oracle，再补 clean source-artifact bootstrap/network 与其余 fault cases；
+2. 在命名 Intel AI PC 上完成可限定引用的设备与性能验收；
+3. 在 Qoder 新会话中完成 12+12 trigger matrix 和 Capsule-only flagship，并保存未剪辑证据；
+4. 建立独立 held-out 数据，覆盖更多 Secret、Injection、语言、任务和负缩减案例；
+5. 评估 latency budget，拆分 CLI 启动、tokenization、embedding、ranking 与 gate 的阶段成本；
+6. 冻结完整 transitive dependencies、LICENSE/NOTICE 和模型再分发方案；
+7. 根据组织环境补强宿主沙箱、审计、policy governance 与可轮换模型版本。
 
 项目 LICENSE（Apache-2.0）、公开 author“谭天晔”和 GitHub 仓库 URL 已确认；ModelScope URL、最终
 平台发布授权和转换模型托管方式仍待决定。第三方来源与许可证记录见

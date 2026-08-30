@@ -24,9 +24,11 @@ QODER_REAL_MACHINE_TEST=NOT_RUN
 QODER_HOST_AVAILABILITY=ABSENT
 WINDOWS_POWERSHELL_RC3=FAIL
 WINDOWS_POWERSHELL_RC4_REGRESSION_SUBSET=PASS
-WINDOWS_POWERSHELL_RC4_FULL_MATRIX=INCONCLUSIVE
+WINDOWS_POWERSHELL_RC4_ORPHAN_PIPE_FAULT=FAIL
+WINDOWS_POWERSHELL_RC4_CANDIDATE=FAIL
+POST_RC4_FIX=UNTAGGED_VALIDATION_PENDING
 INTEL_PERFORMANCE=NOT_RUN
-OVERALL_ACCEPTANCE=INCONCLUSIVE
+OVERALL_ACCEPTANCE=FAIL
 ```
 
 | 验证面 | 当前状态 | 已有证据 | 尚缺证据 |
@@ -34,7 +36,7 @@ OVERALL_ACCEPTANCE=INCONCLUSIVE
 | Python CLI 核心 | `PASS_LOCAL` | macOS、Python 3.12、全量测试与旗舰 CLI 已实测；正式计数以对应 RC SHA 的外置 release evidence 为准 | PowerShell 动态用例在无 PowerShell 的主机上会跳过；不替代 Windows/Qoder |
 | Skill 格式与说明 | `PASS_STATIC_VALIDATED` | `skill-creator` validator 通过；触发与负边界已定义 | 仍需真实 Qoder 选择轨迹 |
 | Qoder 自动发现 | `NOT_RUN_HOST_ABSENT` | 安装与触发用例已定义 | Qoder 版本、截图/日志与命令轨迹 |
-| Windows wrapper | `FAIL_RC3 / RC4_SUBSET_PASS / FULL_MATRIX_INCONCLUSIVE` | rc.3 PowerShell 5.1/7 cold health 固定失败；rc.4 fresh-tag 已覆盖两个 shell 独立 cold+warm、中文/空格 analyze、invalid/missing errors、cross-shell concurrent cold 与 covered residual `0` | source-artifact cache 未清空、network `NOT_MEASURED`、remaining timeout/fault matrix `NOT_RUN` |
+| Windows wrapper | `FAIL_RC3 / RC4_FUNCTIONAL_SUBSET_PASS / RC4_ORPHAN_FAULT_FAIL / RC4_CANDIDATE_FAIL` | rc.3 cold health 固定失败；rc.4 早期 subset 通过，但后续 exact-tag orphan-pipe 必需 oracle 在 wrapper 返回后留下 `1` 个 descendant | empty-cache、network 与其余 faults 仍未执行；不改变已观察到的 rc.4 FAIL |
 | 旗舰 Agent 流程 | `NOT_RUN_REAL_QODER` | Capsule 已保留完整事故证据链，但 Qoder host 缺席 | Qoder 只消费 Capsule 的真实会话证据 |
 | OpenVINO | `PASS_LOCAL_FORMAL_CLI / FAIL_RC3_PROMOTION / RC4_FUNCTIONAL_SUBSET_PASS` | 正式命令显式选择 OpenVINO；macOS 公开 CLI 通过严格 gate；rc.4 Windows health/analyze regression subset 通过 | clean source-artifact bootstrap/network、remaining fault matrix、真实 Qoder trace 与 Intel performance |
 | GitHub Python CI | `RC4_PASS_WITH_SCOPE` | main `33293985019`、tag `33294040300`；Windows/Ubuntu 四个 Python 3.12 job 各 `212 passed / 8 skipped`，Ruff/format/benchmark smoke PASS | 未覆盖 `.[openvino]`、真实模型 bootstrap、PowerShell wrapper、Qoder 或 Intel performance |
@@ -42,14 +44,19 @@ OVERALL_ACCEPTANCE=INCONCLUSIVE
 rc.4 的精确发布身份为 annotated、unsigned tag object
 `2a50625aa95443e328573704cf42e9c633621ffe`，commit
 `52a215727115f32937cb78561e88a63fdae5adf2`，tree
-`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。fresh-tag regression subset 还记录了 `252` markers ×
+`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。早期 fresh-tag regression subset 还记录了 `252` markers ×
 `26` stdout/stderr surfaces 为 `0 hits`，但这不是通用零泄漏保证。外置脱敏报告没有 public URL；其记录的
 manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
 `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。
 
-预填 source-artifact cache、network `NOT_MEASURED` 与 remaining timeout/fault matrix `NOT_RUN` 使
-**Windows full matrix 保持 `INCONCLUSIVE`**。这一 Windows 限制，再加 Qoder host absent/`NOT_RUN` 和
-Intel performance `NOT_RUN`，使 overall acceptance 为 `INCONCLUSIVE`。因此不能说完整端到端已经通过。
+随后同一 exact tag 的 PowerShell 7 orphan-pipe rerun 在 `32.164s` 内返回 exit `2`、空 stdout 和单一
+`AIRLOCK_INVALID_JSON`，但 external cleanup 前/后 residual 为 `1/0`。deadline/error contract 通过，
+no-residual-process 必需 contract 失败，因此 rc.4 candidate 与 overall acceptance 均为 `FAIL`。独立
+failure bundle 为 `29/29`，顶层 `SHA256SUMS` 文件 SHA-256 为
+`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`。预填 source-artifact cache、
+network `NOT_MEASURED`、其余 fault `NOT_RUN`、Qoder absent/`NOT_RUN` 与 Intel performance `NOT_RUN`
+仍是独立未知项，不是此次 FAIL 的原因。当前修复只能标记为
+`POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING`。
 
 还要区分两种安全主张：
 
@@ -283,7 +290,8 @@ $Target = if ([IO.Path]::IsPathRooted($UserPath)) {
 | 模型不可用（开发 CLI） | 直接 Python CLI 显式选择 OpenVINO 且模型目录不可用 | exit `1`；code=`INFERENCE_UNAVAILABLE`；无路径回显；不得回退 lexical | 报告 backend 不可用并停止 | silent fallback、路径/traceback 泄漏 |
 | 输入路径不存在 | 对不存在路径执行 scan/analyze | exit `1`；stdout 空；stderr code=`INPUT_PATH_NOT_FOUND` | 报告路径问题并停止 | 回显敏感路径、traceback、raw fallback |
 | 输入权限不足 | 用无读取权限的测试目录 | exit `1`；code=`INPUT_PERMISSION_DENIED` | 请求用户修正权限或路径并停止 | 部分扫描后继续、silent skip、traceback |
-| audit log 无法写入 | 指向无写权限的外部测试位置 | exit `1`；code=`AUDIT_LOG_WRITE_FAILED` | 报告审计输出失败并停止 | 发布了没有审计证据的结果 |
+| production wrapper audit override | 向唯一 Qoder production entry 传 `--audit-log` | bootstrap 前 exit `1`；code=`INVALID_ARGUMENTS` | 删除未允许参数并按固定 wrapper 合同重试 | 把开发参数静默开放到 production wrapper |
+| audit log 无法写入（development CLI diagnostic only） | 直接 Python CLI 指向无写权限的外部测试位置 | exit `1`；code=`AUDIT_LOG_WRITE_FAILED` | 仅报告开发 CLI 审计输出失败 | 把该结果冒充 Qoder wrapper evidence |
 | 参数错误 | 传未知/额外参数、缺或重复 required flag | exit `1`；code=`INVALID_ARGUMENTS` 或 wrapper 的固定 specialized code | 修正调用；不回显攻击者参数 | argparse usage/原始参数/traceback 泄漏 |
 | path 不是唯一绝对 Windows 路径 | 相对、drive-relative、`.`/`..` 或重复 path | bootstrap 前 exit `1`；code=`AIRLOCK_ABSOLUTE_PATH_REQUIRED` 或 `INVALID_ARGUMENTS` | 用已知 workspace root 做纯字符串绝对化后重试 | 以 Skill root 为 cwd 静默扫描错目标 |
 | 非 UTF-8、竞态或超限 | 使用隔离测试 fixture | exit `1`；code=`INPUT_INCOMPLETE` | fail closed | 使用部分输入继续 |
@@ -295,16 +303,21 @@ $Target = if ([IO.Path]::IsPathRooted($UserPath)) {
 | 超时/无输出/child 不读取 gate stdin | 对 venv、pip、runtime probe、CLI 或 gate 做隔离故障注入 | 每一阶段都有固定 deadline；stdout/stderr 分块限量读取，stdin 异步写入也受同一 deadline；CLI 120 秒后返回 `AIRLOCK_TIMEOUT` | 终止本次调用并报告 | 同步 pipe 写入挂死、taskkill 文本污染 JSON、无输出后读取 raw |
 | 父进程退出但派生子进程持有 pipe | Windows 专用故障桩 | 总 deadline 仍必须返回；随后检查不存在残留子进程 | 若有残留则本次发布验收失败 | wrapper 返回后仍有后台子进程 |
 
-故障注入只能在一次性安装副本或测试桩执行，不要修改正式验收包。恢复后重新跑 health。wrapper 已对 Python 探针（30 秒）、venv（120 秒）、pip（600 秒）、模型准备（900 秒）、正式 CLI（120 秒）、response gate（30 秒）、并发锁等待（1200 秒）分别设限，并把捕获的 stdout/stderr 各限制为 4 MiB 字符、发布前再执行 4 MiB UTF-8 bytes gate；冷启动整体仍应保留宿主级总 deadline。当前没有 Windows Job Object，父进程已先退出的异常派生子进程无法再靠原 PID 做严格进程树回收，所以“无残留进程”仍是 Windows P1 blocker，必须用故障桩验证，不能仅靠静态审查放行。
+故障注入只能在一次性安装副本或测试桩执行，不要修改正式验收包。恢复后重新跑 health。wrapper 已对 Python 探针（30 秒）、venv（120 秒）、pip（600 秒）、模型准备（900 秒）、正式 CLI（120 秒）、response gate（30 秒）、并发锁等待（1200 秒）分别设限，并把捕获的 stdout/stderr 各限制为 4 MiB 字符、发布前再执行 4 MiB UTF-8 bytes gate；冷启动整体仍应保留宿主级总 deadline。exact rc.4 没有 Windows Job Object，且其 orphan-pipe 故障桩已正式证明 no-residual oracle `FAIL`。post-rc.4 working tree 已加入 gated launcher 与 Job Object，但在新 immutable tag 和 exact-tag evidence 前仍是 `VALIDATION_PENDING`，不能回写为 rc.4 修复证据。
+
+rc.4 published spec 中原“audit log 无法写入 → `AUDIT_LOG_WRITE_FAILED`”wrapper oracle 为
+`SPEC_ORACLE_UNREACHABLE`：production wrapper 明确拒绝 `--audit-log` 并先返回 `INVALID_ARGUMENTS`。
+开发 Python CLI 的 `AUDIT_LOG_WRITE_FAILED` 路径仍有效，但不是 Qoder wrapper evidence，也不把 Qoder
+host 从 `NOT_RUN` 改成 `FAIL`。
 
 ## 8. Windows 实机检查
 
 记录：Windows 版本、PowerShell 版本、Qoder 版本、CPU、Python 版本、项目 commit、Skill 实际加载路径。
 
-本节完整 oracle 尚未全部执行。rc.4 回传的 cold/warm 与 analyze 结果属于 regression subset；由于
-source-artifact cache 预填，不构成 clean source-download/bootstrap 或 network 结果。第 7 节 remaining
-timeout/fault cases 仍为 `NOT_RUN`，Qoder 相关字段因 host 缺席必须填 `NOT_RUN`，不能从 wrapper subset
-推导 Qoder `PASS`。
+本节完整 oracle 尚未全部执行。rc.4 的 cold/warm 与 analyze 结果属于早期 functional subset；由于
+source-artifact cache 预填，不构成 clean source-download/bootstrap 或 network 结果。第 7 节
+orphan-pipe fault 已执行并 `FAIL`，其余 timeout/fault cases 仍为 `NOT_RUN`。Qoder 相关字段因 host 缺席
+必须填 `NOT_RUN`，不能从 wrapper subset 或 fault 结果推导 Qoder `PASS/FAIL`。
 
 ### 8.1 冷启动与 warm start
 
@@ -488,7 +501,7 @@ notes:
 - 所有非阻断 analyze 均通过 OpenVINO metadata consistency gate；
 - 每条用例都有环境、commit、Skill 来源、命令、路径、decision 和脱敏证据。
 
-当前项目状态必须保持：**Qoder host absent / integration `NOT_RUN`；rc.3 Windows `FAIL`；rc.4 Windows
-regression subset `PASS`、full matrix `INCONCLUSIVE`；Intel performance `NOT_RUN`；overall
-`INCONCLUSIVE`**。对应机器状态以第 1 节状态块为准。只有补齐 Windows remaining matrix 并完成真实
-Qoder 全套 oracle，才可按本节条件重新判断；不得把 subset 状态提升为完整 Windows/Qoder `PASS`。
+当前项目状态必须保持：**Qoder host absent / integration `NOT_RUN`；rc.3 Windows `FAIL`；rc.4 earlier
+functional subset `PASS`、orphan-pipe fault `FAIL`、candidate `FAIL`；Intel performance `NOT_RUN`；
+overall `FAIL`**。对应机器状态以第 1 节状态块为准。post-rc.4 修复在新 exact tag 与完整证据前只能是
+`UNTAGGED / VALIDATION_PENDING`；不得把 working-tree 结果提升为完整 Windows/Qoder `PASS`。

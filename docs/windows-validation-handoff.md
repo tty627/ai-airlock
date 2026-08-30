@@ -1,8 +1,9 @@
 # AI Airlock Windows Validation Handoff
 
 > Status: `v0.1.0-rc.4` is an annotated, unsigned, published candidate. Its tag object, commit and tree below are
-> frozen. Exact-SHA main/tag Python CI passed with limited scope. A fresh-tag Windows regression subset passed,
-> but the Windows full matrix and overall verdict remain `INCONCLUSIVE`; Qoder was absent and remains `NOT_RUN`.
+> frozen. Exact-SHA main/tag Python CI passed with limited scope. An earlier fresh-tag Windows functional subset
+> passed, but a later required orphan-pipe fault on the same exact tag failed the no-residual-process oracle.
+> Therefore rc.4 Windows wrapper/candidate and overall verdicts are `FAIL`; Qoder remains `NOT_RUN`.
 
 Exact `v0.1.0-rc.3` remains immutable. Its formal Windows verdict was `FAIL`: Windows PowerShell 5.1 and
 PowerShell 7 cold health both returned `AIRLOCK_MODEL_PREPARATION_FAILED`. Diagnostics isolated cached OpenVINO
@@ -210,15 +211,22 @@ The returned fresh-tag run is deliberately recorded at subset granularity:
 | Residual process check | `PASS_REGRESSION_SUBSET` | Observed residual count `0` for covered cases |
 | Known-marker scan | `PASS_WITH_SCOPE` | `252` markers across `26` stdout/stderr surfaces, `0` hits; not a universal zero-leakage claim |
 | Cold-bootstrap/task-period network | `NOT_MEASURED` | No network conclusion is available |
-| Remaining timeout/fault matrix | `NOT_RUN` | Required fault/deadline cases remain open |
+| Orphan-pipe required fault | `FAIL` | PowerShell 7 exact rc.4 returned in `32.164s` with fixed `AIRLOCK_INVALID_JSON`, but residual before/after external cleanup was `1/0` |
+| Remaining timeout/fault cases | `NOT_RUN` | Other required fault/deadline cases remain open; they are not the cause of the observed failure |
 | Qoder discovery, triggers and Capsule-only answer | `NOT_RUN` | Qoder was absent on the validation host |
 | Intel performance | `NOT_RUN` | No Intel latency, device or throughput claim is available |
-| Windows full matrix | `INCONCLUSIVE` | Prefilled source-artifact cache, network `NOT_MEASURED` and remaining timeout/fault matrix `NOT_RUN` prevent a complete Windows-matrix `PASS` |
-| Overall Windows/Qoder/Intel acceptance | `INCONCLUSIVE` | The Windows full-matrix limitations above, plus Qoder absent/`NOT_RUN` and Intel performance `NOT_RUN`, prevent an overall `PASS` |
+| rc.4 Windows candidate | `FAIL` | One required no-residual-process oracle was violated; missing evidence cannot dilute this to `INCONCLUSIVE` |
+| Overall Windows/Qoder/Intel acceptance | `FAIL` | The rc.4 Windows candidate failure is decisive; Qoder/Intel unknowns remain independent |
 
 The external sanitized report has no public URL. Its recorded manifest verification is `99/99`, and the SHA-256 of
 its top-level `SHA256SUMS` file is `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`. Until that artifact is anonymously
 published and reverified, readers cannot independently download it from this repository.
+
+The later failure bundle is separate and also has no public URL. Its manifest verification is `29/29`, and the
+SHA-256 of its top-level `SHA256SUMS` file is
+`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`. Preserve both bundles; one records the
+earlier scoped subset PASS and the other the decisive fault FAIL. Any post-rc.4 fix remains
+`POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING` until a new immutable candidate and exact-tag rerun exist.
 
 ## 8. Verdict rules
 

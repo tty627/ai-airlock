@@ -10,6 +10,7 @@ $ModelDir = Join-Path $ProjectRoot 'models\multilingual-e5-small-openvino-fp16'
 $BootstrapContract = 'qoder-openvino-v1'
 $ReadyMarker = Join-Path $VenvDir '.airlock-ready-qoder-openvino-v1'
 $PackageManifest = Join-Path $ProjectRoot 'pyproject.toml'
+$WindowsGatedLauncherPath = Join-Path $PSScriptRoot 'windows_gated_launcher.ps1'
 
 function Write-AirlockError {
     param(
@@ -434,7 +435,7 @@ function Invoke-BoundedProcess {
         [string[]]$ProcessArguments = @(),
         [string]$ProcessWorkingDirectory = $ProjectRoot,
         [int]$TimeoutMilliseconds = 120000,
-        [AllowNull()][string]$StandardInputText = $null,
+        [AllowNull()][object]$StandardInputText = $null,
         [int]$MaxCapturedCharacters = 4194304
     )
 
@@ -443,28 +444,43 @@ function Invoke-BoundedProcess {
     }) -join ' ')
 
     $Process = $null
+    $KillOnCloseJob = $null
+    $ControlPipe = $null
     $ProcessStarted = $false
+    $ProcessIsolationFailed = $false
+    $ExitedProcessJobCompleted = $false
     try {
-        if ($TimeoutMilliseconds -le 0 -or $MaxCapturedCharacters -le 0) {
+        if ($TimeoutMilliseconds -le 0 -or $MaxCapturedCharacters -le 0 -or `
+            ($null -ne $StandardInputText -and -not ($StandardInputText -is [string]))) {
             throw 'invalid bounded-process limits'
         }
-        $StartInfo = [System.Diagnostics.ProcessStartInfo]::new()
-        $StartInfo.FileName = $Executable
-        $StartInfo.Arguments = $ArgumentText
-        $StartInfo.WorkingDirectory = $ProcessWorkingDirectory
-        $StartInfo.UseShellExecute = $false
-        $StartInfo.CreateNoWindow = $true
-        $StartInfo.RedirectStandardOutput = $true
-        $StartInfo.RedirectStandardError = $true
-        $StartInfo.RedirectStandardInput = $null -ne $StandardInputText
-        $StartInfo.StandardOutputEncoding = [System.Text.UTF8Encoding]::new($false)
-        $StartInfo.StandardErrorEncoding = [System.Text.UTF8Encoding]::new($false)
-
-        $Process = [System.Diagnostics.Process]::new()
-        $Process.StartInfo = $StartInfo
-        if (-not $Process.Start()) {
-            throw 'process did not start'
+        $Watch = [System.Diagnostics.Stopwatch]::StartNew()
+        try {
+            $Session = Start-AirlockGatedProcess `
+                -Executable $Executable `
+                -ArgumentText $ArgumentText `
+                -WorkingDirectory $ProcessWorkingDirectory `
+                -LauncherPath $WindowsGatedLauncherPath `
+                -RedirectStandardInput ($null -ne $StandardInputText) `
+                -HandshakeTimeoutMilliseconds ([Math]::Min($TimeoutMilliseconds, 10000))
         }
+        catch {
+            $ProcessIsolationFailed = $true
+            throw
+        }
+        if (-not $Session.TargetStarted) {
+            return [pscustomobject]@{
+                Started = $false
+                TimedOut = $false
+                OutputLimitExceeded = $false
+                ExitCode = 2
+                Stdout = ''
+                Stderr = ''
+            }
+        }
+        $Process = $Session.Process
+        $KillOnCloseJob = $Session.Job
+        $ControlPipe = $Session.ControlPipe
         $ProcessStarted = $true
 
         # Read both pipes in fixed-size chunks. This keeps memory bounded and
@@ -479,6 +495,13 @@ function Invoke-BoundedProcess {
         $StderrTask = $Process.StandardError.ReadAsync(
             $StderrBuffer, 0, $StderrBuffer.Length
         )
+        $CompletionBuffer = [byte[]]::new(5)
+        $CompletionOffset = 0
+        $CompletionTask = $ControlPipe.ReadAsync(
+            $CompletionBuffer, $CompletionOffset, $CompletionBuffer.Length
+        )
+        $CompletionComplete = $false
+        $TargetExitCode = $null
         $StdoutComplete = $false
         $StderrComplete = $false
         $InputComplete = $null -eq $StandardInputText
@@ -486,13 +509,19 @@ function Invoke-BoundedProcess {
         if ($null -ne $StandardInputText) {
             # Never synchronously write to a child pipe before the timeout
             # clock starts: a non-reading child could otherwise hang forever.
-            $InputTask = $Process.StandardInput.WriteAsync($StandardInputText)
+            $InputTask = $Process.StandardInput.WriteAsync([string]$StandardInputText)
         }
 
-        $Watch = [System.Diagnostics.Stopwatch]::StartNew()
         while ($true) {
             if ($Watch.ElapsedMilliseconds -ge $TimeoutMilliseconds) {
-                Stop-ProcessTreeBounded -Process $Process
+                try {
+                    Complete-AirlockKillOnCloseJob -Job $KillOnCloseJob
+                    $KillOnCloseJob = $null
+                }
+                catch {
+                    $ProcessIsolationFailed = $true
+                    throw
+                }
                 return [pscustomobject]@{
                     Started = $true
                     TimedOut = $true
@@ -519,7 +548,14 @@ function Invoke-BoundedProcess {
                     $StdoutComplete = $true
                 }
                 elseif ($StdoutBuilder.Length -gt $MaxCapturedCharacters - $ReadCount) {
-                    Stop-ProcessTreeBounded -Process $Process
+                    try {
+                        Complete-AirlockKillOnCloseJob -Job $KillOnCloseJob
+                        $KillOnCloseJob = $null
+                    }
+                    catch {
+                        $ProcessIsolationFailed = $true
+                        throw
+                    }
                     return [pscustomobject]@{
                         Started = $true
                         TimedOut = $false
@@ -543,7 +579,14 @@ function Invoke-BoundedProcess {
                     $StderrComplete = $true
                 }
                 elseif ($StderrBuilder.Length -gt $MaxCapturedCharacters - $ReadCount) {
-                    Stop-ProcessTreeBounded -Process $Process
+                    try {
+                        Complete-AirlockKillOnCloseJob -Job $KillOnCloseJob
+                        $KillOnCloseJob = $null
+                    }
+                    catch {
+                        $ProcessIsolationFailed = $true
+                        throw
+                    }
                     return [pscustomobject]@{
                         Started = $true
                         TimedOut = $false
@@ -561,12 +604,58 @@ function Invoke-BoundedProcess {
                 }
             }
 
+            if (-not $CompletionComplete -and $CompletionTask.IsCompleted) {
+                try {
+                    $CompletionReadCount = $CompletionTask.GetAwaiter().GetResult()
+                }
+                catch {
+                    $ProcessIsolationFailed = $true
+                    throw
+                }
+                if ($CompletionReadCount -le 0) {
+                    $ProcessIsolationFailed = $true
+                    throw 'The gated launcher ended without a completion frame.'
+                }
+                $CompletionOffset += $CompletionReadCount
+                if ($CompletionOffset -eq $CompletionBuffer.Length) {
+                    if ([int]$CompletionBuffer[0] -ne 4) {
+                        $ProcessIsolationFailed = $true
+                        throw 'The gated launcher reported an internal failure.'
+                    }
+                    $TargetExitCode = [System.BitConverter]::ToInt32(
+                        $CompletionBuffer, 1
+                    )
+                    $CompletionComplete = $true
+                }
+                else {
+                    $CompletionTask = $ControlPipe.ReadAsync(
+                        $CompletionBuffer,
+                        $CompletionOffset,
+                        $CompletionBuffer.Length - $CompletionOffset
+                    )
+                }
+            }
+
             $ProcessExited = $Process.HasExited
+            if ($ProcessExited -and -not $ExitedProcessJobCompleted) {
+                # Descendants may still own copies of the redirected pipe handles.
+                # Terminate the job and prove it empty before waiting for pipe EOF.
+                try {
+                    Complete-AirlockKillOnCloseJob -Job $KillOnCloseJob
+                    $KillOnCloseJob = $null
+                    $ExitedProcessJobCompleted = $true
+                }
+                catch {
+                    $ProcessIsolationFailed = $true
+                    throw
+                }
+            }
             if ($ProcessExited -and -not $InputComplete) {
                 $Process.StandardInput.Close()
                 $InputComplete = $true
             }
-            if ($ProcessExited -and $StdoutComplete -and $StderrComplete) {
+            if ($ProcessExited -and $StdoutComplete -and $StderrComplete -and `
+                $CompletionComplete) {
                 break
             }
             Start-Sleep -Milliseconds 10
@@ -576,19 +665,32 @@ function Invoke-BoundedProcess {
             Started = $true
             TimedOut = $false
             OutputLimitExceeded = $false
-            ExitCode = $Process.ExitCode
+            ExitCode = $TargetExitCode
             Stdout = $StdoutBuilder.ToString()
             Stderr = $StderrBuilder.ToString()
         }
     }
     catch {
-        if ($ProcessStarted -and $null -ne $Process) {
+        if ($ProcessStarted -and $null -ne $KillOnCloseJob) {
+            try {
+                Complete-AirlockKillOnCloseJob -Job $KillOnCloseJob
+                $KillOnCloseJob = $null
+            }
+            catch {
+                $ProcessIsolationFailed = $true
+            }
+        }
+        elseif ($ProcessStarted -and $null -ne $Process) {
             try {
                 Stop-ProcessTreeBounded -Process $Process
             }
             catch {
                 # Cleanup failure must not expose a native exception or block the wrapper.
             }
+        }
+        if ($ProcessIsolationFailed) {
+            Stop-Airlock -Code 'AIRLOCK_PROCESS_ISOLATION_FAILED' `
+                -Message 'AI Airlock could not isolate its bounded child process.'
         }
         return [pscustomobject]@{
             Started = $false
@@ -600,6 +702,10 @@ function Invoke-BoundedProcess {
         }
     }
     finally {
+        Close-AirlockKillOnCloseJob -Job $KillOnCloseJob
+        if ($null -ne $ControlPipe) {
+            $ControlPipe.Dispose()
+        }
         if ($null -ne $Process) {
             $Process.Dispose()
         }
@@ -741,6 +847,14 @@ if ($Command -ne 'health' -and `
 }
 if ($RequestedOpenVINO) {
     $CliArguments += @('--model-dir', $ModelDir)
+}
+
+try {
+    . (Join-Path $PSScriptRoot 'windows_job.ps1')
+}
+catch {
+    Stop-Airlock -Code 'AIRLOCK_PROCESS_ISOLATION_FAILED' `
+        -Message 'AI Airlock could not initialize bounded process isolation.'
 }
 
 $PackageStamp = Get-PackageStamp

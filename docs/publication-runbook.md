@@ -14,10 +14,10 @@
 `AIRLOCK_MODEL_PREPARATION_FAILED`。诊断定位到 inference smoke 后缓存的 OpenVINO native handles
 阻止 candidate model directory 原子 rename（`PermissionError` / WinError 5）。Qoder 为 `NOT_RUN`。
 
-`v0.1.0-rc.4` 的 fresh-tag Windows regression subset 已通过，但 source-artifact cache 预填、网络
-`NOT_MEASURED`、remaining timeout/fault matrix `NOT_RUN`，因此 Windows full matrix 为 `INCONCLUSIVE`。
-这一限制再加 Qoder 缺席/`NOT_RUN` 与 Intel performance `NOT_RUN`，使 overall verdict 为
-`INCONCLUSIVE`；不得写成完整 Windows/Qoder `PASS`。
+`v0.1.0-rc.4` 的早期 fresh-tag Windows functional subset 已通过，但同一 immutable exact tag 后续
+orphan-pipe 必需 oracle `FAIL`：wrapper 返回后 external cleanup 前/后 residual 为 `1/0`。因此 rc.4
+Windows candidate 与 overall verdict 均为 `FAIL`；不得用 prefilled cache、network `NOT_MEASURED`、
+remaining faults `NOT_RUN`、Qoder 或 Intel 未执行项把决定性失败改写为 `INCONCLUSIVE`。
 
 本 runbook 于 2026-08-28 复核以下一手资料：
 
@@ -54,8 +54,8 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 2. **ModelScope Skill 必须添加自定义标签 `AI PC`。** 精确保留大小写与空格。
 3. **比赛文章必须添加专题标签 `Intel AI PC`。** 该标签是比赛归类，不得写成 Intel 实机已验证。
 4. Skill 必须发布到 ModelScope Skills Center，并在最终指定的生产力 Agent 中完成调用验证；AI Airlock
-   当前 Windows 状态是 `rc.3 FAIL / rc.4 REGRESSION SUBSET PASS / FULL MATRIX INCONCLUSIVE`，Qoder 仍为
-   `NOT_RUN`。
+   当前 Windows 状态是 `rc.3 FAIL / rc.4 EARLIER FUNCTIONAL SUBSET PASS / ORPHAN FAULT FAIL /
+   CANDIDATE FAIL`，Qoder 仍为 `NOT_RUN`。
 5. ModelScope zip 根目录必须有且仅有一个 `SKILL.md`；若采用 CLI 发布路径，还要满足其 frontmatter
    与 5 MB 限制。官方同页对 frontmatter 的 `version` 要求存在表述差异，必须在真实上传路径的预检中
    解决，不能假设当前包一定被接受。
@@ -292,16 +292,19 @@ rc.4 fresh-tag 回传结果必须拆分记录：
 - `PASS_REGRESSION_SUBSET`：PowerShell 5.1/7 各自 cold + warm health、中文 task + 带空格路径 analyze、
   固定 invalid/missing errors、cross-shell concurrent cold、covered cases residual process count `0`；
 - `PASS_WITH_SCOPE`：`252` markers × `26` stdout/stderr surfaces 为 `0 hits`，不得外推为无范围“零泄漏”；
-- `NOT_MEASURED`：cold-bootstrap/task-period network；
-- `NOT_RUN`：remaining timeout/fault matrix；Qoder（host 缺席）和 Intel performance 也分别为 `NOT_RUN`；
-- `INCONCLUSIVE`（Windows full matrix）：source-artifact cache 预填、network `NOT_MEASURED` 和 remaining
-  timeout/fault `NOT_RUN`；
-- `INCONCLUSIVE`（overall）：上述 Windows full-matrix 限制，再加 Qoder absent/`NOT_RUN` 与 Intel
-  performance `NOT_RUN`。
+- `FAIL`（rc.4 orphan-pipe）：`32.164s`、exit `2`、stdout `0`、单一 `AIRLOCK_INVALID_JSON`，external
+  cleanup 前/后 residual `1/0`；因此 rc.4 Windows candidate 与 overall 均为 `FAIL`；
+- `NOT_RUN`：empty source-cache 与 remaining timeout/fault cases；Qoder（host 缺席）和 Intel
+  performance 也分别为 `NOT_RUN`；
+- `NOT_MEASURED`：cold-bootstrap/task-period network；这些未知项不是 rc.4 FAIL 的原因。
 
 外置脱敏报告没有 public URL；其记录的 manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
 `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。在匿名发布并复验前，公众不能
-独立下载该报告。仍需完成的 Qoder 证据包括自动发现、12+12 triggers、首次内容访问 non-bypass、
+独立下载该报告。后续 failure bundle 与早期 subset bundle 分离：manifest `29/29`，顶层
+`SHA256SUMS` 文件 SHA-256 为
+`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`，同样无 public URL。当前修复
+只能写 `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING`；创建并验证新 immutable tag 前不得宣称新候选
+PASS。仍需完成的 Qoder 证据包括自动发现、12+12 triggers、首次内容访问 non-bypass、
 Capsule-only 最终回答、`source:local_ref` 与未经剪辑 trajectory。
 
 按 [qoder_acceptance.md](qoder_acceptance.md) 执行，先判断 `PASS / FAIL / INCONCLUSIVE`。无法证明
@@ -309,9 +312,9 @@ non-bypass 时只能是 `INCONCLUSIVE`。新数字先进入 [Claims Ledger](clai
 commit/evidence/environment，再替换文章与视频占位。Mac CLI rehearsal 永远不能写成 Qoder Task
 Completed。
 
-exact rc.4 tag CI 与 fresh-tag Windows regression subset 已存在，但二者都不是完整 Windows/Qoder 验收。
-source-artifact cache、网络、timeout/fault 和 host non-bypass 的限制必须随每次引用保留；Intel CPU 被识别
-不等于 Intel inference 或性能已通过。
+exact rc.4 tag CI 与早期 fresh-tag Windows functional subset 已存在，但后续 required fault 已决定 rc.4
+candidate `FAIL`。source-artifact cache、网络、remaining faults 和 host non-bypass 的未知状态仍须随每次
+引用保留；Intel CPU 被识别不等于 Intel inference 或性能已通过。
 
 ## 7. 文章、视频与表单
 
@@ -368,8 +371,9 @@ Controlled archive + manifests verified  YES
 Public evidence anonymous check          YES
 Public URLs verified                     YES
 Remote CI verified                       YES
-Windows / Qoder evidence                 PASS or explicitly accepted limitation
-Intel evidence                           PASS or explicitly accepted limitation
+Windows evidence for new immutable RC    PASS
+Qoder evidence                           PASS or explicitly accepted NOT_RUN limitation
+Intel evidence                           PASS or explicitly accepted NOT_RUN limitation
 Claims Ledger final review               YES
 Secret / PII review                      YES
 User publication authorization           YES

@@ -23,7 +23,7 @@
 | Apple M4 CPU OpenVINO CLI | **PASS** | fixed model/revision、`openvino_embedding`、CPU、A/B 与 trade-off |
 | Python strict response gate | **PASS** | `Python response gate passed` |
 | rc.4 scoped GitHub Python CI | **PASS_WITH_SCOPE** | main `33293985019` / tag `33294040300`；四个 job 各 `212 passed / 8 skipped`；不等于 wrapper/Qoder/Intel evidence |
-| Windows / PowerShell 5.1/7 | **rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE** | 只显示已覆盖 regression subset 与 cache/network/fault 限制；不得显示完整 Windows PASS |
+| Windows / PowerShell 5.1/7 | **rc.3 FAIL / rc.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL / CANDIDATE FAIL** | 同时显示早期 scoped PASS 与后续 required fault FAIL；不得显示完整 Windows PASS |
 | Qoder host / Capsule-only answer | **NOT_RUN** | Qoder host 缺席；只能显示 `Qoder host absent / NOT_RUN` |
 | Intel hardware performance | **NOT RUN** | 不填设备数字，不挂 NPU/GPU badge |
 
@@ -219,7 +219,7 @@ Synthetic flagship · checked public outputs
 
 ```text
 Qoder host absent / NOT_RUN
-rc.3 Windows FAIL; rc.4 regression subset PASS / Windows full matrix INCONCLUSIVE
+rc.3 Windows FAIL; rc.4 earlier subset PASS / orphan-pipe fault FAIL / candidate FAIL
 ```
 
 **最终提交版替换条件**：只有完成真实 Windows/Qoder 验收后，替换为连续镜头：自然语言触发 →
@@ -227,9 +227,9 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 **口播（当前版）**：
 
-> Python response gate 已通过；rc.3 Windows cold health 正式失败。exact rc.4 的 Windows regression
-> subset 已通过，但 source-artifact cache 预填、网络未测、remaining timeout/fault 未跑，因此 Windows
-> full matrix 仍为 INCONCLUSIVE；Qoder host 缺席且尚未执行。
+> Python response gate 已通过；rc.3 Windows cold health 正式失败。exact rc.4 的早期 Windows functional
+> subset 已通过，但后续 orphan-pipe 必需 oracle 在 wrapper 返回后仍观察到一个 descendant，因此 rc.4
+> candidate 为 FAIL；Qoder host 缺席且尚未执行。
 
 ### 56–60s · End Card
 
@@ -239,8 +239,8 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 > **AI Airlock. Your data stays. Your Agent works.**
 
-当前 End Card 必须保留 `Mac evidence ready · rc.3 Windows FAIL · rc.4 subset PASS / full matrix
-INCONCLUSIVE · Qoder NOT_RUN`，在实机证据全部回填前
+当前 End Card 必须保留 `Mac evidence ready · rc.3 Windows FAIL · rc.4 earlier subset PASS / orphan fault
+FAIL / candidate FAIL · Qoder NOT_RUN`，在新候选实机证据全部回填前
 不得改成 `OpenVINO × Intel AI PC × Qoder validated`；同时保留
 `Airlock-controlled path · real host non-bypass pending`。
 
@@ -264,15 +264,16 @@ code、stdout/stderr hash 与录像 SHA-256。
 如 raw terminal 包含用户名或绝对路径，原片只进入受控私有 evidence，不进入公开成片；公开版使用安全
 裁剪。不要用后期遮挡掩盖实际命令参数是否正确。
 
-### U2 · Windows PowerShell acceptance（rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE）
+### U2 · Windows PowerShell acceptance（rc.3 FAIL / rc.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL）
 
 rc.3 已记录 PowerShell 5.1 与 7 cold health 的固定失败，不能剪辑成 PASS。rc.4 fresh-tag regression
 subset 已覆盖两个 shell 各自 cold+warm health、中文 task + 带空格路径 analyze、固定 invalid/missing
 errors、cross-shell concurrent cold、covered residual `0`，以及 `252` markers × `26` stdout/stderr surfaces
-`0 hits`。source-artifact cache 已预填，network 为 `NOT_MEASURED`，remaining timeout/fault matrix 为
-`NOT_RUN`，所以 full matrix 必须保持 `INCONCLUSIVE`。外置脱敏报告没有 public URL；其记录的 manifest
-为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
-`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。完整 oracle 以
+`0 hits`。但后续 exact-tag PowerShell 7 orphan-pipe rerun 为 `32.164s`、exit `2`、stdout `0`、单一
+`AIRLOCK_INVALID_JSON`，external cleanup 前/后 residual `1/0`，所以 rc.4 candidate 必须为 `FAIL`。
+empty-cache/network/remaining faults 仍未知，但不是 FAIL 原因。早期 subset bundle 为 `99/99`，其 hash 为
+`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`；后续 failure bundle 为 `29/29`，
+hash 为 `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`。完整 oracle 以
 [qoder_acceptance.md](qoder_acceptance.md) 为准。
 
 ### U3 · Qoder flagship（NOT_RUN · host absent）

@@ -9,9 +9,9 @@
 `FAIL`。`v0.1.0-rc.4` 已作为 annotated、unsigned tag 发布；tag object 为
 `2a50625aa95443e328573704cf42e9c633621ffe`，commit 为
 `52a215727115f32937cb78561e88a63fdae5adf2`，tree 为
-`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。rc.4 的 scoped Python CI 已通过；Windows 只有
-regression subset PASS，full matrix 仍为 `INCONCLUSIVE`。Qoder 和 Intel performance 均为 `NOT_RUN`，
-所以 overall 仍为 `INCONCLUSIVE`。
+`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。rc.4 的 scoped Python CI 与早期 Windows functional
+subset 已通过；但同一 exact tag 的 orphan-pipe 必需 oracle 后续 `FAIL`，因此 rc.4 candidate 与 overall
+均为 `FAIL`。Qoder 和 Intel performance 仍分别为独立的 `NOT_RUN`。
 
 ## 核心结论
 
@@ -56,7 +56,7 @@ Agent 要解决生产问题
 | Source RC | **PASS** | clean checkout；full pytest `212 passed / 6 skipped`，6 项均因 PowerShell 不可用 |
 | macOS OpenVINO | **PASS** | Apple M4 CPU 上固定 model/revision 的公开 CLI、strict Python response gate、flagship 和 A/B 已实跑 |
 | Python Qoder gate | **PASS** | response shape、OpenVINO metadata 与 fail-closed gate 通过；不是 Qoder host |
-| Windows / PowerShell | **rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE** | rc.4 exact fresh tag 通过 PS5.1/PS7 独立 cold+warm health、中文+空格 analyze、固定 errors、cross-shell concurrent cold、残留 `0` 和有界 marker 检查；预填 cache、未测网络与未跑 timeout/fault 阻止 full-matrix 结论 |
+| Windows / PowerShell | **rc.3 FAIL / rc.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL / CANDIDATE FAIL** | 早期 functional subset 通过；后续 exact-tag orphan-pipe fault 在 wrapper 返回后仍有 `1` 个 descendant，违反必需 no-residual oracle |
 | Qoder host | **NOT RUN** | rc.4 Windows 运行中 Qoder 缺失/不可发现；12 个 positive 与 12 个 negative trigger 均 `0/12 REAL_QODER_EXECUTED` |
 | GitHub Python CI | **rc.4 PASS（范围受限）** | exact-SHA main/tag Windows/Ubuntu Python 3.12 四个 job 各 `212 passed / 8 skipped`，Ruff、format 与 benchmark smoke 通过；只有 Windows jobs 另外通过 canonical-LF checkout gate；这不是 wrapper/Qoder/Intel 验收 |
 | Intel hardware | **PERFORMANCE NOT RUN** | rc.4 regression subset 只建立有界 wrapper 功能性；无命名 Intel device 的 cold/warm latency、NPU/GPU 或性能 oracle |
@@ -71,11 +71,11 @@ regression subset 通过 PS5.1/PS7 独立 process-cold+warm health、中文+空�
 invalid/missing errors、cross-shell concurrent cold 和残留进程 `0`；252 个 frozen known-fixture
 markers 在 26 个 stdout/stderr 输出面上观察到 `0` hits。这只是有界 regression subset，不是通用“零泄漏”。
 
-source-artifact cache 在运行前已预填，网络为 `NOT_MEASURED`，timeout/fault 剩余矩阵为
-`NOT_RUN`；这三项使 Windows full matrix 保持 `INCONCLUSIVE`。Qoder 缺失/`NOT_RUN` 与 Intel
-performance `NOT_RUN` 是另外的 overall 准入缺口，不是 Windows full-matrix 不通过的直接原因。
-外置脱敏报告尚无 public URL，manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件 SHA-256 为
-`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。
+随后同一 immutable rc.4 的 PowerShell 7 orphan-pipe rerun 为 `32.164s`、exit `2`、stdout `0`、单一
+`AIRLOCK_INVALID_JSON`，external cleanup 前/后 residual `1/0`。这项必需 oracle `FAIL` 决定 rc.4
+candidate/overall 为 `FAIL`。source-artifact cache 预填、network `NOT_MEASURED`、其余 fault `NOT_RUN`、
+Qoder 与 Intel `NOT_RUN` 是另外的未知项。早期 subset bundle 为 `99/99`、hash `3f0a1791…29f3b`；后续
+failure bundle 为 `29/29`、hash `00b336f9…5677a`；两者均无 public URL。
 
 ## 为什么必须在本地做第一跳
 
@@ -211,10 +211,10 @@ OpenVINO flagship 的 `analyze` stdout、stderr 与 audit log 中，对从冻结
 ## Qoder 集成设计与验收分离
 
 正式设计入口要求 Windows wrapper 显式选择 OpenVINO，并由 Agent 只消费 `safe_context`。当前已验证
-Python strict response gate。rc.4 fresh-tag Windows regression subset 已覆盖双 shell 独立 cold/warm health、
+Python strict response gate。rc.4 早期 fresh-tag Windows functional subset 已覆盖双 shell 独立 cold/warm health、
 中文+空格路径 analyze、固定 invalid/missing errors、cross-shell concurrent cold、残留进程
-和有界 marker/surface 检查。但预填 source-artifact cache、未测网络与未跑 timeout/fault
-剩余矩阵意味着 Windows full matrix 仍为 `INCONCLUSIVE`。
+和有界 marker/surface 检查。但后续 required orphan-pipe fault 已违反 no-residual contract，rc.4
+candidate 为 `FAIL`。post-rc.4 修复仍为 `UNTAGGED / VALIDATION_PENDING`。
 
 Qoder 在这台主机上缺失/不可发现，因此下列 Qoder 宿主事实对 rc.4 仍保持 `NOT_RUN`：
 
@@ -237,9 +237,8 @@ CLI rehearsal 的画面只能标为：
 3. 可验证 Local AI：Apple M4 CPU 上 OpenVINO mode/model/revision/device 可见。
 4. 有 utility 的安全缩减：flagship required facts `3/3` 与 estimated-token context reduction 同时出现。
 5. 诚实 trade-off：Mean Recall@K 数值变化与 P95 latency 代价同图。
-6. 诚实未完成项：Windows 标记 `rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE`；
-   Qoder host、Agent Task Completed 与 Intel performance 标记 `NOT_RUN`，项目 overall 标记
-   `INCONCLUSIVE`。
+6. 诚实状态：Windows 标记 `rc.3 FAIL / rc.4 earlier subset PASS / orphan fault FAIL / candidate FAIL`；
+   Qoder host、Agent Task Completed 与 Intel performance 分别标记 `NOT_RUN`，项目 overall 标记 `FAIL`。
 
 ## 比赛材料映射
 

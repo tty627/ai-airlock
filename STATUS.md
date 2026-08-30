@@ -35,10 +35,10 @@ infer candidate identity from floating `main`, and never move an existing tag.
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
 | Competition docs and visuals | `READY_FOR_CANDIDATE_REVIEW` | README, article draft, seven SVG/PNG pairs, demo script | Validate from a clean candidate checkout and target renderers |
-| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_SUBSET_PASS / FULL_MATRIX_INCONCLUSIVE` | Exact rc.4 fresh-tag regression subset passed independent PS5.1/PS7 cold+warm health, Chinese+space analyze, fixed invalid/missing errors, cross-shell concurrent cold, residual `0`, and bounded marker checks | Run the remaining timeout/fault matrix and network measurement without extrapolating the subset to a full Windows PASS |
+| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_FUNCTIONAL_SUBSET_PASS / RC4_ORPHAN_FAULT_FAIL / RC4_CANDIDATE_FAIL` | The earlier exact-rc.4 subset passed, but the required orphan-pipe oracle left one nonce-matched descendant alive after wrapper return | Validate the post-rc.4 untagged isolation fix, then create and test a new immutable candidate; never move rc.4 |
 | Qoder host integration | `NOT_RUN` | Qoder was absent/not discoverable in the rc.4 Windows run; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
 | Intel hardware | `PERFORMANCE_NOT_RUN` | rc.4 regression subset established bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
-| Overall candidate validation | `INCONCLUSIVE` | Windows is subset-only/full-matrix inconclusive; Qoder is absent/`NOT_RUN`; Intel performance is `NOT_RUN` | Complete and review each independent oracle without merging their causes |
+| Overall candidate validation | `FAIL` | Exact rc.4 violated a required Windows no-residual-process oracle | Keep Qoder, Intel, empty-cache and network unknowns separate; none is the cause of this failure |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
 | GitHub / Python CI | `RC4_VERIFIED_WITH_SCOPE` | Exact-SHA rc.4 main/tag CI succeeded on Windows and Ubuntu Python 3.12; all four jobs reported `212 passed / 8 skipped` | Keep prepared-OpenVINO skips and wrapper/Qoder/Intel non-coverage explicit |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
@@ -146,7 +146,7 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
   run `scripts/run.ps1` as the production wrapper, validate PowerShell 5.1/7 host behavior, open Qoder, or measure
   Intel performance.
 
-## Fresh-tag Windows regression-subset evidence for rc.4
+## Exact-tag Windows evidence for rc.4
 
 - A fresh checkout resolved and tested the exact rc.4 tag object, commit and tree above. The tested source remained
   bound to that identity.
@@ -158,14 +158,21 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
   zero-leakage result.
 - The source-artifact cache was prefilled before this run, so “cold” does not prove an empty-cache source download
   or bootstrap. Network activity was `NOT_MEASURED`, and the remaining timeout/fault matrix was `NOT_RUN`.
-  Therefore the only allowed Windows verdict is `REGRESSION SUBSET PASS / FULL MATRIX INCONCLUSIVE`, not a
-  Windows PASS.
+  These limits remain attached to the earlier functional subset.
+- A later required PowerShell 7 orphan-pipe fault on the same immutable exact tag returned in `32.164s` with exit
+  `2`, empty stdout and one fixed `AIRLOCK_INVALID_JSON`. The direct gate parent had exited, but one descendant
+  still held the redirected pipes and remained alive after wrapper return. The external harness observed residual
+  counts `1` before its exact-PID cleanup and `0` after cleanup. Deadline and fixed-error normalization passed;
+  the no-residual-process contract failed. This makes the rc.4 Windows wrapper and candidate verdict `FAIL`.
 - Separately, Qoder was absent/not discoverable and remained `NOT_RUN`; no discovery, 12+12 trigger, Capsule-only,
   non-bypass, final-answer or Agent Task Completed evidence exists. Intel performance was also `NOT_RUN`. These
-  additional missing gates keep the project overall `INCONCLUSIVE`; they are not the direct cause of the Windows
-  full-matrix limitation.
+  unknowns do not dilute the observed rc.4 failure and are not its cause.
 - The external sanitized report bundle has no public URL. Its manifest verification is `99/99`, and the SHA-256 of
   its top-level `SHA256SUMS` file is `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`.
+- The later failure bundle is separate: manifest verification `29/29`, top-level `SHA256SUMS` file SHA-256
+  `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`. Neither bundle has a public URL.
+- The working-tree process-isolation repair is only `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING`; it is not rc.4
+  evidence and must not be named as a new candidate until an immutable tag and exact-tag rerun exist.
 
 ## Current blockers and decisions
 
@@ -190,10 +197,12 @@ separately licensed hosted IR.
 - Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
 - Publish the sanitized rc.4 Windows report bundle at a public URL after review; its manifest `99/99` and top-level
   `SHA256SUMS` file hash are recorded above, but the current external copy is not public.
-- Complete the rc.4 Windows timeout/fault matrix and network measurement. The prefilled source-artifact cache and
-  remaining `NOT_RUN` cases prevent a Windows full-matrix PASS.
-- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed from the exact rc.4 tag;
-  Qoder was absent/not discoverable in the current run.
+- Preserve rc.4 remaining timeout/fault cases and network measurement as historical `NOT_RUN` / `NOT_MEASURED`;
+  rerunning them on rc.4 can add diagnostic evidence but cannot reverse its blocking orphan-pipe `FAIL`.
+- Form a new immutable candidate from the post-rc.4 isolation fix, then run the complete Windows timeout/fault and
+  network matrix against that exact identity; publication requires its no-residual-process oracle to `PASS`.
+- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed against the new immutable
+  candidate. A later exact-rc.4 Qoder run would be historical evidence only and would not repair rc.4's verdict.
 - Run the declared Intel performance oracle; current bounded wrapper functionality is not performance evidence.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
@@ -216,14 +225,16 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Review and publish the post-tag documentation update without moving `v0.1.0-rc.4`; distinguish the completed
-   exact-SHA CI from the bounded Windows regression subset.
-2. From the exact rc.4 identity, run the remaining timeout/fault cases and measure network behavior; preserve the
-   distinction between process-cold runs and the prefilled source-artifact cache.
-3. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
+1. Publish the rc.4 failure correction without moving `v0.1.0-rc.4`; preserve both the earlier subset evidence and
+   the later blocking fault evidence.
+2. Complete local and CI validation of the post-rc.4 untagged process-isolation fix. Only after those gates pass,
+   create a new immutable candidate and rerun the exact orphan-pipe oracle on both PowerShell 5.1 and 7.
+3. On that later candidate, run the empty source-cache/network and remaining timeout/fault cases without rewriting
+   rc.4 history.
+4. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
    Completed oracle. Until then its state remains `NOT_RUN`.
-4. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
-5. Review and publish the sanitized report bundle, then update public URLs and any later claims from that same
+5. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
+6. Review and publish the sanitized report bundles, then update public URLs and any later claims from that same
    evidence identity.
 
 ## Update rules
