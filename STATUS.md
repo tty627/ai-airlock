@@ -278,7 +278,9 @@ separately licensed hosted IR.
 7. [`docs/release-metadata.md`](docs/release-metadata.md) — measured memory and runtime field evidence.
 8. [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md) — evidence report.
 9. [`docs/submission-checklist.md`](docs/submission-checklist.md) — competition GO/NO-GO checklist.
-10. [`docs/publication-runbook.md`](docs/publication-runbook.md) — GitHub/ModelScope release procedure.
+10. [`docs/competition-submission-fields.md`](docs/competition-submission-fields.md) — public work fields and
+    the personal fields that require user completion.
+11. [`docs/publication-runbook.md`](docs/publication-runbook.md) — GitHub/ModelScope release procedure.
 
 `PROJECT_SPEC.md` is a historical design draft. `docs/final-integrator-report.md` and
 `docs/relevance-closure-report.md` are historical internal audits. They are not the current runtime contract and

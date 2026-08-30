@@ -282,6 +282,9 @@ network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evide
 - [x] Icon URL：使用 rc.5 不可变 tag 下的公开 PNG，已写入 `meta.json`。
 - [x] 登录态 ModelScope 表单已确认 owner `Ararag1`、名称、License、公开状态、描述、类型、标签、
   文件上传与创建按钮；deadline 页面已核对为 `2026-08-31 23:59`。
+- [x] 比赛钉钉表单 16 个字段已核对；作品字段见
+  [competition-submission-fields.md](competition-submission-fields.md)。手机号、单位/学校、地址、微信、
+  邮箱、业务/职业/来源与客户信息库授权必须由本人填写或选择。
 
 ## 10. 本地 QA
 
