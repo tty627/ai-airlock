@@ -53,6 +53,7 @@ $Allowlist = @(
     'docs/windows-validation-handoff.md',
     'docs/windows-validation-report-template.md',
     'docs/windows-intel-rc6-evidence.md'
+    'docs/windows-intel-rc7-evidence.md'
 )
 
 function Invoke-Git {

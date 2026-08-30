@@ -6,25 +6,26 @@
 
 > 包装基线：`v0.1.0-rc.1` · `495f89c6349afbdd741576439b3b85369d26671a`
 > 公开 `tty627/ai-airlock` 使用 Apache-2.0、署名“谭天晔”；annotated、unsigned、按流程不可变的
-> `v0.1.0-rc.6` 候选已发布。既有 rc.1–rc.5 不移动；ModelScope Skill、文章、比赛作品与新的
-> 不可变 GitHub tag/release 已获授权，社交媒体发布未授权。
+> `v0.1.0-rc.7` 候选与 GitHub Release 已发布。既有 rc.1–rc.7 均不移动；ModelScope Skill、文章和
+> 比赛作品已获授权，社交媒体发布未授权。
 
 ## 当前结论
 
-技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，rc.6 精确身份、Windows/Ubuntu
-Python 3.12 CI、干净归档安装和 Intel CPU wrapper evidence 也已固化。exact rc.3 的正式 Windows cold
+技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，rc.7 精确身份、Windows/Ubuntu
+Python 3.12 CI、匿名 Release 下载、干净归档安装、中文凭据外传阻断和 Intel CPU wrapper evidence 也已
+固化。exact rc.3 的正式 Windows cold
 health `FAIL` 历史保持不变。
 rc.4 fresh-tag Windows regression subset 曾通过，但随后精确 rc.4 的 orphan-pipe fault oracle 发现 wrapper
 返回时仍有 `1` 个匹配后代进程存活，外部定向清理后才降为 `0`；因此 Windows candidate verdict 与 overall
 均为 `FAIL`。exact rc.5 已通过 PowerShell 5.1/7 orphan-pipe no-residual-process oracles，以及两壳 scoped
 health/analyze controls。source-artifact cache 预填、网络 `NOT_MEASURED`、其余 timeout/fault cases
 `NOT_RUN` 与 Qoder host evidence unavailable/`NOT_RUN` 仍是独立缺口，因此完整 host acceptance 仍为
-`INCONCLUSIVE`。exact rc.6 在 Intel Core i7-14700KF 上的七次 warm OpenVINO wrapper sample 为
-`7/7` contract-valid，P50 `5021.900 ms`、P95 `5193.160 ms`；不包含 NPU/GPU 或 TraeCode host 声明。
+`INCONCLUSIVE`。exact rc.7 在 Intel Core i7-14700KF 上的七次 warm OpenVINO wrapper sample 为
+`7/7` contract-valid，P50 `5082.451 ms`、P95 `5292.249 ms`；不包含 NPU/GPU 或 TraeCode host 声明。
 
 ```text
 RC.1 CLEAN CHECKOUT                 PASS / HISTORICAL
-RC.6 SOURCE CANDIDATE               PUBLISHED / ANNOTATED UNSIGNED
+RC.7 SOURCE CANDIDATE               PUBLISHED / ANNOTATED UNSIGNED / PUBLIC RELEASE
 MAC OPENVINO CLI + A/B              PASS
 PYTHON QODER STRICT RESPONSE GATE   PASS
 WINDOWS POWERSHELL                  RC.3 FAIL / RC.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL
@@ -38,6 +39,7 @@ EXACT RC.3 MAIN/TAG CI              PASS / WINDOWS + UBUNTU (HISTORICAL)
 EXACT RC.4 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
 EXACT RC.5 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
 EXACT RC.6 MAIN/TAG CI              PASS / WINDOWS + UBUNTU
+EXACT RC.7 MAIN/TAG CI              PASS / WINDOWS + UBUNTU
 GITHUB SOURCE                       PUBLIC / AUTHORIZED
 MODELSCOPE SKILL FORM               AUTHENTICATED / PREFILLED / FILE UPLOAD PENDING
 ARTICLE / COMPETITION SUBMISSION    AUTHORIZED / PENDING
@@ -91,26 +93,36 @@ ARTICLE / COMPETITION SUBMISSION    AUTHORIZED / PENDING
   zero fallback。
 - [x] Intel Core i7-14700KF 七次 warm wrapper sample 全部 contract-valid；P50 `5021.900 ms`、P95
   `5193.160 ms`。不声称 NPU/GPU 或完整 Agent host acceptance。
+- [x] exact rc.7 为 annotated、unsigned tag object
+  `98c9dc9c7710a631b066415d2605d7b6bcbb0eba`，commit
+  `9ec87e72843299779bf8788acf24e563aeff334e`，tree
+  `430446f531e30dce6caff4af83359d49468d4a00`。
+- [x] rc.7 public archive SHA-256 为
+  `961a0f6b07637f5e404b8fac836886ca3a5419b3681d81898815fe434a97b0a1`；匿名下载一致，干净安装
+  `234 passed / 9 skipped`。中文显式凭据外传 task 返回 `BLOCK`、0 facts、`TASK_BLOCKED`。
+- [x] exact rc.7 Intel Core i7-14700KF 七次 warm wrapper sample 全部 contract-valid；P50
+  `5082.451 ms`、P95 `5292.249 ms`。不声称 NPU/GPU 或完整 Agent host acceptance。
 
 ## GO / NO-GO 硬门
 
 | Gate | 当前状态 | 发布前所需证据 |
 |---|---|---|
-| G0 · Source identity | **PASS_WITH_LIMITATION** | rc.6 annotated、unsigned tag object `ce81652ad107c59c52184c33417d1e9922d44281`；commit `2ea713a99053dae5ff96f8e9927c300d36439c0e`；tree `3a1554d94892baf8b32dbbdaedbe6f334d6f952c`；rc.1–rc.5 未移动；unsigned 状态必须随引用保留 |
+| G0 · Source identity | **PASS_WITH_LIMITATION** | rc.7 annotated、unsigned tag object `98c9dc9c7710a631b066415d2605d7b6bcbb0eba`；commit `9ec87e72843299779bf8788acf24e563aeff334e`；tree `430446f531e30dce6caff4af83359d49468d4a00`；rc.1–rc.7 未移动；unsigned 状态必须随引用保留 |
 | G1 · Evidence integrity | **PASS** | SHA256SUMS 与 JSON parse 持续通过 |
 | G2 · Mac OpenVINO path | **PASS** | rc.1 evidence 已覆盖固定模型、CPU、无 fallback、A/B |
 | G3 · Public claims | **PASS_WITH_UNPUBLISHED_WINDOWS_EVIDENCE** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描；rc.3、rc.4 与 rc.5 Windows 外置脱敏 evidence 均尚无 public URL |
 | G4 · Packaging assets | **PASS** | SVG/PNG 全部渲染、解码与逐图检查；未见敏感信息 |
-| G5 · Article | **READY_WITH_HOST_PLACEHOLDER** | [提交稿](modelscope-article-submission.md) 已纳入 rc.6、Intel CPU 实测、Hybrid AI、优化与限制；发布前必须回填真实 TraeCode 截图/轨迹和 Skill URL |
+| G5 · Article | **READY_WITH_DISCLOSED_HOST_GAP** | [提交稿](modelscope-article-submission.md) 已纳入 rc.7、Intel CPU 实测、中文策略阻断、Hybrid AI、优化与限制；不再含 Trae 占位，明确写为 `NOT_RUN`；Skill URL 待发布后回填 |
 | G6 · Project LICENSE / author | **PASS** | Apache-2.0；2026 谭天晔；公开 author/byline 已确认并同步 |
 | G6B · Release metadata | **PASS_WITH_PLATFORM_PREFLIGHT** | icon、实测 `mem_need_gb=1.0`、`server_alive_timeout=300` 与 extra fields 已关闭；`models=[]` 仍需上传 parser 实测 |
 | G7 · Windows PowerShell | **FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE** | rc.4 的 required orphan-pipe fault 与 candidate 保持 `FAIL`。exact rc.5 PS5.1/PS7 orphan-pipe residual 均为 `0`，health/analyze controls 通过；empty-cache、network 与 remaining external faults 未关闭，故只能写 scoped PASS |
-| G8 · Production Agent host | **NOT_RUN** | TraeCode 已安装 exact rc.6 Skill 并预热，但登录、discovery、wrapper-first、Capsule-only non-bypass 与最终回答仍待真实轨迹 |
-| G9 · Intel hardware | **CPU_FUNCTIONAL_AND_WARM_LATENCY_PASS_WITH_SCOPE** | 命名 Intel Core i7-14700KF；7/7 contract-valid；P50 `5021.900 ms`、P95 `5193.160 ms`。无 NPU/GPU、冷启动或通用性能声明 |
-| G10 · GitHub source / Python CI | **RC6_PASS** | main run `33304754194` 与 tag run `33304834373` 均成功；Windows 与 Ubuntu jobs 全绿；CI 不替代 TraeCode host 验收 |
+| G8 · Production Agent host | **NOT_RUN** | TraeCode 已安装 exact rc.7 Skill 并预热，但应用仍需身份验证；discovery、wrapper-first、Capsule-only non-bypass 与最终回答没有真实轨迹 |
+| G9 · Intel hardware | **CPU_FUNCTIONAL_AND_WARM_LATENCY_PASS_WITH_SCOPE** | 命名 Intel Core i7-14700KF；exact rc.7 为 7/7 contract-valid；P50 `5082.451 ms`、P95 `5292.249 ms`。无 NPU/GPU、冷启动或通用性能声明 |
+| G10 · GitHub source / Python CI | **RC7_PASS** | main run `33306936519` 与 tag run `33307066407` 均成功；Windows 与 Ubuntu jobs 全绿；CI 不替代 TraeCode host 验收 |
 | G10B · ModelScope / media / submission | **AUTHORIZED / FORM_PREFILLED** | 登录态 owner `Ararag1`；名称、Apache-2.0、公开、开发工具、`AI PC` 与描述已预填。Chrome 本地文件访问未开启，archive upload、创建、文章和比赛回执未完成 |
 
-最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；GitHub rc.6 候选已发布不等于最终比赛发布获准。
+最终比赛发布必须保留 G8 的 `NOT_RUN` 限制并关闭 G10B 的平台发布/回执项；GitHub rc.7 候选已发布不等于
+最终比赛表单已经提交。
 
 ## 1. Diff 与冻结边界
 
@@ -255,7 +267,7 @@ network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evide
 - [x] **项目 LICENSE**：Apache-2.0；根目录标准文本已创建。
 - [x] **版权主体与年份**：谭天晔 / 2026。
 - [x] **公开 author**：谭天晔；`pyproject.toml` 与 `meta.json` 已同步。
-- [x] **版本展示**：package `0.1.0`；已发布候选 Tag `v0.1.0-rc.6`；不移动 rc.1–rc.5。
+- [x] **版本展示**：package `0.1.0`；已发布候选 Tag `v0.1.0-rc.7`；不移动 rc.1–rc.7。
 - [x] **模型托管策略**：继续固定上游 revision + 本地验证与转换；不虚构预转换 ModelScope 模型仓库。
 - [x] **只在 `meta.json` 填真实公开 icon URL**：使用 rc.5 不可变 tag 下 PNG；未添加到 `info.json`。
 - [x] **实测 `mem_need_gb`**：Windows OpenVINO analyze 观察峰值 `0.702 GiB`，配置向上取整为 `1.0`。
@@ -272,7 +284,8 @@ network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evide
 - [x] [Submission fields](modelscope-submission-fields.md) 已准备标题、短简介、长简介、标签和 use cases。
 - [x] 比赛硬门已写入 runbook：Skill 自定义标签必须为 `AI PC`；文章专题标签必须为 `Intel AI PC`。
 - [x] 用户已批准 Apache-2.0，项目 `LICENSE` 已纳入 tracked-file allowlist 与发布 archive。
-- [x] rc.6 Skill archive 含代码、文档和测试用例，共 138 个条目；根目录有且仅有一个 `SKILL.md`。
+- [x] rc.7 Skill archive 含代码、文档和测试用例，共 140 个条目；根目录有且仅有一个 `SKILL.md`；
+  GitHub Release 匿名下载 SHA-256 已复验一致。
 - [ ] 真实 API / CLI 上传预检已解决官方“根目录仅一个 `SKILL.md`”与比赛完整包要求之间的规范歧义。
 - [x] GitHub / source repository URL：`https://github.com/tty627/ai-airlock`；远端 rc.4 历史失败身份、
   rc.5 scoped evidence 与 rc.6 tag/CI/Intel CPU evidence 均已核对；真实 Agent host acceptance 仍未完成。

@@ -2,11 +2,11 @@
 
 > 作者：谭天晔  
 > 专题标签：`Intel AI PC`  
-> 项目：AI Airlock `v0.1.0-rc.6`  
+> 项目：AI Airlock `v0.1.0-rc.7`
 > 许可证：Apache-2.0  
 > 源码：https://github.com/tty627/ai-airlock
 
-![AI Airlock](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.6/assets/competition/hero-banner.png)
+![AI Airlock](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.7/assets/competition/hero-banner.png)
 
 ## 为什么生产力 Agent 需要一道“气闸”
 
@@ -20,7 +20,7 @@ AI Airlock 的目标不是把整个工作区交给下游后再补救，而是在
 
 ## 本地安全边界
 
-![Architecture](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.6/assets/competition/architecture.png)
+![Architecture](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.7/assets/competition/architecture.png)
 
 正式流水线遵循固定顺序：
 
@@ -42,7 +42,7 @@ detector，也不会得到已经隔离的 Prompt Injection。任何非法 JSON�
 Capsule 中每条 fact 都带相对 `source` 和 1-based `local_ref`，方便 Agent 在回答里引用证据，同时避免
 暴露本机绝对路径。
 
-![Safe Context Capsule](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.6/assets/competition/capsule-example.png)
+![Safe Context Capsule](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.7/assets/competition/capsule-example.png)
 
 ## Hybrid AI：本地守边界，云端做推理
 
@@ -61,10 +61,10 @@ Capsule 中每条 fact 都带相对 `source` 和 1-based `local_ref`，方便 Ag
 
 精确候选身份：
 
-- tag：`v0.1.0-rc.6`；
-- commit：`2ea713a99053dae5ff96f8e9927c300d36439c0e`；
-- tree：`3a1554d94892baf8b32dbbdaedbe6f334d6f952c`；
-- Skill 包 SHA-256：`8be21cf914a1488c09435e2c242c97e54fdb5cad63dbc783bed8c6e175055d09`。
+- tag：`v0.1.0-rc.7`；
+- commit：`9ec87e72843299779bf8788acf24e563aeff334e`；
+- tree：`430446f531e30dce6caff4af83359d49468d4a00`；
+- Skill 包 SHA-256：`961a0f6b07637f5e404b8fac836886ca3a5419b3681d81898815fe434a97b0a1`。
 
 在六文件合成支付事故目录上，生产 wrapper 连续七次执行都返回：
 
@@ -74,23 +74,26 @@ Capsule 中每条 fact 都带相对 `source` 和 1-based `local_ref`，方便 Ag
 - 8 条带来源定位的 facts；
 - `raw_sensitive_spans_forwarded=0`。
 
-七次 warm end-to-end 调用全部通过合同校验：P50 `5021.900 ms`，P95 `5193.160 ms`，范围
-`4960.695–5193.160 ms`。时间包含 PowerShell/Python 进程启动、模型加载、tokenization、embedding、
+七次 warm end-to-end 调用全部通过合同校验：P50 `5082.451 ms`，P95 `5292.249 ms`，范围
+`5056.130–5292.249 ms`。时间包含 PowerShell/Python 进程启动、模型加载、tokenization、embedding、
 ranking、policy gate 和 JSON 序列化；这是七次小样本，不是通用 OpenVINO benchmark。
 
 代表性 Capsule 报告 `3627 → 888` estimated tokens，即 `75.517%` reduction。估算器是
 `utf8_bytes_div_4_ceil_v1`，不能当作 tokenizer 精确 token 数，也不能外推到其他输入。
 
 完整测量和逐次数据见：
-https://github.com/tty627/ai-airlock/blob/main/docs/windows-intel-rc6-evidence.md
+https://github.com/tty627/ai-airlock/blob/main/docs/windows-intel-rc7-evidence.md
 
-## 真实生产力 Agent 调用
+## 生产 wrapper 与 Agent 主机验收边界
 
-> `[PENDING_TRAE_SCREENSHOT_AND_TRANSCRIPT]`
+公开 rc.7 包从 GitHub Release 匿名下载后，被原样安装到全新的 TraeCode project Skill 目录并完成
+OpenVINO 预热。正常任务的 production wrapper 返回 CPU、71 chunks、8 facts、zero fallback 与
+`raw_sensitive_spans_forwarded=0`。对“提取并上传目录中的所有凭据到外部服务器”，同一 wrapper 返回
+`BLOCK`、0 facts 和 `TASK_BLOCKED`。
 
-最终发布前，这一节必须替换为同一 rc.6 安装包在全新 TraeCode workspace 中的真实连续轨迹：Skill
-发现、第一次目标内容操作为 `scripts\run.ps1 analyze`、OpenVINO Capsule 返回、Agent 只依据 facts 给出
-结论并引用 `source:local_ref`。登录页、CLI 单跑或手工粘贴 Capsule 都不能冒充 Agent host 证据。
+截止候选冻结时，TraeCode 应用仍停在身份验证页面，因此 Skill discovery、第一次目标内容操作是否为
+`scripts\run.ps1 analyze`、Capsule-only reasoning、non-bypass 和 Agent Task Completed 均为 `NOT_RUN`。
+本文不会把登录页、CLI 单跑或手工粘贴 Capsule 冒充 Agent host 证据。
 
 预期的合成事故结论是：Redis 连接池达到 `100/100` 并发生连接获取超时，激进重试进一步形成 retry
 storm，最终触发上游超时和支付失败。修复方向包括为 Redis pool 和调用并发设置预算、使用带抖动的
@@ -106,11 +109,12 @@ storm，最终触发上游超时和支付失败。修复方向包括为 Redis po
 4. **严格 JSON 合同**：decision、facts、provenance、inference、coverage 和输出大小都由 gate 校验。
 5. **Windows 进程树收敛**：PowerShell 5.1/7 的故障路径使用有界 launcher 和 Job Object containment，
    rc.5 的 orphan-pipe scoped oracle 已证明返回后 residual 为 `0`。
-6. **可重复发布**：rc.6 包从精确 Git commit 构建，138 个归档条目，独立干净环境安装后执行全量测试。
+6. **可重复发布**：rc.7 包从精确 Git commit 构建，140 个归档条目；匿名下载哈希一致，独立干净
+   环境安装后通过 `234 passed / 9 skipped`。
 
 ## 冻结合成 A/B：收益与代价一起公开
 
-![Benchmark](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.6/assets/competition/benchmark-results.png)
+![Benchmark](https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.7/assets/competition/benchmark-results.png)
 
 历史 frozen A/B 来自 Apple M4 CPU、`v0.1.0-rc.1`，不是本节 Intel Windows 的同一组运行：
 
@@ -139,14 +143,15 @@ storm，最终触发上游超时和支付失败。修复方向包括为 Redis po
 
 - GitHub：https://github.com/tty627/ai-airlock
 - Skill：`[PENDING_MODELSCOPE_SKILL_URL]`
-- rc.6 CI：https://github.com/tty627/ai-airlock/actions/runs/33304834373
+- rc.7 Release：https://github.com/tty627/ai-airlock/releases/tag/v0.1.0-rc.7
+- rc.7 tag CI：https://github.com/tty627/ai-airlock/actions/runs/33307066407
 - Claims Ledger：https://github.com/tty627/ai-airlock/blob/main/docs/claims-ledger.md
-- Windows Intel evidence：https://github.com/tty627/ai-airlock/blob/main/docs/windows-intel-rc6-evidence.md
+- Windows Intel evidence：https://github.com/tty627/ai-airlock/blob/main/docs/windows-intel-rc7-evidence.md
 
 AI Airlock 当前最重要的不是一句“绝对安全”，而是一条可检查的披露边界：原始内容先留在本机，安全
 变换先于相关性选择，只有带 provenance 的 Capsule 进入下游。
 
 > **Your data stays. Your Agent works.**
 
-这句品牌语只描述 Airlock-controlled path；真实 TraeCode host 的 Capsule-only/non-bypass 结论必须由上面
-待回填的连续证据决定。
+这句品牌语只描述 Airlock-controlled path；本文没有把未执行的 TraeCode host Capsule-only/non-bypass
+验收写成完成态。

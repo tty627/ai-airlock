@@ -30,8 +30,9 @@
 > 当前 detector 识别的 Prompt Injection，
 > 再用 OpenVINO 从已净化内容中选择任务相关证据，只输出可追溯的 Safe Context Capsule。当前
 > `v0.1.0-rc.1` 已完成 Apple M4 CPU 上的 clean-checkout、OpenVINO CLI 与合成 A/B；exact
-> `v0.1.0-rc.6` 已通过 Windows/Ubuntu CI、干净归档安装和 Intel Core i7-14700KF 上的 OpenVINO wrapper
-> 功能/七次 warm latency 验证。真实 TraeCode Capsule-only host 验收仍待回填。
+> `v0.1.0-rc.7` 已通过 Windows/Ubuntu main/tag CI、匿名 Release 下载、干净归档安装和 Intel Core
+> i7-14700KF 上的 OpenVINO wrapper 功能/七次 warm latency 验证；测试的中文凭据外传任务被策略
+> 阻断。真实 TraeCode Capsule-only host 验收仍为 `NOT_RUN`。
 
 如果平台字数更紧，可用：
 
@@ -74,10 +75,10 @@
 
 ### 比赛 / 专题强制标签
 
-- **ModelScope Skill 自定义标签：`AI PC`（REQUIRED）。** 当前仅有 Apple M4 CPU 实测，正文必须保留
-  硬件范围。
-- **比赛文章专题标签：`Intel AI PC`（REQUIRED）。** 这是比赛归类字段；在真实 Intel evidence 回填前，
-  不得把标签解释成“已在 Intel AI PC 验证”。
+- **ModelScope Skill 自定义标签：`AI PC`（REQUIRED）。** 当前 Intel evidence 仅覆盖 Core i7-14700KF
+  桌面 CPU，正文必须保留硬件范围。
+- **比赛文章专题标签：`Intel AI PC`（REQUIRED）。** 这是比赛归类字段；不得把它解释成 NPU/GPU 或
+  真实 TraeCode host 验证。
 - `OpenVINO`：可准确使用，rc.1 已有 Apple M4 CPU 的 OpenVINO CLI 与 A/B 证据。
 - `Agentic` / `Skills`：准确描述集成形态，但真实 Qoder host acceptance 仍是 PENDING。
 
@@ -123,7 +124,7 @@ intfloat/multilingual-e5-small
 Safe Context Capsule / stable JSON contract
 ```
 
-不要在字段中加入 GPU、NPU、Intel device 或 Windows 性能，直到对应证据完成。
+不要在字段中加入 GPU 或 NPU。Intel/Windows 数值只可引用 rc.7 evidence 中限定的 CPU 小样本。
 
 ## 本地资产
 
@@ -164,7 +165,7 @@ Issue tracker URL:       https://github.com/tty627/ai-airlock/issues
 | `info.json.mem_need_gb` | Windows OpenVINO analyze 实测峰值 `0.702 GiB`；配置 `1.0` | 已向上取整并保留测量范围；见 [release-metadata.md](release-metadata.md) |
 | `info.json.server_alive_timeout` | `300` | 使用官方明确默认值；短生命周期 client 不声称常驻 server |
 | `info.json.models` | `[]`；官方示例使用带 `model_id` / `dir_name` / `required_files` 的对象，未明确空数组是否接受 | 先验证平台 parser；继续“上游固定 revision + 本地转换”，或在完成授权/归属/哈希后建立公开转换模型仓库 |
-| package metadata version | `0.1.0` | 当前源码候选展示为 `v0.1.0-rc.5`，frozen benchmark 仍绑定 rc.1；不得移动或重打任何 RC tag |
+| package metadata version | `0.1.0` | 当前发布候选为 `v0.1.0-rc.7`，frozen benchmark 仍绑定 rc.1；不得移动或重打任何 RC tag |
 | `info.json` extra fields | 非模板字段已移除 | 只保留官方五个字段；`models=[]` 仍需真实上传 preflight |
 | Skill 标识 / 未来目录 | `SKILL.md.name`、Python package 与 `meta.json.name` 均为 `ai-airlock` | 用户已确认不可变 `skill_name=ai-airlock`；TraeCode 名称语法兼容，真实发现待验收 |
 | `SKILL.md` host 模板 | 已加入 Usage / Examples / retry resume / unsupported-platform / no-cloud-fallback，并保持唯一 wrapper | 文档兼容已关闭；真实 TraeCode/Qoder host 行为仍不能由文档代替 |

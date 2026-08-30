@@ -69,3 +69,4 @@ def test_release_builder_includes_submission_and_intel_evidence() -> None:
 
     assert "'docs/modelscope-article-submission.md'" in builder
     assert "'docs/windows-intel-rc6-evidence.md'" in builder
+    assert "'docs/windows-intel-rc7-evidence.md'" in builder

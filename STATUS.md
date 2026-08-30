@@ -15,17 +15,18 @@ Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
 Previous Windows candidates: v0.1.0-rc.3 and v0.1.0-rc.4 (immutable; formal Windows verdicts FAIL)
-Release candidate tag:      v0.1.0-rc.6 (annotated, unsigned, published; immutable by release policy)
-Release candidate tag object: ce81652ad107c59c52184c33417d1e9922d44281
-Release candidate commit:   2ea713a99053dae5ff96f8e9927c300d36439c0e
-Release candidate tree:     3a1554d94892baf8b32dbbdaedbe6f334d6f952c
+Release candidate tag:      v0.1.0-rc.7 (annotated, unsigned, published; immutable by release policy)
+Release candidate tag object: 98c9dc9c7710a631b066415d2605d7b6bcbb0eba
+Release candidate commit:   9ec87e72843299779bf8788acf24e563aeff334e
+Release candidate tree:     430446f531e30dce6caff4af83359d49468d4a00
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1` through `v0.1.0-rc.6` remain immutable. Formal Windows validation of exact rc.3 failed during
+`v0.1.0-rc.1` through `v0.1.0-rc.7` remain immutable. Formal Windows validation of exact rc.3 failed during
 cold health on both Windows PowerShell 5.1 and PowerShell 7; exact rc.4 later failed its required orphan-pipe
-no-residual-process oracle. rc.5 closed that scoped defect. `v0.1.0-rc.6` is the current annotated, unsigned,
-published packaging/TraeCode candidate with the exact identity above. Never infer candidate identity from
+no-residual-process oracle. rc.5 closed that scoped defect. `v0.1.0-rc.6` remains the immutable packaging
+candidate that exposed the Chinese policy gap; rc.7 adds the reviewed credential-exfiltration fix and is the
+current annotated, unsigned, published exact identity above. Never infer candidate identity from
 floating `main`, and never move an existing tag.
 
 ## Status summary
@@ -35,13 +36,13 @@ floating `main`, and never move an existing tag.
 | Python security core | `VERIFIED` | Frozen rc.1 clean-checkout evidence | Re-run on the future release candidate |
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
-| Competition docs and visuals | `READY_WITH_HOST_PLACEHOLDER` | README, submission article, seven SVG/PNG pairs, demo script | Replace the TraeCode placeholder with real screenshot/transcript and validate target renderers |
+| Competition docs and visuals | `READY_WITH_DISCLOSED_HOST_GAP` | README, submission article, seven SVG/PNG pairs, demo script | Publish without claiming the unexecuted TraeCode host oracle |
 | Windows PowerShell 5.1 / 7 | `FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE` | Exact rc.5 passed orphan-pipe no-residual-process oracles in PowerShell 5.1 and 7 plus scoped health/analyze controls | Run empty-cache, network and remaining external fault cases against exact rc.5; never move an earlier tag |
-| TraeCode/Qoder host integration | `NOT_RUN` | rc.6 is installed and prewarmed in a fresh TraeCode workspace; no authenticated host trajectory exists | Real discovery, wrapper-first tool trace, Capsule-only answer and non-bypass evidence |
-| Intel hardware | `CPU_FUNCTIONAL_AND_WARM_LATENCY_PASS_WITH_SCOPE` | Intel Core i7-14700KF; seven of seven contract-valid OpenVINO wrapper runs; P50 `5021.900 ms`, P95 `5193.160 ms` | Do not claim NPU/GPU, cold-start or general performance |
-| Overall candidate validation | `INCONCLUSIVE` | Exact rc.6 package/CI/Intel CPU wrapper evidence passes, but production-Agent host acceptance and publication remain incomplete | Keep each unknown explicit; a wrapper pass is not host acceptance |
+| TraeCode/Qoder host integration | `NOT_RUN` | rc.7 is installed and prewarmed in a fresh TraeCode workspace; the application still requires authentication and no host trajectory exists | Real discovery, wrapper-first tool trace, Capsule-only answer and non-bypass evidence |
+| Intel hardware | `CPU_FUNCTIONAL_AND_WARM_LATENCY_PASS_WITH_SCOPE` | Intel Core i7-14700KF; exact rc.7 seven of seven contract-valid OpenVINO wrapper runs; P50 `5082.451 ms`, P95 `5292.249 ms` | Do not claim NPU/GPU, cold-start or general performance |
+| Overall candidate validation | `INCONCLUSIVE_WITH_SUBMISSION_DISCLOSURE` | Exact rc.7 package/CI/Intel CPU wrapper and tested Chinese policy block pass, but production-Agent host acceptance and publication remain incomplete | Publish only with the host gap explicit; a wrapper pass is not host acceptance |
 | Release metadata | `PASS_WITH_PLATFORM_PREFLIGHT` | Public immutable icon, measured `mem_need_gb=1.0`, documented timeout `300`, and template-only `info.json` fields | Confirm `models=[]` on the real upload parser |
-| GitHub / Python CI | `RC6_VERIFIED` | Exact-SHA rc.6 main run `33304754194` and tag run `33304834373` succeeded on Windows and Ubuntu | CI does not substitute for TraeCode host acceptance |
+| GitHub / Python CI | `RC7_VERIFIED` | Exact-SHA rc.7 main run `33306936519` and tag run `33307066407` succeeded on Windows and Ubuntu | CI does not substitute for TraeCode host acceptance |
 | ModelScope publication | `AUTHENTICATED_FORM_PREFILLED` | Owner `Ararag1`; name, Apache-2.0, public, developer-tools, `AI PC` and description are filled | Enable Chrome extension local-file access, upload archive, then obtain action-time confirmation for final create |
 
 ## Verified rc.1 facts
@@ -232,6 +233,28 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
   authenticated TraeCode host acceptance. Exact per-run evidence and scope are in
   [windows-intel-rc6-evidence.md](docs/windows-intel-rc6-evidence.md).
 
+## GitHub, package and Intel CPU evidence for rc.7
+
+- Remote annotated tag `v0.1.0-rc.7` has tag object
+  `98c9dc9c7710a631b066415d2605d7b6bcbb0eba`, peels to commit
+  `9ec87e72843299779bf8788acf24e563aeff334e`, and resolves to tree
+  `430446f531e30dce6caff4af83359d49468d4a00`.
+- Exact-SHA main CI [run 33306936519](https://github.com/tty627/ai-airlock/actions/runs/33306936519) and tag CI
+  [run 33307066407](https://github.com/tty627/ai-airlock/actions/runs/33307066407) succeeded on Windows and
+  Ubuntu.
+- The public Skill archive is 1,309,273 bytes, contains 140 entries and exactly one root `SKILL.md`, and has
+  SHA-256 `961a0f6b07637f5e404b8fac836886ca3a5419b3681d81898815fe434a97b0a1`. An unauthenticated download
+  reproduced the byte count and hash.
+- A clean extracted archive and clean Python 3.12 environment passed `234 passed / 9 skipped`. The prepared
+  Python 3.12/OpenVINO environment passed `242 passed / 1 skipped`.
+- The exact package's production wrapper returned a contract-valid OpenVINO/CPU Capsule for the flagship task
+  and returned `BLOCK`, zero facts and `TASK_BLOCKED` for the tested Chinese credential-exfiltration task.
+- Seven warm OpenVINO wrapper analyzes were contract-valid: P50 `5082.451 ms`, P95 `5292.249 ms`, range
+  `5056.130–5292.249 ms`. Full identity, per-run results and limitations are in
+  [windows-intel-rc7-evidence.md](docs/windows-intel-rc7-evidence.md).
+- TraeCode remained at its authentication screen. Discovery, wrapper-first Agent behavior, Capsule-only
+  reasoning, non-bypass and Agent Task Completed therefore remain `NOT_RUN`.
+
 ## Current blockers and decisions
 
 ### Confirmed public GitHub identity
@@ -241,8 +264,8 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
 - Previous Candidates: immutable `v0.1.0-rc.3` and `v0.1.0-rc.4`, both with formal Windows verdict `FAIL`.
-- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.6`; exact tag object, commit and tree are
-  recorded above. rc.1 through rc.6 are never moved by release policy.
+- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.7`; exact tag object, commit and tree are
+  recorded above. rc.1 through rc.7 are never moved by release policy.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -260,8 +283,9 @@ separately licensed hosted IR.
   rerunning them on rc.4 can add diagnostic evidence but cannot reverse its blocking orphan-pipe `FAIL`.
 - Complete the Windows empty-cache, network and remaining timeout/fault matrix against exact rc.5. The observed
   orphan-pipe no-residual-process oracle already passes, but it does not substitute for the unexecuted cases.
-- Complete TraeCode login, then run discovery, wrapper-first, Capsule-only/non-bypass and Agent Task Completed
-  against exact rc.6. Qoder's larger 12+12 matrix remains post-deadline hardening.
+- When an authenticated TraeCode environment becomes available, run discovery, wrapper-first,
+  Capsule-only/non-bypass and Agent Task Completed against exact rc.7. This is a disclosed post-submission gap,
+  not a completed publication gate. Qoder's larger 12+12 matrix remains post-deadline hardening.
 - Treat the recorded Intel CPU warm sample as scoped evidence only; NPU/GPU and cold-start remain unmeasured.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
@@ -288,15 +312,15 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Preserve rc.3/rc.4 failure history and all immutable rc.1–rc.6 identities; do not move any published tag.
-2. Complete TraeCode login and execute real discovery, wrapper-first, Capsule-only/non-bypass and Agent Task
-   Completed against exact rc.6. Qoder's larger 12+12 matrix remains hardening.
-3. Enable Chrome extension local-file access, upload the exact rc.6 archive, and stop immediately before the
+1. Preserve rc.3/rc.4 failure history and all immutable rc.1–rc.7 identities; do not move any published tag.
+2. Keep the unavailable TraeCode host run explicitly `NOT_RUN`; perform it later against exact rc.7 when an
+   authenticated environment is available.
+3. Enable Chrome extension local-file access, upload the exact rc.7 archive, and stop immediately before the
    representational `创建` action for action-time confirmation.
-4. Replace the article's TraeCode placeholder with the real screenshot/transcript, publish the Skill and article,
-   then submit the competition entry and save every receipt/URL.
-5. Create a new immutable final tag/release only if post-evidence repository changes require it; never move rc.1–rc.6.
-6. Perform anonymous download and link verification before marking the submission complete.
+4. Publish the article with the TraeCode limitation intact, then submit the competition entry and save every
+   receipt/URL.
+5. Do not create or move another tag merely for post-tag documentation; rc.7 is the frozen runtime candidate.
+6. Perform anonymous link verification before marking the submission complete.
 
 ## Update rules
 

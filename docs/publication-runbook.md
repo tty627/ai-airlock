@@ -80,7 +80,7 @@ commit/tag，并记录 packaging identity 与 rc.5 candidate identity 的映射�
 Project LICENSE:          Apache-2.0
 Copyright holder/year:    谭天晔 / 2026
 Public author/byline:     谭天晔
-Version display strategy: package 0.1.0 / next candidate tag v0.1.0-rc.6
+Version display strategy: package 0.1.0 / published immutable candidate tag v0.1.0-rc.7
 ModelScope owner:         [RESOLVE FROM AUTHENTICATED /users/me; immutable after create]
 ModelScope skill_name:    ai-airlock (confirmed; immutable after create)
 Category:                 developer-tools (confirmed)

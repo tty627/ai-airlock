@@ -25,16 +25,16 @@ hosts should retain additional system headroom.
   metadata does not invent one. Real upload preflight must confirm the platform accepts this self-managed model
   path.
 - Non-template `info.json` fields were removed to minimize parser ambiguity.
-- `meta.json.icon` points to the immutable public rc.5 asset; rc.6 does not change that image.
+- `meta.json.icon` points to the immutable public rc.5 asset; rc.7 does not change that image.
 
 ## Intel CPU warm latency
 
-The exact `v0.1.0-rc.6` package was installed into a fresh TraeCode project Skill directory and exercised on
+The exact public `v0.1.0-rc.7` package was installed into a fresh TraeCode project Skill directory and exercised on
 Windows 11 Enterprise with an Intel Core i7-14700KF. Seven sequential warm OpenVINO analyzes all returned the
 same contract-valid result: `ALLOW_WITH_TRANSFORM`, CPU device, 71 chunks, eight facts, zero fallback and
 `raw_sensitive_spans_forwarded=0`.
 
-The seven-run end-to-end wrapper sample measured P50 `5021.900 ms` and P95 `5193.160 ms`, with a range of
-`4960.695–5193.160 ms`. This is a small Intel CPU sample and includes process startup and model load; it is not
+The seven-run end-to-end wrapper sample measured P50 `5082.451 ms` and P95 `5292.249 ms`, with a range of
+`5056.130–5292.249 ms`. This is a small Intel CPU sample and includes process startup and model load; it is not
 NPU/GPU evidence or a general OpenVINO benchmark. Exact identity, environment, per-run values and claim limits
-are recorded in [windows-intel-rc6-evidence.md](windows-intel-rc6-evidence.md).
+are recorded in [windows-intel-rc7-evidence.md](windows-intel-rc7-evidence.md).

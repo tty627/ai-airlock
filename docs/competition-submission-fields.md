@@ -9,21 +9,21 @@
 |---:|---|---|---|
 | 01 | 姓名 | `谭天晔` | 公开 author 已确认；输入表单前仍按个人信息传输处理 |
 | 02 | 作品名称 | `AI Airlock：本地安全上下文气闸` | 10–30 字范围待平台最终校验 |
-| 03 | 作品简介 | 见下文 298 字版本 | 满足页面标注的 200–300 字 |
+| 03 | 作品简介 | 见下文 284 字版本 | 满足页面标注的 200–300 字 |
 | 04 | AI模型说明 | 见下文 | 已绑定固定 model/revision 与能力边界 |
 | 05 | 魔搭研习社作品链接 | `[PENDING_AFTER_PUBLICATION]` | 必填 |
 | 06 | 魔搭 Skills 中心作品链接 | `[PENDING_AFTER_PUBLICATION]` | 必填 |
 | 07 | 小红书作品链接 | 留空 | 可选；社交媒体发布未获授权 |
 
-### 作品简介（298 字符）
+### 作品简介（284 字符）
 
-> AI Airlock 是面向生产力 Agent 的本地安全上下文网关。它在 Windows/Intel PC 上先扫描日志、配置和
-> CSV，检测并变换当前策略覆盖的 Secret/PII，隔离 Prompt Injection，再用 OpenVINO 对已净化证据做
-> 任务相关性排序，仅输出带 source/local_ref 的 Safe Context Capsule。下游 TraeCode Agent 只消费
-> Capsule 完成支付超时归因和修复建议。项目包含 Apache-2.0 源码、文档、测试和可复验发布包；rc.6
-> 已通过双平台 CI、干净归档安装与 Intel CPU 验证。
+> AI Airlock 是面向生产力 Agent 的本地安全上下文网关。它在 Windows/Intel PC 上扫描日志、配置和
+> CSV，检测并变换 Secret/PII，隔离 Prompt Injection，再用 OpenVINO 对已净化证据排序，仅输出带
+> source/local_ref 的 Safe Context Capsule。项目包含 Apache-2.0 源码、测试和可复验发布包；rc.7 已
+> 通过双平台 CI、匿名下载、干净安装、Intel CPU wrapper 与中文凭据外传阻断验证。真实 TraeCode host
+> 验收明确标记为未执行。
 
-字符计数按 PowerShell/.NET `String.Length` 对单行正文计算为 `298`。平台可能采用不同计数规则，最终
+字符计数按 PowerShell/.NET `String.Length` 对单行正文计算为 `284`。平台可能采用不同计数规则，最终
 填入后需观察其自身校验提示。
 
 ### AI 模型说明
@@ -31,7 +31,7 @@
 > 使用 `intfloat/multilingual-e5-small`，固定 revision
 > `614241f622f53c4eeff9890bdc4f31cfecc418b3`，在本机校验源文件并转换为 OpenVINO IR。模型只对已经
 > 完成 Secret/PII 变换和 Prompt Injection 隔离的候选证据生成多语言 embedding，用于任务相关性排序。
-> Secret/PII/Injection 检测由确定性策略完成，不把安全分类效果归因于 embedding 模型。rc.6 在 Windows
+> Secret/PII/Injection 检测由确定性策略完成，不把安全分类效果归因于 embedding 模型。rc.7 在 Windows
 > 11 Enterprise、Intel Core i7-14700KF、OpenVINO CPU 上完成真实 wrapper 验证；不声称 NPU/GPU 加速。
 
 ## 必须由本人提供或选择的字段
