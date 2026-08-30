@@ -6,7 +6,8 @@
 
 > 包装基线：`v0.1.0-rc.1` · `495f89c6349afbdd741576439b3b85369d26671a`
 > 公开 `tty627/ai-airlock` 使用 Apache-2.0、署名“谭天晔”；annotated、unsigned、按流程不可变的
-> `v0.1.0-rc.5` 候选已发布。既有 rc.1–rc.4 不移动；ModelScope、文章、视频和比赛表单尚未授权发布。
+> `v0.1.0-rc.5` 候选已发布。既有 rc.1–rc.4 不移动；ModelScope Skill、文章、比赛作品与新的
+> 不可变 GitHub tag/release 已获授权，社交媒体发布未授权。
 
 ## 当前结论
 
@@ -35,7 +36,7 @@ EXACT RC.3 MAIN/TAG CI              PASS / WINDOWS + UBUNTU (HISTORICAL)
 EXACT RC.4 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
 EXACT RC.5 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
 GITHUB SOURCE                       PUBLIC / AUTHORIZED
-OTHER PUBLICATION                   NOT AUTHORIZED
+MODELSCOPE / ARTICLE / SUBMISSION   AUTHORIZED / LOGIN REQUIRED
 ```
 
 包装 readiness flag 已在本文末尾根据本地 QA 回填；它们不代表最终比赛提交 ready。
@@ -86,14 +87,14 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 | G2 · Mac OpenVINO path | **PASS** | rc.1 evidence 已覆盖固定模型、CPU、无 fallback、A/B |
 | G3 · Public claims | **PASS_WITH_UNPUBLISHED_WINDOWS_EVIDENCE** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描；rc.3、rc.4 与 rc.5 Windows 外置脱敏 evidence 均尚无 public URL |
 | G4 · Packaging assets | **PASS** | SVG/PNG 全部渲染、解码与逐图检查；未见敏感信息 |
-| G5 · Article | **READY_WITH_LIMITATIONS** | 初稿已同步 rc.3 FAIL、rc.4 candidate FAIL、rc.5 scoped PASS / overall INCONCLUSIVE、Qoder/Intel NOT_RUN；尚未授权公开发布 |
+| G5 · Article | **READY_WITH_LIMITATIONS** | 初稿已同步 rc.3 FAIL、rc.4 candidate FAIL、rc.5 scoped PASS / overall INCONCLUSIVE、Qoder/Intel NOT_RUN；已授权发布，待宿主证据回填 |
 | G6 · Project LICENSE / author | **PASS** | Apache-2.0；2026 谭天晔；公开 author/byline 已确认并同步 |
-| G6B · Release metadata | **BLOCKED** | icon URL、实测 `mem_need_gb`、timeout 语义、`models=[]` 平台接受度、额外字段 parser 行为 |
+| G6B · Release metadata | **PASS_WITH_PLATFORM_PREFLIGHT** | icon、实测 `mem_need_gb=1.0`、`server_alive_timeout=300` 与 extra fields 已关闭；`models=[]` 仍需上传 parser 实测 |
 | G7 · Windows PowerShell | **FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE** | rc.4 的 required orphan-pipe fault 与 candidate 保持 `FAIL`。exact rc.5 PS5.1/PS7 orphan-pipe residual 均为 `0`，health/analyze controls 通过；empty-cache、network 与 remaining external faults 未关闭，故只能写 scoped PASS |
 | G8 · Qoder host | **NOT_RUN** | discovery、12+12 triggers、Capsule-only non-bypass、最终回答 |
 | G9 · Intel hardware | **PERFORMANCE_NOT_RUN** | rc.5 scoped functional validation 不等于命名 Intel device、runtime telemetry、cold/warm latency、p50/p95、吞吐或失败数 evidence；不得从 CPU 字符串或功能通过推导性能结论 |
 | G10 · GitHub source / Python CI | **RC5_PASS_WITH_SCOPE** | main run `33298393856`、tag run `33298491017` 均成功；Windows 各 `225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`，Ruff/format/benchmark smoke PASS；未覆盖完整 wrapper、Qoder 或 Intel |
-| G10B · ModelScope / media / submission | **NOT AUTHORIZED / NOT RUN** | 平台 preflight、公开页面、文章/视频发布与比赛提交回执 |
+| G10B · ModelScope / media / submission | **AUTHORIZED / LOGIN_REQUIRED** | Chrome 与应用内浏览器均未建立 ModelScope 登录；平台 preflight、公开页与提交回执未完成 |
 
 最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；GitHub rc.5 候选已发布不等于最终比赛发布获准。
 
@@ -239,16 +240,15 @@ network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evide
 - [x] **版权主体与年份**：谭天晔 / 2026。
 - [x] **公开 author**：谭天晔；`pyproject.toml` 与 `meta.json` 已同步。
 - [x] **版本展示**：package `0.1.0`；已发布 Windows 候选 Tag `v0.1.0-rc.5`；不移动 rc.1–rc.5。
-- [ ] **用户确认模型托管**：继续固定上游 revision + 本地转换，或另建公开转换模型仓库。
-- [ ] **只在 `meta.json` 填真实公开 icon URL**；不得使用本机路径或添加到 `info.json`。
-- [ ] **实测 `mem_need_gb`**：必须覆盖模型驻留 + 推理峰值；当前 `0.25` 不构成发布依据。
-- [ ] **确认 `server_alive_timeout=0` 的 host 语义**；官方说明只明确默认 `300` 和 `-1`。
+- [x] **模型托管策略**：继续固定上游 revision + 本地验证与转换；不虚构预转换 ModelScope 模型仓库。
+- [x] **只在 `meta.json` 填真实公开 icon URL**：使用 rc.5 不可变 tag 下 PNG；未添加到 `info.json`。
+- [x] **实测 `mem_need_gb`**：Windows OpenVINO analyze 观察峰值 `0.702 GiB`，配置向上取整为 `1.0`。
+- [x] **`server_alive_timeout`**：使用官方明确默认值 `300`；不再使用未定义的 `0`。
 - [ ] **确认 `models=[]` 被平台接受**，或完成公开转换模型 repo、固定 revision、required files、哈希与再分发复核。
-- [ ] **确认 `info.json` 额外字段被目标 parser 接受**。
-- [ ] **确认目标 host 接受 `ai-airlock` 命名**；OpenVINO 文件规范使用 `local-<function>` 约定，
-  不可变 `skill_name` 必须在创建前由用户确认。
-- [ ] **确认 `SKILL.md` 与目标 host 模板兼容**；当前没有与 wrapper 对齐的 `--continue` 支持，也未完整
-  覆盖官方 Usage / Examples / unsupported-platform / no-cloud-fallback 结构，不能只靠文案宣称通过。
+- [x] **移除 `info.json` 额外字段**：只保留官方模板字段。
+- [x] **确认 `ai-airlock` 命名决策**：用户已确认 ModelScope `skill_name`，TraeCode 名称语法兼容。
+- [x] **对齐 `SKILL.md` host 模板**：加入 Usage / Examples、真实 retry resume、unsupported-platform
+  与 no-cloud-fallback；真实宿主调用仍由 TraeCode acceptance 单独判定。
 - [ ] 若发布 wheel/离线包，冻结完整 transitive dependency lock，并收集实际分发包的 LICENSE/NOTICE。
 
 ## 9. Submission fields 与 URL
@@ -285,16 +285,16 @@ network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evide
 ## 11. 发布 Runbook
 
 [Publication runbook](publication-runbook.md) 已包含 tracked/allowlist 打包、denylist、全新目录复验、
-SHA-256 manifest、公开 evidence 与 ModelScope 下载后复验。GitHub candidate commit/push/tag 已获授权；
-仍不得在没有单独授权和相应硬门证据时执行：
+SHA-256 manifest、公开 evidence 与 ModelScope 下载后复验。GitHub candidate、ModelScope Skill、文章和
+比赛提交均已获授权；仍不得执行：
 
 - 移动、删除或重打任何既有 RC 标签；
-- ModelScope、研习社、视频平台、比赛表单或社交媒体发布；
+- 未授权的社交媒体发布，或超出比赛交付所需范围的外部发布；
 - 捏造或提前回填尚不存在的公开 URL、平台回执或实机证据；
 - 用 Mac 结果替代 Windows/Qoder/Intel；
 - 改写已确认的 LICENSE、author 或 candidate identity。
 
-GitHub candidate 同步已经完成；这不自动授权 ModelScope、文章、视频或比赛提交。
+本轮目标授权覆盖 ModelScope Skill、研习社文章、比赛作品和新的不可变 GitHub tag/release。
 
 ## 本轮最终 readiness flags
 

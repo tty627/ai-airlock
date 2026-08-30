@@ -1,8 +1,9 @@
 {
   "display_name": "AI Airlock",
   "display_description": "在本地变换当前策略可识别的敏感内容，并生成任务相关的 Safe Context Capsule",
-  "detail_describe": "v0.1 在当前 detector/policy 覆盖范围内识别 Secret、PII 与 Prompt Injection，先执行替换、伪名化或隔离，再输出可追溯的 Safe Context Capsule。开发用 Python CLI 默认使用确定性 relevance；显式 OpenVINO 模式只对已净化证据做本地 task relevance。正式 Qoder analyze 合同要求 OpenVINO，但真实 Windows/Qoder host 验收仍为 PENDING。",
+  "detail_describe": "v0.1 在当前 detector/policy 覆盖范围内识别 Secret、PII 与 Prompt Injection，先执行替换、伪名化或隔离，再输出可追溯的 Safe Context Capsule。生产 Agent 在 Windows 上通过唯一 PowerShell wrapper 显式调用本地 OpenVINO relevance；真实 TraeCode/Qoder 宿主验收状态以发布证据为准。",
   "name": "ai-airlock",
+  "icon": "https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.5/assets/competition/ai-airlock-icon.png",
   "use_cases": [
     "在当前策略覆盖范围内安全分析生产日志与配置",
     "在 AI 分析前变换和隔离已识别的敏感或不可信内容",

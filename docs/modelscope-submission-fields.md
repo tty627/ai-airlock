@@ -143,7 +143,7 @@ Source repository URL:   https://github.com/tty627/ai-airlock
 ModelScope Skill URL:    [PENDING_AFTER_PUBLICATION]
 ModelScope article URL:  [PENDING_AFTER_PUBLICATION]
 Demo video URL:          [PENDING_AFTER_PUBLICATION]
-Icon URL:                [PENDING_AFTER_ASSET_HOSTING]
+Icon URL:                https://raw.githubusercontent.com/tty627/ai-airlock/v0.1.0-rc.5/assets/competition/ai-airlock-icon.png
 Documentation URL:       [PENDING_AFTER_PUBLICATION]
 Issue tracker URL:       https://github.com/tty627/ai-airlock/issues
 ```
@@ -160,19 +160,18 @@ Issue tracker URL:       https://github.com/tty627/ai-airlock/issues
 | 字段 | 当前值 / 状态 | 必须由用户决定 |
 |---|---|---|
 | `meta.json.author` / `pyproject.toml authors` | `谭天晔` | 已确认的公开 author/byline；发布前只需核对平台字段未被改写 |
-| `meta.json.icon` | 官方定义了该字段；当前缺失 | 资产公开托管后只在 `meta.json` 填可匿名访问的真实 URL；不要使用本机路径，也不要把 `icon` 加到 `info.json` |
-| `info.json.mem_need_gb` | `0.25`；没有模型 + 推理峰值实测支撑 | 先在目标环境测量模型驻留与推理峰值，再填写不低估的最低内存；当前为发布阻断 |
-| `info.json.server_alive_timeout` | `0`；官方说明只明确默认 `300`、`-1` 永不过期 | 通过目标 host 规范或实机确认 `0` 的语义；未确认前为发布阻断 |
+| `meta.json.icon` | rc.5 不可变 tag 下的公开 PNG URL | 已填入 `meta.json`；匿名访问待最终发布复验，不添加到 `info.json` |
+| `info.json.mem_need_gb` | Windows OpenVINO analyze 实测峰值 `0.702 GiB`；配置 `1.0` | 已向上取整并保留测量范围；见 [release-metadata.md](release-metadata.md) |
+| `info.json.server_alive_timeout` | `300` | 使用官方明确默认值；短生命周期 client 不声称常驻 server |
 | `info.json.models` | `[]`；官方示例使用带 `model_id` / `dir_name` / `required_files` 的对象，未明确空数组是否接受 | 先验证平台 parser；继续“上游固定 revision + 本地转换”，或在完成授权/归属/哈希后建立公开转换模型仓库 |
 | package metadata version | `0.1.0` | 当前源码候选展示为 `v0.1.0-rc.5`，frozen benchmark 仍绑定 rc.1；不得移动或重打任何 RC tag |
-| `info.json.name/version/stage/inference_mode` | 当前仓库扩展字段；不在所复核的官方 `info.json` 模板中 | 确认目标 parser 是否容忍；`deterministic_rules` 只表示通用/开发默认，正式 Qoder analyze 设计显式要求 OpenVINO，真实 host 仍 pending |
-| Skill 标识 / 未来目录 | 当前 `SKILL.md.name`、Python package、`meta.json.name` 与 `info.json.name` 标识为 `ai-airlock`；未来安装目录尚未创建；OpenVINO 文件规范与模板使用 `local-<function>` / `local-<skill-name>` | 在创建不可变 `skill_name` 前确认目标 host 是否接受该标识；如需迁移，由用户决定名称，不能本轮擅改 |
-| `SKILL.md` host 模板 | 当前缺少与真实 wrapper 对齐的 `--continue` 支持，且未完整采用官方要求的 Usage / Examples / unsupported-platform / no-cloud-fallback 结构 | 先确认比赛采用哪套 host contract；若要求 OpenVINO 模板，需另开实现与 Windows/Qoder 验收轮，不能只补宣称 |
+| `info.json` extra fields | 非模板字段已移除 | 只保留官方五个字段；`models=[]` 仍需真实上传 preflight |
+| Skill 标识 / 未来目录 | `SKILL.md.name`、Python package 与 `meta.json.name` 均为 `ai-airlock` | 用户已确认不可变 `skill_name=ai-airlock`；TraeCode 名称语法兼容，真实发现待验收 |
+| `SKILL.md` host 模板 | 已加入 Usage / Examples / retry resume / unsupported-platform / no-cloud-fallback，并保持唯一 wrapper | 文档兼容已关闭；真实 TraeCode/Qoder host 行为仍不能由文档代替 |
 | project LICENSE | Apache-2.0；copyright 2026 谭天晔 | 已确认；发布 archive 保留完整 `LICENSE` 与第三方 notices |
 | public repository | `https://github.com/tty627/ai-airlock`；public | 已确认；最终表单使用该 URL 并在匿名窗口复核 |
 
-本轮没有填写 icon、内存或托管模型猜测值；author、package version、Apache-2.0 与 public repository 使用
-已确认的项目事实。
+icon 使用不可变公开资产，内存使用 Windows 实测峰值上取整，timeout 使用官方默认值；没有猜测托管模型。
 
 ### 模型下载、固定 revision、转换与再分发决策
 
@@ -196,12 +195,12 @@ Issue tracker URL:       https://github.com/tty627/ai-airlock/issues
 
 | 字段 | 状态 |
 |---|---|
-| `owner` | `[USER_CONFIRM_REQUIRED]`；创建后不可更改 |
-| `skill_name` | 候选 `ai-airlock`；仅小写字母、数字、连字符，创建后不可更改；同时存在 OpenVINO `local-<function>` 命名约定，必须先做目标 host 预检并由用户确认 |
-| `category` | 候选 `developer-tools` 或 `ai-automation`；由用户确认 |
+| `owner` | 登录后从 `/users/me` 读取真实 owner；创建后不可更改，禁止猜测 |
+| `skill_name` | `ai-airlock`；用户已确认，创建后不可更改 |
+| `category` | `developer-tools`；用户已确认 |
 | `license` | `Apache-2.0`；已确认 |
 | `source_url` | `https://github.com/tty627/ai-airlock`；发布前做匿名访问复核 |
-| upload path | API / CLI 待确认；若使用 CLI，先解决 `SKILL.md` frontmatter 的 `version` 预检 |
+| upload path | 优先网页/OpenAPI 两步发布；保留 Codex/Trae 有效的 `metadata.version`，不走要求顶层 `version` 的 CLI 变体 |
 
 ## 表单提交前复核
 

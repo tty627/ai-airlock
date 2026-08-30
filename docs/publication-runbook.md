@@ -2,8 +2,8 @@
 
 > 状态：GitHub candidate 发布已完成。公开 `tty627/ai-airlock` 使用 Apache-2.0、署名“谭天晔”，新的
 > annotated、unsigned `v0.1.0-rc.5` 已发布并按流程保持不可变；既有 `v0.1.0-rc.1` 至
-> `v0.1.0-rc.4` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
-> 社交媒体发布。
+> `v0.1.0-rc.4` 不移动。用户已授权本轮发布 ModelScope Skill、研习社文章、比赛作品以及新的
+> 不可变 GitHub tag/release；不授权移动 rc.1–rc.5，也不包含社交媒体发布。
 
 当前项目状态以 [`../STATUS.md`](../STATUS.md) 为入口。tagged commit 不能安全地把自己的 commit/tree
 哈希或 tag object 写回自身，因此这些值由 tag 解析，并在本文和
@@ -24,7 +24,7 @@ health/analyze controls，状态为 `RC5_WINDOWS_SCOPED_VALIDATION=PASS_WITH_SCO
 remaining external faults、Qoder 与 Intel performance 尚未关闭，因此当前 candidate overall 为
 `INCONCLUSIVE`，不是完整 Windows 或最终发布 `PASS`。
 
-本 runbook 于 2026-08-28 复核以下一手资料：
+本 runbook 于 2026-08-30 复核以下一手资料：
 
 - [ModelScope 比赛页](https://www.modelscope.cn/events/289/summary)；
 - [ModelScope Skills Center 发布与安装规范](https://github.com/modelscope/modelscope-skills/blob/main/skills/ms-hub/references/skills-center.md)；
@@ -80,42 +80,38 @@ commit/tag，并记录 packaging identity 与 rc.5 candidate identity 的映射�
 Project LICENSE:          Apache-2.0
 Copyright holder/year:    谭天晔 / 2026
 Public author/byline:     谭天晔
-Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.5
-ModelScope owner:         [USER CONFIRM REQUIRED]
-ModelScope skill_name:    [USER CONFIRM REQUIRED; immutable after create]
-Category:                 [USER CONFIRM REQUIRED]
+Version display strategy: package 0.1.0 / next candidate tag v0.1.0-rc.6
+ModelScope owner:         [RESOLVE FROM AUTHENTICATED /users/me; immutable after create]
+ModelScope skill_name:    ai-airlock (confirmed; immutable after create)
+Category:                 developer-tools (confirmed)
 Public repository:        https://github.com/tty627/ai-airlock
-Model hosting strategy:   [USER DECISION]
-Publication scope/date:   [USER DECISION]
+Model hosting strategy:   fixed upstream revision + verified local OpenVINO conversion
+Publication scope/date:   authorized for the 2026-08-31 competition deadline
 ```
 
 许可证依据见 [license-decision.md](license-decision.md)，第三方边界见
 [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md)。不得猜测身份、版权主体、URL 或 ModelScope owner。
 
-发布前还必须关闭以下 metadata blocker：
+元数据已关闭的项目与剩余 preflight：
 
-- `meta.json.icon` 是官方定义字段；当前未填。只能在图标真实公开托管后填写可匿名访问的 URL，不能
-  使用本机路径、猜测 URL，也不能把 `icon` 添加到没有该字段的 `info.json`。
-- `info.json.mem_need_gb=0.25` 没有“模型 + 推理峰值”的实测支撑。官方定义要求包含两者；完成目标
-  环境峰值测量前，该值是阻断项，不得凭经验改数。
-- `info.json.server_alive_timeout=0` 不在当前官方说明的默认 `300` / `-1` 语义中；需通过目标 host
-  规范或实机确认后再决定。
+- `meta.json.icon` 已指向 rc.5 不可变 tag 下可匿名访问的 PNG；未把 `icon` 添加到 `info.json`。
+- Windows 实测 OpenVINO analyze 进程树工作集峰值为 `0.702 GiB`，`mem_need_gb` 向上配置为
+  `1.0`；方法、范围与限制见 [release-metadata.md](release-metadata.md)。
+- `server_alive_timeout` 已改为官方明确的默认值 `300`。Airlock v0.1 是短生命周期 client，
+  不声称存在常驻 server。
 - `info.json.models=[]` 是否被平台接受尚未确认。AI Airlock 当前实际方案是固定 Hugging Face revision、
   逐文件校验、本地转换 OpenVINO IR；若改为平台托管，必须先有公开 `model_id`、固定 revision、
   `dir_name`、含核心 `.xml/.bin` 的 `required_files`、转换物 SHA-256、来源归属与再分发授权。
-- `info.json` 中的 `name`、`version`、`stage`、`inference_mode` 是当前仓库扩展字段，不在所复核的官方
-  模板中；先验证目标 parser 是否容忍额外字段。`deterministic_rules` 只表示通用/开发默认，正式 Qoder
-  `analyze` 合同仍要求显式 OpenVINO。
+- `info.json` 中非模板的 `name`、`version`、`stage`、`inference_mode` 已移除，降低 parser 歧义。
 - OpenVINO 文件规范给出的 Skill 目录命名约定为 `local-<function>`，官方 `meta.json` 模板也把 `name`
   写为 `local-<skill-name>`；当前 `SKILL.md.name`、Python package、`meta.json.name` 与 `info.json.name`
-  标识为 `ai-airlock`；公开源码仓库已确定为 `tty627/ai-airlock`，但未来 host 安装目录仍未创建。
-  这不是 ModelScope `skill_name` 或 host 安装目录的改名授权。必须在创建不可变
-  `skill_name` 前由目标 host / 比赛方确认是否接受该标识，或由用户决定迁移方案。
+  标识为 `ai-airlock`；公开源码仓库和用户确认的不可变 ModelScope `skill_name` 也使用
+  `ai-airlock`。TraeCode 官方名称约束允许该形式；真实自动发现仍需登录后验证。
 - OpenVINO 文件规范要求 `SKILL.md` 正文包含 `Usage`、Examples 表、`--continue` resume protocol、输出
   解释、失败处理，以及“不直调其他脚本 / 首次下载耗时 / 不支持平台报错 / 无云端 fallback”等重要说明。
-  当前 `SKILL.md` 的 Capsule 安全合同较完整，但没有与实际 wrapper 对齐的 `--continue` 支持，也未完全
-  按该模板组织；本 candidate 未新增 wrapper resume 能力，故这是目标 host acceptance blocker，不能仅靠
-  文档宣称支持。
+  `SKILL.md` 现已包含 Usage、Examples、输出/失败解释、unsupported-platform/no-cloud-fallback
+  以及与短生命周期 wrapper 对齐的“重复同一命令”resume 语义；不伪造未实现的 `--continue`。
+  文档兼容已关闭，真实 TraeCode 自动发现与调用仍必须实跑。
 
 ## 3. 从受控文件构建发布包
 
@@ -158,8 +154,10 @@ docs/modelscope-submission-fields.md
 docs/publication-runbook.md
 docs/qoder_acceptance.md
 docs/release-evidence.md
+docs/release-metadata.md
 docs/submission-checklist.md
 docs/threat-model.md
+docs/trae-acceptance.md
 docs/windows-validation-handoff.md
 docs/windows-validation-report-template.md
 ```

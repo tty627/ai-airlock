@@ -18,28 +18,41 @@ Use this Skill when either condition holds:
 
 Do not use it merely because a normal coding task happens inside a repository. Do not trigger for ordinary programming questions, pasted code, concept explanations, general writing, translation, arithmetic, or other tasks that do not require reading sensitive or explicitly untrusted local data.
 
-## Formal Qoder entry
+## Usage on Windows production agents
 
-The only production entry for Qoder on Windows is the wrapper in the installed Skill directory:
+Install the complete Skill package, not only this file. TraeCode discovers a project installation at
+`<workspace>\.trae\skills\ai-airlock\SKILL.md`; TraeCode CLI uses
+`<workspace>\.traecli\skills\ai-airlock\SKILL.md`. Restart the host after installing and use `/skills`
+to verify discovery. Qoder uses its configured installed Skill directory. Read
+[docs/trae-acceptance.md](docs/trae-acceptance.md) only while installing or validating TraeCode.
+
+The only production entry for TraeCode or Qoder on Windows is the wrapper in the installed Skill directory:
 
 ```powershell
 & '<skill-root>\scripts\run.ps1' analyze --task '<user task>' --path '<absolute target path>' --relevance-backend openvino --json
 ```
 
+| Intent | Wrapper call | Continue only when |
+|---|---|---|
+| Diagnose private or untrusted local content | `analyze --task ... --path ... --relevance-backend openvino --json` | The validated Capsule is `ALLOW` or `ALLOW_WITH_TRANSFORM` with non-empty facts |
+| Inventory recognized risks without downstream analysis | `scan --path ... --json` | Report only the sanitized inventory |
+| Check local runtime readiness | `health --json` | `status=ok` and `inference.openvino_available=true` |
+
 Convert the exact user-selected target to an absolute path lexically, without checking or reading its contents. Pass an already absolute literal unchanged so the wrapper can reject ambiguous Win32 spellings. For a relative target, first reject empty interior components, `.`/`..`, leading/trailing ASCII space, trailing dot, invalid Win32 characters, and reserved device names; only then combine it with the known workspace root and call `[IO.Path]::GetFullPath(...)`. Do not use `Resolve-Path`, `Test-Path`, `Get-Item`, file search, or an editor read first: a missing or inaccessible target must reach Airlock and produce its fixed error. Never widen a file or subdirectory request to the repository, workspace, parent directory, or home directory. Pass task and path as separate literal arguments; when constructing PowerShell text, single-quote each value and escape an embedded `'` as `''`. Never interpolate task text as executable PowerShell.
-
-Use the same wrapper with:
-
-- `analyze --task ... --path ... --relevance-backend openvino --json` when the user wants Airlock to release a Capsule and then complete a task.
-- `scan --path ... --json` only when the user wants a security inventory and no downstream content analysis.
-- `health --json` for diagnostics. It may precede, but never replace, the requested `analyze` or `scan` call.
 
 Use exactly one `--json` and, where applicable, exactly one absolute `--path` and one literal
 `--task`. Do not add `--policy`, `--audit-log`, `--model-dir`, undocumented flags, or positional
-arguments to the production wrapper. Use the development Python CLI outside Qoder when those
+arguments to the production wrapper. Use the development Python CLI outside production agents when those
 diagnostic options are intentionally needed.
 
-The Python module command documented in `README.md` is for development diagnostics, not a second Qoder production entry.
+The Python module command documented in `README.md` is for development diagnostics, not a second production entry.
+
+### Resume protocol
+
+AI Airlock v0.1 is a short-lived client and intentionally does not accept `--continue`. If first-run model
+preparation is interrupted, rerun the identical `health` or requested production command. The pinned source
+revision, verified downloads, staging directory and atomic model promotion make that retry idempotent. Never
+replace the retry with a raw-file read, lexical fallback, different model revision or hand-edited partial output.
 
 The production `analyze` path always selects OpenVINO explicitly. The wrapper refuses a missing or
 lexical backend, installs the project's `openvino` extra, prepares the pinned repository-relative
@@ -48,6 +61,15 @@ model when needed, and validates the returned metadata before releasing JSON. A 
 `ALLOW_WITH_TRANSFORM` Capsule must report `inference.mode=openvino_embedding`; never retry through
 lexical. A policy `BLOCK` occurs before relevance inference, so stop on it and do not claim the
 embedding model ran for that blocked request.
+
+### Important
+
+- Do not call `prepare_embedding_model.py`, the Python module or any other helper directly from the host.
+- First use may require a network download and local OpenVINO conversion; later analysis is local. Report a
+  preparation error instead of switching to a cloud model.
+- The production wrapper supports Windows PowerShell 5.1 or PowerShell 7. On another platform, stop with an
+  unsupported-platform limitation; do not invent a shell translation.
+- There is no cloud inference fallback and no lexical fallback for a released production `analyze` Capsule.
 
 ## Mandatory Agent flow
 
@@ -69,4 +91,6 @@ embedding model ran for that blocked request.
 - Do not claim OpenVINO or model inference ran unless an `ALLOW` or `ALLOW_WITH_TRANSFORM` Capsule
   reports both `inference.openvino_available=true` and `inference.mode=openvino_embedding`.
 
-For Qoder installation and behavioral acceptance, read [docs/qoder_acceptance.md](docs/qoder_acceptance.md). Do not load that test matrix during ordinary Airlock use.
+For Qoder installation and behavioral acceptance, read [docs/qoder_acceptance.md](docs/qoder_acceptance.md).
+For TraeCode installation and behavioral acceptance, read
+[docs/trae-acceptance.md](docs/trae-acceptance.md). Do not load either test matrix during ordinary Airlock use.

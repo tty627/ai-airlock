@@ -39,9 +39,9 @@ identity above. Never infer candidate identity from floating `main`, and never m
 | Qoder host integration | `NOT_RUN` | rc.5 evidence covers the production wrapper, not Qoder; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
 | Intel hardware | `PERFORMANCE_NOT_RUN` | rc.5 scoped Windows evidence establishes bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
 | Overall candidate validation | `INCONCLUSIVE` | Exact rc.5 closed the blocking rc.4 orphan-pipe regression, but the full Windows matrix, Qoder and Intel evidence remain incomplete | Keep each unknown explicit; a scoped pass is not full acceptance |
-| Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
+| Release metadata | `PASS_WITH_PLATFORM_PREFLIGHT` | Public immutable icon, measured `mem_need_gb=1.0`, documented timeout `300`, and template-only `info.json` fields | Confirm `models=[]` on the real upload parser |
 | GitHub / Python CI | `RC5_VERIFIED_WITH_SCOPE` | Exact-SHA rc.5 main/tag CI succeeded; Windows reported `225 passed / 8 skipped` and Ubuntu `213 passed / 14 skipped` | Keep prepared-OpenVINO/Windows-Job skips and wrapper/Qoder/Intel non-coverage explicit |
-| ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
+| ModelScope publication | `LOGIN_REQUIRED` | Local fields, article, package builder and authorization are prepared | Authenticate ModelScope, run platform preflight, publish URLs and save receipt |
 
 ## Verified rc.1 facts
 
@@ -225,9 +225,9 @@ separately licensed hosted IR.
 
 ### Technical blockers before publication
 
-- Measure `info.json.mem_need_gb` as model residency plus inference peak; current `0.25` is not release evidence.
-- Confirm the host meaning of `server_alive_timeout=0`.
-- Confirm that the platform accepts `models=[]` and the current extra `info.json` fields.
+- `mem_need_gb=1.0` now rounds above the observed `0.702 GiB` Windows OpenVINO analyze process-tree peak.
+- `server_alive_timeout=300` now uses the documented default and non-template `info.json` fields are removed.
+- Confirm that the real upload parser accepts the intentional self-managed-model declaration `models=[]`.
 - Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
 - Publish the sanitized rc.3/rc.4 historical and rc.5 current Windows report bundles at public URLs after review;
   the external copies are not public.
@@ -249,9 +249,11 @@ separately licensed hosted IR.
 3. [`SKILL.md`](SKILL.md) — current Agent behavior contract.
 4. [`docs/windows-validation-handoff.md`](docs/windows-validation-handoff.md) — Windows operator handoff.
 5. [`docs/qoder_acceptance.md`](docs/qoder_acceptance.md) — authoritative Windows/Qoder oracle.
-6. [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md) — evidence report.
-7. [`docs/submission-checklist.md`](docs/submission-checklist.md) — competition GO/NO-GO checklist.
-8. [`docs/publication-runbook.md`](docs/publication-runbook.md) — GitHub/ModelScope release procedure.
+6. [`docs/trae-acceptance.md`](docs/trae-acceptance.md) — TraeCode installation and host oracle.
+7. [`docs/release-metadata.md`](docs/release-metadata.md) — measured memory and runtime field evidence.
+8. [`docs/windows-validation-report-template.md`](docs/windows-validation-report-template.md) — evidence report.
+9. [`docs/submission-checklist.md`](docs/submission-checklist.md) — competition GO/NO-GO checklist.
+10. [`docs/publication-runbook.md`](docs/publication-runbook.md) — GitHub/ModelScope release procedure.
 
 `PROJECT_SPEC.md` is a historical design draft. `docs/final-integrator-report.md` and
 `docs/relevance-closure-report.md` are historical internal audits. They are not the current runtime contract and
@@ -262,12 +264,12 @@ must not be included in the public Skill archive.
 1. Preserve rc.3/rc.4 failure history and the immutable rc.5 identity; do not move any published tag.
 2. On exact rc.5, run the empty source-cache/network and remaining timeout/fault cases without rewriting rc.4
    history.
-3. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
-   Completed oracle. Until then its state remains `NOT_RUN`.
+3. Complete TraeCode login and execute real discovery, the deadline-critical trigger set, Capsule-only/non-bypass
+   and Agent Task Completed against the next immutable candidate. Qoder's larger 12+12 matrix remains hardening.
 4. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
 5. Review and publish the sanitized rc.3/rc.4/rc.5 report bundles, then update public URLs and any later claims from
    the same evidence identities without copying private diagnostic artifacts.
-6. Close release metadata and platform preflight blockers before requesting final publication authorization.
+6. Use the existing publication authorization after closing login and platform preflight blockers.
 
 ## Update rules
 
