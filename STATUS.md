@@ -305,6 +305,8 @@ separately licensed hosted IR.
 10. [`docs/competition-submission-fields.md`](docs/competition-submission-fields.md) — public work fields and
     the personal fields that require user completion.
 11. [`docs/publication-runbook.md`](docs/publication-runbook.md) — GitHub/ModelScope release procedure.
+12. [`docs/mac-submission-handoff.md`](docs/mac-submission-handoff.md) — Mac takeover, exact rc.7 download,
+    platform publication and final-form handoff.
 
 `PROJECT_SPEC.md` is a historical design draft. `docs/final-integrator-report.md` and
 `docs/relevance-closure-report.md` are historical internal audits. They are not the current runtime contract and

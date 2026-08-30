@@ -40,6 +40,7 @@ $Allowlist = @(
     'docs/competition-story.md',
     'docs/demo-script.md',
     'docs/license-decision.md',
+    'docs/mac-submission-handoff.md',
     'docs/modelscope-article.md',
     'docs/modelscope-article-submission.md',
     'docs/modelscope-submission-fields.md',

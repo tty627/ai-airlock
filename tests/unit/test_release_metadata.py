@@ -68,5 +68,6 @@ def test_release_builder_includes_submission_and_intel_evidence() -> None:
     builder = (PROJECT_ROOT / "scripts" / "build_release.ps1").read_text(encoding="utf-8")
 
     assert "'docs/modelscope-article-submission.md'" in builder
+    assert "'docs/mac-submission-handoff.md'" in builder
     assert "'docs/windows-intel-rc6-evidence.md'" in builder
     assert "'docs/windows-intel-rc7-evidence.md'" in builder
