@@ -4,9 +4,10 @@
 > 技术基线：AI Airlock `v0.1.0-rc.1`，source commit
 > `495f89c6349afbdd741576439b3b85369d26671a`。
 > 实测范围：**Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1**。
-> exact `v0.1.0-rc.3` 的 Windows PowerShell 5.1/7 cold health 已正式执行并 `FAIL`；下一候选 rc.4
-> 仍须 fresh-tag 重验。Intel 性能、真实 Qoder host 与 Capsule-only Agent Task Completed 为
-> `NOT_RUN / PENDING`。
+> exact `v0.1.0-rc.3` 的 Windows PowerShell 5.1/7 cold health 正式 verdict 为 `FAIL`，历史保持不变。
+> annotated、unsigned `v0.1.0-rc.4` 已发布且 scoped CI 通过；fresh-tag Windows regression subset
+> 通过，但 Windows full matrix 与 overall 仍为 `INCONCLUSIVE`。Intel 性能、真实 Qoder host 与
+> Capsule-only Agent Task Completed 为 `NOT_RUN`。
 
 ![AI Airlock Hero](../assets/competition/hero-banner.svg)
 
@@ -160,10 +161,30 @@ P95 从 `103.052 ms` 上升至 `1204.529 ms`。这个代价是否
 当前 Python strict response gate 已验证：它会对白名单字段、schema、decision、相对 provenance、OpenVINO
 metadata 和输出大小做严格检查。这是集成合同的证据，但不是 Qoder host 的行为证据。
 
+当前源码候选是 annotated、unsigned `v0.1.0-rc.4`：tag object
+`2a50625aa95443e328573704cf42e9c633621ffe`，commit
+`52a215727115f32937cb78561e88a63fdae5adf2`，tree
+`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。[main CI `33293985019`](https://github.com/tty627/ai-airlock/actions/runs/33293985019)
+与 [tag CI `33294040300`](https://github.com/tty627/ai-airlock/actions/runs/33294040300) 均成功；Windows/Ubuntu
+四个 Python 3.12 job 各为 `212 passed / 8 skipped`，Ruff、format、benchmark smoke 通过。8 个 skip
+来自 prepared OpenVINO model/runtime unavailable；CI 未覆盖 `.[openvino]`、真实模型 bootstrap、
+PowerShell wrapper、Qoder 或 Intel performance。
+
 exact rc.3 在 Qoder 之前的 Windows cold health 已失败：两个 PowerShell shell 均返回固定错误
 `AIRLOCK_MODEL_PREPARATION_FAILED`。外置诊断将其限定为 inference smoke 后缓存的 OpenVINO native
 handles 阻止 candidate model directory 原子 rename（`PermissionError` / WinError 5）；见
 [Claims Ledger · C-WIN-01](claims-ledger.md)。这不是 Windows PASS，也不是 rc.4 修复证据。
+
+rc.4 fresh-tag Windows 回传了一个受限但有价值的 regression subset：PowerShell 5.1/7 分别完成 cold +
+warm health，中文 task + 带空格路径 analyze、固定 invalid/missing errors、cross-shell concurrent cold
+通过，covered cases 的 residual process count 为 `0`；`252` markers × `26` stdout/stderr surfaces 为 `0 hits`。
+这些结论不能外推为通用“零泄漏”。更重要的是，source-artifact cache 已预填、网络为 `NOT_MEASURED`，
+remaining timeout/fault matrix 为 `NOT_RUN`，所以 **Windows full matrix 仍为 `INCONCLUSIVE`**。再加上
+Qoder 缺席/`NOT_RUN` 与 Intel performance `NOT_RUN`，overall 也为 `INCONCLUSIVE`。
+
+外置脱敏报告没有 public URL；其记录的 manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
+`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。在匿名发布并复验前，公众无法
+独立下载这份报告。
 
 真实验收矩阵已经定义 12 个 positive triggers 和 12 个 negative triggers；当前两组均为
 `0/12 REAL_QODER_EXECUTED`。还需要在真实 Windows/Qoder 上证明 Skill 自动发现、第一次内容访问就是
@@ -184,14 +205,16 @@ wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule �
 - Apple M4 CPU 上的 OpenVINO health、public CLI、strict Python response gate、flagship 与 full A/B；
 - frozen synthetic set 上的 Secret、Injection、relevance、context 和 CLI latency 指标。
 - exact rc.3 的 Windows PowerShell 5.1/7 cold health 失败，以及受限、尚未公开的根因诊断。
+- exact rc.4 annotated tag object / commit / tree 与 scoped main/tag Windows/Ubuntu Python 3.12 CI；
+- exact rc.4 fresh-tag 的 Windows regression subset：5.1/7 独立 cold+warm health、中文/空格 analyze、
+  invalid/missing errors、cross-shell concurrent cold、covered residual `0` 与 scoped marker scan `0 hits`。
 
 尚未验证：
 
-- exact rc.4 Windows PowerShell 5.1/7 cold/warm、中文与带空格路径、故障注入和进程清理；
+- exact rc.4 的 clean source-artifact bootstrap/network、remaining timeout/fault matrix 与完整 Windows oracle；
 - Qoder Skill 自动发现、12+12 triggers、Capsule-only non-bypass、真实最终回答；
 - Intel AI PC、GPU/NPU 使用、跨硬件性能；
-- rc.4 exact-SHA main/tag GitHub CI、ModelScope 页面、文章和视频 URL；rc.3 scoped CI 是历史 PASS，
-  不替代 rc.4 或宿主验收；
+- rc.4 外置脱敏报告、ModelScope 页面、文章和视频的可匿名访问 public URL；
 - 未知 Secret、规避式 Injection、真实生产分布和跨领域 Agent utility。
 
 ## 10. 可复现方法
@@ -237,8 +260,8 @@ trace、设置证据和未剪辑录像证明，而不是靠文档承诺。
 
 若面向商用，下一步优先级不是增加更多宣传数字，而是补足证据层：
 
-1. 从 exact rc.4 fresh tag 在 Windows PowerShell 5.1/7 和命名 Intel AI PC 上完成 cold/warm、路径、
-   错误与进程验收；
+1. 为 exact rc.4 补做 clean source-artifact bootstrap/network、remaining timeout/fault matrix，并在命名
+   Intel AI PC 上完成可限定引用的设备与性能验收；
 2. 在 Qoder 新会话中完成 12+12 trigger matrix 和 Capsule-only flagship，并保存未剪辑证据；
 3. 建立独立 held-out 数据，覆盖更多 Secret、Injection、语言、任务和负缩减案例；
 4. 评估 latency budget，拆分 CLI 启动、tokenization、embedding、ranking 与 gate 的阶段成本；

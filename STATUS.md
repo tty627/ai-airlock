@@ -15,17 +15,17 @@ Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
 Previous Windows candidate: v0.1.0-rc.3 (immutable; formal Windows verdict FAIL)
-Windows candidate tag:      v0.1.0-rc.4 (candidate preparation; not yet published)
-Windows candidate tag object: [OWNER_HANDOFF_AFTER_TAG_CREATION]
-Windows candidate commit:   [OWNER_HANDOFF_AFTER_TAG_CREATION]
-Windows candidate tree:     [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Windows candidate tag:      v0.1.0-rc.4 (annotated, unsigned, published; immutable by release policy)
+Windows candidate tag object: 2a50625aa95443e328573704cf42e9c633621ffe
+Windows candidate commit:   52a215727115f32937cb78561e88a63fdae5adf2
+Windows candidate tree:     46bc0f55eed58b7234338d4ff4e32bc71c348f8a
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
 `v0.1.0-rc.1`, `v0.1.0-rc.2` and `v0.1.0-rc.3` remain immutable. Formal Windows validation of exact rc.3
-failed during cold health on both Windows PowerShell 5.1 and PowerShell 7. The next candidate is
-`v0.1.0-rc.4`; its tag object, commit and tree are intentionally blocked above until an annotated tag is
-created and independently resolved. Do not infer them from floating `main`, and never move an existing tag.
+failed during cold health on both Windows PowerShell 5.1 and PowerShell 7. `v0.1.0-rc.4` is now an annotated,
+unsigned, published candidate with the exact identity above. The tag remains immutable by release policy; never
+infer candidate identity from floating `main`, and never move an existing tag.
 
 ## Status summary
 
@@ -35,11 +35,12 @@ created and independently resolved. Do not infer them from floating `main`, and 
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
 | Competition docs and visuals | `READY_FOR_CANDIDATE_REVIEW` | README, article draft, seven SVG/PNG pairs, demo script | Validate from a clean candidate checkout and target renderers |
-| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_PENDING` | Exact rc.3 cold health returned `AIRLOCK_MODEL_PREPARATION_FAILED` on both shells | Exact rc.4 fresh-tag cold/warm, paths, errors, concurrency and residual-process checks |
-| Qoder host integration | `NOT_RUN` | 12 positive and 12 negative trigger specifications | Real discovery, tool trace, Capsule-only and non-bypass evidence |
-| Intel hardware | `NOT_VERIFIED` | rc.3 host identified an Intel CPU and internal OpenVINO inference smoke ran, but model promotion failed before ready health or analyze | Named device and successful cold/warm performance evidence, or explicit limitation |
+| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_SUBSET_PASS / FULL_MATRIX_INCONCLUSIVE` | Exact rc.4 fresh-tag regression subset passed independent PS5.1/PS7 cold+warm health, Chinese+space analyze, fixed invalid/missing errors, cross-shell concurrent cold, residual `0`, and bounded marker checks | Run the remaining timeout/fault matrix and network measurement without extrapolating the subset to a full Windows PASS |
+| Qoder host integration | `NOT_RUN` | Qoder was absent/not discoverable in the rc.4 Windows run; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
+| Intel hardware | `PERFORMANCE_NOT_RUN` | rc.4 regression subset established bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
+| Overall candidate validation | `INCONCLUSIVE` | Windows is subset-only/full-matrix inconclusive; Qoder is absent/`NOT_RUN`; Intel performance is `NOT_RUN` | Complete and review each independent oracle without merging their causes |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / Python CI | `RC3_VERIFIED_WITH_SCOPE / RC4_PENDING` | Remote annotated rc.3 identity plus successful exact-SHA main/tag CI on Windows and Ubuntu Python 3.12 | Require exact-SHA rc.4 main and tag CI; this is not wrapper/Qoder evidence |
+| GitHub / Python CI | `RC4_VERIFIED_WITH_SCOPE` | Exact-SHA rc.4 main/tag CI succeeded on Windows and Ubuntu Python 3.12; all four jobs reported `212 passed / 8 skipped` | Keep prepared-OpenVINO skips and wrapper/Qoder/Intel non-coverage explicit |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -124,8 +125,47 @@ PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task
 - The sanitized report and `SHA256SUMS` are stored outside the checkout and have not been published at a public
   URL. Private diagnostic artifacts must not be copied into a public bundle.
 
-The rc.3 verdict is `FAIL`. Any current working-tree test count or wrapper probe is development evidence only;
-it must not be described as exact-tag rc.4 CI or formal fresh-tag Windows/Qoder evidence.
+The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or reinterpret this immutable history.
+
+## GitHub publication evidence for rc.4
+
+- Remote annotated tag `v0.1.0-rc.4` has tag object
+  `2a50625aa95443e328573704cf42e9c633621ffe`, peels to commit
+  `52a215727115f32937cb78561e88a63fdae5adf2`, and resolves to tree
+  `46bc0f55eed58b7234338d4ff4e32bc71c348f8a`.
+- The tag is annotated but unsigned. Candidate immutability is a release-process rule, so handoffs continue to
+  verify the exact tag object, peeled commit and tree rather than trusting a floating ref.
+- Exact-SHA main CI: [GitHub Actions run 33293985019](https://github.com/tty627/ai-airlock/actions/runs/33293985019),
+  `success`; Windows job `99210391718` and Ubuntu job `99210391785`.
+- Candidate tag CI: [GitHub Actions run 33294040300](https://github.com/tty627/ai-airlock/actions/runs/33294040300),
+  `success`; Windows job `99210537344` and Ubuntu job `99210537462`.
+- All four Python 3.12 jobs reported `212 passed / 8 skipped`, passed Ruff and format checks, and passed the
+  benchmark smoke test. Each set of eight skips was due to the prepared OpenVINO model/runtime being unavailable;
+  the Windows jobs also passed the canonical-LF checkout gate.
+- This is exact-candidate scoped Python CI. It does not install and exercise the prepared Windows OpenVINO path,
+  run `scripts/run.ps1` as the production wrapper, validate PowerShell 5.1/7 host behavior, open Qoder, or measure
+  Intel performance.
+
+## Fresh-tag Windows regression-subset evidence for rc.4
+
+- A fresh checkout resolved and tested the exact rc.4 tag object, commit and tree above. The tested source remained
+  bound to that identity.
+- The regression subset passed independent process-cold and warm `health` checks through Windows PowerShell 5.1
+  and PowerShell 7, Chinese-plus-space-path `analyze`, fixed invalid/missing-input error contracts, and a
+  cross-shell concurrent-cold scenario.
+- Wrapper exit left `0` residual child processes. Across 26 stdout/stderr surfaces, checks of all 252 frozen
+  known-fixture forbidden markers observed `0` hits. This is a bounded marker/surface observation, not a universal
+  zero-leakage result.
+- The source-artifact cache was prefilled before this run, so “cold” does not prove an empty-cache source download
+  or bootstrap. Network activity was `NOT_MEASURED`, and the remaining timeout/fault matrix was `NOT_RUN`.
+  Therefore the only allowed Windows verdict is `REGRESSION SUBSET PASS / FULL MATRIX INCONCLUSIVE`, not a
+  Windows PASS.
+- Separately, Qoder was absent/not discoverable and remained `NOT_RUN`; no discovery, 12+12 trigger, Capsule-only,
+  non-bypass, final-answer or Agent Task Completed evidence exists. Intel performance was also `NOT_RUN`. These
+  additional missing gates keep the project overall `INCONCLUSIVE`; they are not the direct cause of the Windows
+  full-matrix limitation.
+- The external sanitized report bundle has no public URL. Its manifest verification is `99/99`, and the SHA-256 of
+  its top-level `SHA256SUMS` file is `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`.
 
 ## Current blockers and decisions
 
@@ -136,8 +176,8 @@ it must not be described as exact-tag rc.4 CI or formal fresh-tag Windows/Qoder 
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
 - Previous Candidate: immutable `v0.1.0-rc.3`, with formal Windows verdict `FAIL`.
-- Next Candidate Tag: `v0.1.0-rc.4`; identity remains blocked until exact-SHA main CI succeeds and the annotated
-  tag is created and resolved. rc.1 through rc.3 are never moved.
+- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.4`; exact tag object, commit and tree are recorded
+  above. rc.1 through rc.4 are never moved by release policy.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -148,8 +188,13 @@ separately licensed hosted IR.
 - Confirm the host meaning of `server_alive_timeout=0`.
 - Confirm that the platform accepts `models=[]` and the current extra `info.json` fields.
 - Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
-- Publish a sanitized evidence bundle with URL and SHA-256; the local ignored `.release-evidence/` is not public.
-- Complete exact rc.4 fresh-tag Windows/Qoder validation and preserve sanitized traces plus uncut private recordings.
+- Publish the sanitized rc.4 Windows report bundle at a public URL after review; its manifest `99/99` and top-level
+  `SHA256SUMS` file hash are recorded above, but the current external copy is not public.
+- Complete the rc.4 Windows timeout/fault matrix and network measurement. The prefilled source-artifact cache and
+  remaining `NOT_RUN` cases prevent a Windows full-matrix PASS.
+- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed from the exact rc.4 tag;
+  Qoder was absent/not discoverable in the current run.
+- Run the declared Intel performance oracle; current bounded wrapper functionality is not performance evidence.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
   resolution. Do not delete the test or weaken detection merely to silence a scanner.
@@ -171,15 +216,15 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Review the rc.3 root-cause fix and regression coverage without treating current working-tree results as
-   release evidence.
-2. Freeze the rc.4 candidate commit, require exact-SHA main CI, then create and publish a new annotated rc.4 tag;
-   never move rc.1 through rc.3.
-3. Resolve the remote rc.4 tag object, peeled commit and tree and supply all three through the owner handoff.
-4. From a new clone detached at exact rc.4, repeat formal Windows PowerShell and Qoder acceptance. Qoder and
-   Intel performance remain unverified until their declared oracles actually run.
-5. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
-   same run identity.
+1. Review and publish the post-tag documentation update without moving `v0.1.0-rc.4`; distinguish the completed
+   exact-SHA CI from the bounded Windows regression subset.
+2. From the exact rc.4 identity, run the remaining timeout/fault cases and measure network behavior; preserve the
+   distinction between process-cold runs and the prefilled source-artifact cache.
+3. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
+   Completed oracle. Until then its state remains `NOT_RUN`.
+4. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
+5. Review and publish the sanitized report bundle, then update public URLs and any later claims from that same
+   evidence identity.
 
 ## Update rules
 

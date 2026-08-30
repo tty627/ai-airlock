@@ -22,19 +22,29 @@ read、索引和附件旁路仍待 Qoder 验收，不能外推为通用安全保
 | Clean checkout / full pytest | **PASS · 212 passed / 6 skipped** | source RC 在记录环境中通过全量本地测试；6 项均因 PowerShell 不可用而 skip | 不等于 Windows、远端 CI 或 Qoder 通过 |
 | macOS / Apple M4 / OpenVINO CPU | **PASS** | 固定模型与 revision 的公开 CLI、严格 Python response gate、flagship 和完整 A/B 已实跑 | 不等于 Intel AI PC、Windows wrapper 或 Qoder host 通过 |
 | Python Qoder strict response gate | **PASS** | `safe_context` JSON 的严格字段、模式和 OpenVINO metadata gate 已验证 | 不是 Qoder 界面、Skill 自动发现或 Capsule-only 宿主行为 |
-| Windows PowerShell 5.1 / 7 | **rc.3 FAIL · rc.4 RETEST PENDING** | exact rc.3 的两个 cold health 均返回固定错误 `AIRLOCK_MODEL_PREPARATION_FAILED` | 不是 Windows wrapper PASS；rc.4 必须从 fresh tag 重跑完整矩阵 |
-| Qoder host / Agent Task Completed | **NOT RUN** | 12 个正向和 12 个负向触发 oracle 已定义 | 正向与负向均为 `0/12 REAL_QODER_EXECUTED` |
-| GitHub Python CI | **rc.3 PASS · scoped / rc.4 PENDING** | rc.3 的 main/tag Windows/Ubuntu Python 3.12、LF checkout、Ruff、benchmark smoke 已通过 | rc.4 仍需 exact-SHA main/tag CI；Python CI 不是 PowerShell wrapper、Qoder host 或 Intel evidence |
-| Intel hardware | **PERFORMANCE NOT RUN** | rc.3 Windows 主机识别到 Intel CPU；内部 OpenVINO inference smoke 已执行 | wrapper 在 model promotion rename 前失败，未产生 ready health、analyze、cold/warm、NPU/GPU 或性能结论 |
+| Windows PowerShell 5.1 / 7 | **rc.3 FAIL · rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE** | exact rc.4 fresh-tag regression subset 通过双 shell 独立 cold/warm health、中文+空格路径 analyze、固定错误、cross-shell concurrent cold、残留进程和有界泄漏检查 | source-artifact cache 已预填，网络未测，timeout/fault 剩余矩阵未跑；不是 Windows full-matrix PASS |
+| Qoder host / Agent Task Completed | **NOT RUN** | rc.4 Windows 运行中 Qoder 缺失/不可发现；12 个正向和 12 个负向触发 oracle 已定义 | 正向与负向均为 `0/12 REAL_QODER_EXECUTED` |
+| GitHub Python CI | **rc.4 PASS · scoped** | exact-SHA main/tag Windows/Ubuntu Python 3.12 四个 job 各 `212 passed / 8 skipped`，Ruff、format、benchmark smoke 通过 | 8 项均因 prepared OpenVINO model/runtime 不可用而 skip；不是 wrapper、Qoder host 或 Intel evidence |
+| Intel hardware | **PERFORMANCE NOT RUN** | rc.4 regression subset 执行了 ready health/analyze 功能检查 | 未执行命名 Intel device 的 cold/warm latency、NPU/GPU 使用或性能 oracle |
 
 完整冻结证据见 [release evidence protocol](docs/release-evidence.md)；本次机器可读结果由
 [Claims Ledger](docs/claims-ledger.md) 约束。
 
 rc.3 的失败诊断（[Claims Ledger · C-WIN-01](docs/claims-ledger.md)）定位到 OpenVINO inference smoke
-后仍被缓存的 native handles：它们阻止 candidate
-model directory 的原子 rename，并在 Windows 上触发 `PermissionError` / WinError 5。rc.3 保持不可变；
-下一候选为 `v0.1.0-rc.4`。当前工作树测试或 wrapper 探针不是正式 rc.4 证据。rc.4 只有在 exact-SHA
-main/tag CI 完成，并从 fresh clone 的精确 tag 重跑 Windows/Qoder 验收后，才能更新结论。
+后仍被缓存的 native handles：它们阻止 candidate model directory 的原子 rename，并在 Windows
+上触发 `PermissionError` / WinError 5。rc.3 保持不可变且正式 verdict 仍为 `FAIL`。`v0.1.0-rc.4`
+已作为 annotated、unsigned tag 发布；tag object 为
+`2a50625aa95443e328573704cf42e9c633621ffe`，commit 为
+`52a215727115f32937cb78561e88a63fdae5adf2`，tree 为
+`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。
+
+rc.4 的 exact-SHA main/tag scoped Python CI 已通过。fresh-tag Windows 报告只支持
+`REGRESSION SUBSET PASS`：PowerShell 5.1/7 独立 cold+warm health、中文+空格路径 analyze、固定
+invalid/missing errors、cross-shell concurrent cold、wrapper 退出后残留进程 `0`，以及 252 个
+known-fixture markers 在 26 个 stdout/stderr 输出面上观察到 `0` hits。由于 source-artifact cache 预先填充、
+网络为 `NOT_MEASURED`，且 timeout/fault 剩余矩阵为 `NOT_RUN`，Windows full matrix 结论仍为
+`INCONCLUSIVE`。另外，Qoder 不存在/不可发现，仍为 `NOT_RUN`；Intel performance 仍为
+`NOT_RUN`，因此项目 overall 也为 `INCONCLUSIVE`。
 
 当前项目进度、发布阻断与下一步见 [STATUS](STATUS.md)。Windows Agent 必须使用 owner handoff 提供的
 精确 tag object、commit 与 tree，并按 [Windows validation handoff](docs/windows-validation-handoff.md)
@@ -134,8 +144,9 @@ python -m airlock.cli analyze \
   --json
 ```
 
-Qoder on Windows 的设计入口如下；rc.3 在进入 Qoder 任务前已因 Windows cold health 失败，真实 Qoder
-host 验收仍为 `NOT_RUN`，rc.4 必须重新验证：
+Qoder on Windows 的设计入口如下；rc.3 在进入 Qoder 任务前已因 Windows cold health 失败。rc.4
+只完成了不含 Qoder 的 Windows regression subset；Qoder 未安装或不可发现，真实 host 验收仍为
+`NOT_RUN`：
 
 ```powershell
 & '<skill-root>\scripts\run.ps1' analyze `
@@ -157,9 +168,12 @@ warning 时必须停止。完整安装、参数限制和 12+12 触发矩阵见
 - 合成 relevance micro-fixtures 的聚合 Capsule 会因 JSON 元数据而膨胀，不能把 flagship 的
   estimated-token 缩减率外推为通用 context reduction。
 - `.qoderignore`、`SKILL.md` 和权限设置是行为约束，不是 OS sandbox；真实宿主 non-bypass 仍是 PENDING。
-- rc.3 有正式 Windows wrapper **失败**证据，不是 PASS；rc.4 仍没有 fresh-tag Windows PASS，Qoder host、
-  Capsule-only Agent Task Success 与 Intel 性能也未通过。tagged source snapshot 不自证其 post-push CI，
-  具体结论须以 [STATUS](STATUS.md) 中绑定 SHA 的外部 GitHub run 和正式验收报告为准。
+- rc.3 有正式 Windows wrapper **失败**证据，不是 PASS；rc.4 只能写 fresh-tag
+  **regression subset PASS / Windows full matrix INCONCLUSIVE**。source-artifact cache 预先填充，网络为
+  `NOT_MEASURED`，timeout/fault 剩余矩阵为 `NOT_RUN`。Qoder host、Capsule-only Agent Task Success
+  与 Intel performance 另外均为 `NOT_RUN`，因此项目 overall 也为 `INCONCLUSIVE`。外置脱敏报告的
+  manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
+  `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`，但尚无 public URL。
 - 项目 LICENSE、author 与公开源码仓库已确认；ModelScope URL、提交身份和独立模型托管方式仍待决定。
 
 更多细节见 [architecture](docs/architecture.md)、[threat model](docs/threat-model.md) 和

@@ -1,8 +1,8 @@
 # AI Airlock Windows Validation Handoff
 
-> Status: `v0.1.0-rc.4` is being prepared but is not yet an annotated published tag. Its tag object, commit and
-> tree are deliberately blocked placeholders. Formal validation must not begin until the owner supplies the
-> post-tag values and the tested checkout reproduces them exactly.
+> Status: `v0.1.0-rc.4` is an annotated, unsigned, published candidate. Its tag object, commit and tree below are
+> frozen. Exact-SHA main/tag Python CI passed with limited scope. A fresh-tag Windows regression subset passed,
+> but the Windows full matrix and overall verdict remain `INCONCLUSIVE`; Qoder was absent and remains `NOT_RUN`.
 
 Exact `v0.1.0-rc.3` remains immutable. Its formal Windows verdict was `FAIL`: Windows PowerShell 5.1 and
 PowerShell 7 cold health both returned `AIRLOCK_MODEL_PREPARATION_FAILED`. Diagnostics isolated cached OpenVINO
@@ -28,22 +28,27 @@ Non-negotiable rules:
 The authoritative behavioral oracle is [`qoder_acceptance.md`](qoder_acceptance.md). This handoff defines order,
 identity and evidence handling; it does not replace that oracle.
 
-## 2. Candidate identity — fill before handoff
+## 2. Published candidate identity
 
 ```text
 SOURCE_REPOSITORY_URL:   https://github.com/tty627/ai-airlock
 CANDIDATE_TAG:           v0.1.0-rc.4
-CANDIDATE_TAG_OBJECT:    [OWNER_HANDOFF_AFTER_TAG_CREATION]
-CANDIDATE_COMMIT:        [OWNER_HANDOFF_AFTER_TAG_CREATION]
-CANDIDATE_TREE:          [OWNER_HANDOFF_AFTER_TAG_CREATION]
+CANDIDATE_TAG_OBJECT:    2a50625aa95443e328573704cf42e9c633621ffe
+CANDIDATE_COMMIT:        52a215727115f32937cb78561e88a63fdae5adf2
+CANDIDATE_TREE:          46bc0f55eed58b7234338d4ff4e32bc71c348f8a
 CORE_EVIDENCE_COMMIT:    495f89c6349afbdd741576439b3b85369d26671a
 EXPECTED_PROJECT_NAME:   ai-airlock
 ```
 
-Do not infer or replace identity values from floating `main` or the current working tree. Formal validation is
-`BLOCKED` while any placeholder remains, if exact-SHA main/tag CI has not succeeded, if the Windows Agent prompt
-does not repeat all three resolved values, or if the fresh tagged checkout does not reproduce them. Development
-test counts and wrapper probes before the tag are not formal rc.4 evidence.
+The annotated tag is unsigned. [Main CI run `33293985019`](https://github.com/tty627/ai-airlock/actions/runs/33293985019)
+and [tag CI run `33294040300`](https://github.com/tty627/ai-airlock/actions/runs/33294040300) succeeded on Windows
+and Ubuntu; all four Python 3.12 jobs each reported `212 passed / 8 skipped`, plus Ruff, format and benchmark
+smoke. The eight skips were prepared OpenVINO model/runtime unavailable cases. This CI did not exercise
+`.[openvino]`, model bootstrap, `scripts/run.ps1`, Qoder or Intel performance.
+
+Do not infer or replace identity values from floating `main` or the current working tree. Validation remains
+`BLOCKED` if the Windows Agent prompt does not repeat all three resolved values, or if the fresh tagged checkout
+does not reproduce them exactly. Pre-tag development probes and scoped Python CI are not formal host evidence.
 
 ## 3. Read before running
 
@@ -64,9 +69,9 @@ Use a new directory that Qoder has never opened. Use the fixed values from secti
 ```powershell
 $RepositoryUrl = 'https://github.com/tty627/ai-airlock'
 $CandidateTag = 'v0.1.0-rc.4'
-$ExpectedTagObject = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
-$ExpectedCommit = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
-$ExpectedTree = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
+$ExpectedTagObject = '2a50625aa95443e328573704cf42e9c633621ffe'
+$ExpectedCommit = '52a215727115f32937cb78561e88a63fdae5adf2'
+$ExpectedTree = '46bc0f55eed58b7234338d4ff4e32bc71c348f8a'
 $RunId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
 $CheckoutRoot = "C:\AI-Airlock-Acceptance\$RunId\source"
 
@@ -190,6 +195,30 @@ Check every externally visible surface available in the run:
 - sanitized transcript, screenshots and video captions.
 
 Report known-fixture marker denominators and hits. Do not claim universal zero leakage.
+
+### Returned rc.4 result
+
+The returned fresh-tag run is deliberately recorded at subset granularity:
+
+| Validation surface | Returned result | Scope / limitation |
+|---|---|---|
+| Identity and scoped GitHub CI | `PASS_WITH_SCOPE` | Exact tag object, commit and tree matched; the two CI runs above passed only the declared Python surface |
+| PowerShell 5.1 and PowerShell 7 independent cold + warm health | `PASS_REGRESSION_SUBSET` | Source-artifact cache was prefilled, so this is not a clean source-download/bootstrap or network result |
+| Chinese task + path containing spaces analyze | `PASS_REGRESSION_SUBSET` | Wrapper/analyze case only; not a Qoder-host result |
+| Fixed invalid/missing-input errors | `PASS_REGRESSION_SUBSET` | Covered returned invalid/missing cases only |
+| Cross-shell concurrent cold start | `PASS_REGRESSION_SUBSET` | Covered the returned concurrency case |
+| Residual process check | `PASS_REGRESSION_SUBSET` | Observed residual count `0` for covered cases |
+| Known-marker scan | `PASS_WITH_SCOPE` | `252` markers across `26` stdout/stderr surfaces, `0` hits; not a universal zero-leakage claim |
+| Cold-bootstrap/task-period network | `NOT_MEASURED` | No network conclusion is available |
+| Remaining timeout/fault matrix | `NOT_RUN` | Required fault/deadline cases remain open |
+| Qoder discovery, triggers and Capsule-only answer | `NOT_RUN` | Qoder was absent on the validation host |
+| Intel performance | `NOT_RUN` | No Intel latency, device or throughput claim is available |
+| Windows full matrix | `INCONCLUSIVE` | Prefilled source-artifact cache, network `NOT_MEASURED` and remaining timeout/fault matrix `NOT_RUN` prevent a complete Windows-matrix `PASS` |
+| Overall Windows/Qoder/Intel acceptance | `INCONCLUSIVE` | The Windows full-matrix limitations above, plus Qoder absent/`NOT_RUN` and Intel performance `NOT_RUN`, prevent an overall `PASS` |
+
+The external sanitized report has no public URL. Its recorded manifest verification is `99/99`, and the SHA-256 of
+its top-level `SHA256SUMS` file is `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`. Until that artifact is anonymously
+published and reverified, readers cannot independently download it from this repository.
 
 ## 8. Verdict rules
 

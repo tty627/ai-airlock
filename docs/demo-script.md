@@ -1,15 +1,19 @@
 # AI Airlock 60 秒 Demo Script
 
-> 版本：`v0.1.0-rc.1` · source commit
+> Frozen benchmark 版本：`v0.1.0-rc.1` · source commit
 > `495f89c6349afbdd741576439b3b85369d26671a`。
-> 所有数字来自当前 SHA 绑定的 release evidence；准入定义见
+> 当前源码候选：annotated、unsigned `v0.1.0-rc.4` · tag object
+> `2a50625aa95443e328573704cf42e9c633621ffe` · commit
+> `52a215727115f32937cb78561e88a63fdae5adf2` · tree
+> `46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。
+> 所有数字分别受对应 RC 身份和 evidence 边界约束；准入定义见
 > [Claims Ledger](claims-ledger.md)。
 
 主线：
 
 > `Private Data → Detect / Transform / Isolate → OpenVINO Relevance → Safe Context Capsule →
 > Agent`
-> `真实 Qoder Capsule-only Task Completed = PENDING`
+> `真实 Qoder Capsule-only Task Completed = NOT_RUN (host absent)`
 
 ## 当前事实与拍摄边界
 
@@ -18,8 +22,9 @@
 | macOS clean checkout | **PASS** | `212 passed / 6 skipped`；6 项均因 PowerShell unavailable |
 | Apple M4 CPU OpenVINO CLI | **PASS** | fixed model/revision、`openvino_embedding`、CPU、A/B 与 trade-off |
 | Python strict response gate | **PASS** | `Python response gate passed` |
-| Windows / PowerShell 5.1/7 | **rc.3 FAIL / rc.4 RETEST PENDING** | 可引用 `C-WIN-01` 展示固定失败边界；不得显示伪造 PASS 终端 |
-| Qoder host / Capsule-only answer | **PENDING** | 只能显示 `Host acceptance pending` |
+| rc.4 scoped GitHub Python CI | **PASS_WITH_SCOPE** | main `33293985019` / tag `33294040300`；四个 job 各 `212 passed / 8 skipped`；不等于 wrapper/Qoder/Intel evidence |
+| Windows / PowerShell 5.1/7 | **rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE** | 只显示已覆盖 regression subset 与 cache/network/fault 限制；不得显示完整 Windows PASS |
+| Qoder host / Capsule-only answer | **NOT_RUN** | Qoder host 缺席；只能显示 `Qoder host absent / NOT_RUN` |
 | Intel hardware performance | **NOT RUN** | 不填设备数字，不挂 NPU/GPU badge |
 
 Mac CLI rehearsal 不是 Qoder Agent Task Completed。只有真实 Qoder 界面、Skill 自动发现、wrapper tool
@@ -41,15 +46,17 @@ trace、Capsule-only 最终回答与 non-bypass 证据同时存在，才能替�
 建议录屏前把 shell prompt 临时设置为中性文本，并裁掉菜单栏、通知、用户目录、远程主机名与账号。
 不得为了画面清洁修改 frozen tag 或 evidence。
 
-### 必须回到 Windows / Qoder 后替换
+### 仍须由 Windows / Qoder 真实素材补齐
 
 1. Qoder 在新会话中自动发现并选择真实安装的 `ai-airlock` Skill。
 2. 第一次接触目标内容的动作是 `scripts/run.ps1 analyze ... --relevance-backend openvino --json`。
-3. 真实 Windows PowerShell 5.1 与 7 的 cold/warm health；中文 task 与带空格路径。
+3. rc.4 已覆盖的 5.1/7 独立 cold/warm、中文 + 空格 analyze 等 regression subset 只有在原始素材与
+   manifest 可追溯时才能入镜；clean source-artifact bootstrap/network 与 remaining timeout/fault matrix
+   仍需补测。
 4. Qoder tool trace 证明没有 editor raw read、search、index、attachment、shell、subagent、MCP 或 connector
    bypass。
 5. Qoder 只从 `safe_context.facts` 得出事故根因，并引用 `source:local_ref`。
-6. 任务期非预期网络计数和 wrapper 退出后的残留进程检查。
+6. 任务期非预期网络计数仍为 `NOT_MEASURED`；covered wrapper cases 的 residual count `0` 只能限定引用。
 7. 12 个 positive 与 12 个 negative triggers 的真实执行摘要。
 8. Intel AI PC 性能；必须记录具体 CPU/device、OS、OpenVINO、cold/warm 定义与失败数。
 
@@ -211,8 +218,8 @@ Synthetic flagship · checked public outputs
 **当前 Mac 包装版画面**：显示橙色占位：
 
 ```text
-Qoder host acceptance pending
-rc.3 Windows FAIL; rc.4 / Capsule-only Agent answer footage required
+Qoder host absent / NOT_RUN
+rc.3 Windows FAIL; rc.4 regression subset PASS / Windows full matrix INCONCLUSIVE
 ```
 
 **最终提交版替换条件**：只有完成真实 Windows/Qoder 验收后，替换为连续镜头：自然语言触发 →
@@ -220,8 +227,9 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 **口播（当前版）**：
 
-> Python response gate 已通过；rc.3 Windows cold health 正式失败；exact rc.4 与真实 Qoder 的宿主
-> non-bypass 和最终回答仍待实机证据。
+> Python response gate 已通过；rc.3 Windows cold health 正式失败。exact rc.4 的 Windows regression
+> subset 已通过，但 source-artifact cache 预填、网络未测、remaining timeout/fault 未跑，因此 Windows
+> full matrix 仍为 INCONCLUSIVE；Qoder host 缺席且尚未执行。
 
 ### 56–60s · End Card
 
@@ -231,7 +239,8 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 > **AI Airlock. Your data stays. Your Agent works.**
 
-当前 End Card 必须保留 `Mac evidence ready · rc.3 Windows FAIL · rc.4/Qoder pending`，在实机证据全部回填前
+当前 End Card 必须保留 `Mac evidence ready · rc.3 Windows FAIL · rc.4 subset PASS / full matrix
+INCONCLUSIVE · Qoder NOT_RUN`，在实机证据全部回填前
 不得改成 `OpenVINO × Intel AI PC × Qoder validated`；同时保留
 `Airlock-controlled path · real host non-bypass pending`。
 
@@ -255,19 +264,24 @@ code、stdout/stderr hash 与录像 SHA-256。
 如 raw terminal 包含用户名或绝对路径，原片只进入受控私有 evidence，不进入公开成片；公开版使用安全
 裁剪。不要用后期遮挡掩盖实际命令参数是否正确。
 
-### U2 · Windows PowerShell acceptance（rc.3 FAIL / rc.4 RETEST PENDING）
+### U2 · Windows PowerShell acceptance（rc.3 FAIL / rc.4 SUBSET PASS / FULL MATRIX INCONCLUSIVE）
 
-rc.3 已记录 PowerShell 5.1 与 7 cold health 的固定失败，不能剪辑成 PASS。rc.4 必须从 fresh tag 在
-Windows 机器连续记录两个 shell 的 cold/warm health、中文 task、带空格路径、固定错误 JSON 和无残留
-进程检查。完整 oracle 以 [qoder_acceptance.md](qoder_acceptance.md) 为准。
+rc.3 已记录 PowerShell 5.1 与 7 cold health 的固定失败，不能剪辑成 PASS。rc.4 fresh-tag regression
+subset 已覆盖两个 shell 各自 cold+warm health、中文 task + 带空格路径 analyze、固定 invalid/missing
+errors、cross-shell concurrent cold、covered residual `0`，以及 `252` markers × `26` stdout/stderr surfaces
+`0 hits`。source-artifact cache 已预填，network 为 `NOT_MEASURED`，remaining timeout/fault matrix 为
+`NOT_RUN`，所以 full matrix 必须保持 `INCONCLUSIVE`。外置脱敏报告没有 public URL；其记录的 manifest
+为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
+`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。完整 oracle 以
+[qoder_acceptance.md](qoder_acceptance.md) 为准。
 
-### U3 · Qoder flagship（PENDING）
+### U3 · Qoder flagship（NOT_RUN · host absent）
 
 从全新 Qoder 会话开始，连续记录 Skill 选择、权限设置、第一次目标内容访问、wrapper 命令、单 JSON
 Capsule、最终回答与 `source:local_ref`。不得先打开或索引 fixture。若 non-bypass 无法证明，结果只能是
 `INCONCLUSIVE`。
 
-### U4 · 12+12 trigger matrix（PENDING）
+### U4 · 12+12 trigger matrix（NOT_RUN · host absent）
 
 每条 trigger 使用全新会话。记录 `12/12 positive` 与 `12/12 negative` 的逐例轨迹、误触发、bypass、
 泄漏和 task completion；当前只能写 `STATIC_SPEC_DEFINED`，不能预填通过。
@@ -298,7 +312,7 @@ reviewer:
 - 把 Apple M4 结果写成 Windows、Intel AI PC、GPU 或 NPU 结果。
 - 只展示 Recall 增益而裁掉 P95 latency 代价。
 - 把 `3/3 required facts` 写成真实 Agent task success。
-- 把 `raw_sensitive_spans_forwarded=0` 或 `0/252` 写成无范围的“零泄漏”。
+- 把 `raw_sensitive_spans_forwarded=0` 或 `252 markers × 26 stdout/stderr surfaces / 0 hits` 写成无范围的“零泄漏”。
 - 展示 raw Secret、PII、Injection 原文、用户名、绝对路径、账号、远程主机、通知或可用 endpoint。
 - 伪造 Qoder 界面、URL、CI badge、Windows 画面或硬件 telemetry。
 - 让视频、README、文章和 benchmark 使用不同 commit、run 或指标定义。

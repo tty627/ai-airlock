@@ -21,25 +21,40 @@ Windows 执行者应先读取 [`../STATUS.md`](../STATUS.md) 和
 
 ```text
 QODER_REAL_MACHINE_TEST=NOT_RUN
+QODER_HOST_AVAILABILITY=ABSENT
 WINDOWS_POWERSHELL_RC3=FAIL
-WINDOWS_POWERSHELL_RC4=PENDING
+WINDOWS_POWERSHELL_RC4_REGRESSION_SUBSET=PASS
+WINDOWS_POWERSHELL_RC4_FULL_MATRIX=INCONCLUSIVE
+INTEL_PERFORMANCE=NOT_RUN
+OVERALL_ACCEPTANCE=INCONCLUSIVE
 ```
 
 | 验证面 | 当前状态 | 已有证据 | 尚缺证据 |
 |---|---|---|---|
 | Python CLI 核心 | `PASS_LOCAL` | macOS、Python 3.12、全量测试与旗舰 CLI 已实测；正式计数以对应 RC SHA 的外置 release evidence 为准 | PowerShell 动态用例在无 PowerShell 的主机上会跳过；不替代 Windows/Qoder |
 | Skill 格式与说明 | `PASS_STATIC_VALIDATED` | `skill-creator` validator 通过；触发与负边界已定义 | 仍需真实 Qoder 选择轨迹 |
-| Qoder 自动发现 | `PENDING_REAL_QODER` | 安装与触发用例已定义 | Qoder 版本、截图/日志与命令轨迹 |
-| Windows wrapper | `FAIL_RC3 / PENDING_RC4` | exact rc.3 的 PowerShell 5.1/7 cold health 均返回 `AIRLOCK_MODEL_PREPARATION_FAILED`；诊断见 Claims Ledger `C-WIN-01` | exact rc.4 fresh-tag cold/warm、路径、错误、并发与残留进程结果 |
-| 旗舰 Agent 流程 | `PENDING_REAL_QODER_WINDOWS` | Capsule 已保留完整事故证据链 | Qoder 只消费 Capsule 的真实会话证据 |
-| OpenVINO | `PASS_LOCAL_FORMAL_CLI / FAIL_RC3_PROMOTION / PENDING_RC4_QODER` | 正式命令已显式选择 OpenVINO；macOS 公开 CLI 从非仓库 cwd 通过严格 response gate；rc.3 Windows 内部 inference smoke 已执行，但 model promotion rename 失败 | exact rc.4 ready health/analyze 与真实 Qoder/Windows trace |
+| Qoder 自动发现 | `NOT_RUN_HOST_ABSENT` | 安装与触发用例已定义 | Qoder 版本、截图/日志与命令轨迹 |
+| Windows wrapper | `FAIL_RC3 / RC4_SUBSET_PASS / FULL_MATRIX_INCONCLUSIVE` | rc.3 PowerShell 5.1/7 cold health 固定失败；rc.4 fresh-tag 已覆盖两个 shell 独立 cold+warm、中文/空格 analyze、invalid/missing errors、cross-shell concurrent cold 与 covered residual `0` | source-artifact cache 未清空、network `NOT_MEASURED`、remaining timeout/fault matrix `NOT_RUN` |
+| 旗舰 Agent 流程 | `NOT_RUN_REAL_QODER` | Capsule 已保留完整事故证据链，但 Qoder host 缺席 | Qoder 只消费 Capsule 的真实会话证据 |
+| OpenVINO | `PASS_LOCAL_FORMAL_CLI / FAIL_RC3_PROMOTION / RC4_FUNCTIONAL_SUBSET_PASS` | 正式命令显式选择 OpenVINO；macOS 公开 CLI 通过严格 gate；rc.4 Windows health/analyze regression subset 通过 | clean source-artifact bootstrap/network、remaining fault matrix、真实 Qoder trace 与 Intel performance |
+| GitHub Python CI | `RC4_PASS_WITH_SCOPE` | main `33293985019`、tag `33294040300`；Windows/Ubuntu 四个 Python 3.12 job 各 `212 passed / 8 skipped`，Ruff/format/benchmark smoke PASS | 未覆盖 `.[openvino]`、真实模型 bootstrap、PowerShell wrapper、Qoder 或 Intel performance |
 
-因此当前只能说“本地 CLI integration 已验证；rc.3 Windows cold health 正式失败；rc.4 与 Qoder
-integration 待验收”，不能说完整端到端已经通过。
+rc.4 的精确发布身份为 annotated、unsigned tag object
+`2a50625aa95443e328573704cf42e9c633621ffe`，commit
+`52a215727115f32937cb78561e88a63fdae5adf2`，tree
+`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。fresh-tag regression subset 还记录了 `252` markers ×
+`26` stdout/stderr surfaces 为 `0 hits`，但这不是通用零泄漏保证。外置脱敏报告没有 public URL；其记录的
+manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
+`3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。
+
+预填 source-artifact cache、network `NOT_MEASURED` 与 remaining timeout/fault matrix `NOT_RUN` 使
+**Windows full matrix 保持 `INCONCLUSIVE`**。这一 Windows 限制，再加 Qoder host absent/`NOT_RUN` 和
+Intel performance `NOT_RUN`，使 overall acceptance 为 `INCONCLUSIVE`。因此不能说完整端到端已经通过。
 
 还要区分两种安全主张：
 
-- 本规范可以证明：在指定版本、设置和测试提示下，观测到的 Qoder 轨迹没有绕过 Airlock。
+- 完整执行并通过本规范后，最多可以支持证明：在指定版本、设置和测试提示下，受观测的 Qoder 轨迹
+  没有绕过 Airlock；当前 Qoder 为 `NOT_RUN`，尚无此项实测结论。
 - 本规范不能证明：同一 OS 用户权限下，任意 Agent 都不可能通过读取工具或任意 shell 绕过 Airlock。`SKILL.md` 是行为合同，不是强制沙箱。
 
 ## 2. Qoder 安装与放置
@@ -286,6 +301,11 @@ $Target = if ([IO.Path]::IsPathRooted($UserPath)) {
 
 记录：Windows 版本、PowerShell 版本、Qoder 版本、CPU、Python 版本、项目 commit、Skill 实际加载路径。
 
+本节完整 oracle 尚未全部执行。rc.4 回传的 cold/warm 与 analyze 结果属于 regression subset；由于
+source-artifact cache 预填，不构成 clean source-download/bootstrap 或 network 结果。第 7 节 remaining
+timeout/fault cases 仍为 `NOT_RUN`，Qoder 相关字段因 host 缺席必须填 `NOT_RUN`，不能从 wrapper subset
+推导 Qoder `PASS`。
+
 ### 8.1 冷启动与 warm start
 
 1. 使用不含 `.venv` 的干净 package；确认 Python 3.12 可用。
@@ -357,8 +377,9 @@ macOS 的 Python CLI、Wine 或静态脚本审查都不能替代本节 Windows �
 
 ### 10.1 QP-01 oracle 与 task-matched Mac evidence
 
-真实 Qoder positive matrix 当前为 `0/12 REAL_QODER_EXECUTED`，其中 QP-01 也尚未执行；本节不得被
-引用为 Qoder host 已执行结果。
+真实 Qoder positive matrix 当前为 `0/12 REAL_QODER_EXECUTED`，其中 QP-01 也尚未执行；rc.4 Windows
+中文/空格路径 wrapper analyze 是 regression subset，不是 Qoder positive trigger。本节不得被引用为
+Qoder host 已执行结果。
 当前冻结 evidence 只证明：**与 QP-01 使用同一 task 的 macOS Python CLI/response-gate Capsule 实测**
 通过，并记录了以下受限事实：
 
@@ -446,7 +467,7 @@ raw_workspace_bypass_observed: true | false
 secret_or_pii_disclosure_observed: true | false
 unexpected_network_observed: true | false
 residual_child_process_observed: true | false
-result: PASS | FAIL | INCONCLUSIVE
+result: PASS | FAIL | INCONCLUSIVE | NOT_RUN
 evidence_location:
 notes:
 ```
@@ -467,7 +488,7 @@ notes:
 - 所有非阻断 analyze 均通过 OpenVINO metadata consistency gate；
 - 每条用例都有环境、commit、Skill 来源、命令、路径、decision 和脱敏证据。
 
-在完成 exact rc.4 Windows/Qoder 证据前，项目状态必须保持：**Qoder integration not run / pending
-acceptance；rc.3 Windows FAIL；rc.4 Windows pending**。对应机器状态为
-`QODER_REAL_MACHINE_TEST=NOT_RUN`、`WINDOWS_POWERSHELL_RC3=FAIL`、
-`WINDOWS_POWERSHELL_RC4=PENDING`。
+当前项目状态必须保持：**Qoder host absent / integration `NOT_RUN`；rc.3 Windows `FAIL`；rc.4 Windows
+regression subset `PASS`、full matrix `INCONCLUSIVE`；Intel performance `NOT_RUN`；overall
+`INCONCLUSIVE`**。对应机器状态以第 1 节状态块为准。只有补齐 Windows remaining matrix 并完成真实
+Qoder 全套 oracle，才可按本节条件重新判断；不得把 subset 状态提升为完整 Windows/Qoder `PASS`。
