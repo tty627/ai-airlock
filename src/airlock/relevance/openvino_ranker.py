@@ -460,6 +460,12 @@ def _load_runtime(model_dir: str, manifest_fingerprint: str) -> tuple[Any, Any]:
         raise OpenVINORankingUnavailable() from None
 
 
+def clear_openvino_runtime_cache() -> None:
+    """Release cached native runtime handles before moving a prepared model."""
+
+    _load_runtime.cache_clear()
+
+
 class OpenVINOEmbeddingBackend:
     """OpenVINO tokenization and Runtime inference with deterministic pooling."""
 

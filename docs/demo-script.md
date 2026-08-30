@@ -18,7 +18,7 @@
 | macOS clean checkout | **PASS** | `212 passed / 6 skipped`；6 项均因 PowerShell unavailable |
 | Apple M4 CPU OpenVINO CLI | **PASS** | fixed model/revision、`openvino_embedding`、CPU、A/B 与 trade-off |
 | Python strict response gate | **PASS** | `Python response gate passed` |
-| Windows / PowerShell 5.1/7 | **PENDING** | 只能显示验收占位，不显示伪造终端 |
+| Windows / PowerShell 5.1/7 | **rc.3 FAIL / rc.4 RETEST PENDING** | 可引用 `C-WIN-01` 展示固定失败边界；不得显示伪造 PASS 终端 |
 | Qoder host / Capsule-only answer | **PENDING** | 只能显示 `Host acceptance pending` |
 | Intel hardware performance | **NOT RUN** | 不填设备数字，不挂 NPU/GPU badge |
 
@@ -212,7 +212,7 @@ Synthetic flagship · checked public outputs
 
 ```text
 Qoder host acceptance pending
-Windows / Capsule-only Agent answer footage required
+rc.3 Windows FAIL; rc.4 / Capsule-only Agent answer footage required
 ```
 
 **最终提交版替换条件**：只有完成真实 Windows/Qoder 验收后，替换为连续镜头：自然语言触发 →
@@ -220,7 +220,8 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 **口播（当前版）**：
 
-> Python response gate 已通过；真实 Windows/Qoder 的宿主 non-bypass 和最终回答仍待实机证据。
+> Python response gate 已通过；rc.3 Windows cold health 正式失败；exact rc.4 与真实 Qoder 的宿主
+> non-bypass 和最终回答仍待实机证据。
 
 ### 56–60s · End Card
 
@@ -230,7 +231,7 @@ wrapper tool trace → Capsule-only 根因回答。不得剪掉首次内容访�
 
 > **AI Airlock. Your data stays. Your Agent works.**
 
-当前 End Card 必须保留 `Mac packaging ready · Windows/Qoder evidence pending`，在实机证据全部回填前
+当前 End Card 必须保留 `Mac evidence ready · rc.3 Windows FAIL · rc.4/Qoder pending`，在实机证据全部回填前
 不得改成 `OpenVINO × Intel AI PC × Qoder validated`；同时保留
 `Airlock-controlled path · real host non-bypass pending`。
 
@@ -254,10 +255,11 @@ code、stdout/stderr hash 与录像 SHA-256。
 如 raw terminal 包含用户名或绝对路径，原片只进入受控私有 evidence，不进入公开成片；公开版使用安全
 裁剪。不要用后期遮挡掩盖实际命令参数是否正确。
 
-### U2 · Windows PowerShell acceptance（PENDING）
+### U2 · Windows PowerShell acceptance（rc.3 FAIL / rc.4 RETEST PENDING）
 
-在真实 Windows 机器连续记录 PowerShell 5.1 与 7 的 cold/warm health、中文 task、带空格路径、固定
-错误 JSON 和无残留进程检查。完整 oracle 以 [qoder_acceptance.md](qoder_acceptance.md) 为准。
+rc.3 已记录 PowerShell 5.1 与 7 cold health 的固定失败，不能剪辑成 PASS。rc.4 必须从 fresh tag 在
+Windows 机器连续记录两个 shell 的 cold/warm health、中文 task、带空格路径、固定错误 JSON 和无残留
+进程检查。完整 oracle 以 [qoder_acceptance.md](qoder_acceptance.md) 为准。
 
 ### U3 · Qoder flagship（PENDING）
 

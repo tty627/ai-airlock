@@ -1,6 +1,6 @@
 # AI Airlock Third-Party Notices
 
-> Status: source-submission notice for the `v0.1.0-rc.3` candidate.
+> Status: source-submission notice for the `v0.1.0-rc.4` candidate; package version remains `0.1.0`.
 > AI Airlock itself is licensed under Apache-2.0; this file separately records direct dependencies,
 > known optional-extra dependencies, and the model source used by the frozen core evidence.
 

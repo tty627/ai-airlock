@@ -23,6 +23,7 @@ from airlock.relevance.openvino_ranker import (
     MODEL_SIZE_LIMIT_BYTES,
     OpenVINOEmbeddingBackend,
     OpenVINORankingUnavailable,
+    clear_openvino_runtime_cache,
     resolve_model_dir,
     validate_model_dir,
 )
@@ -168,6 +169,8 @@ def _convert_sources(source: Path, destination: Path) -> None:
 
 
 def _verify_inference(model_dir: Path) -> None:
+    backend: OpenVINOEmbeddingBackend | None = None
+    failed = False
     try:
         backend = OpenVINOEmbeddingBackend(model_dir)
         query = backend.embed_query("本地支付故障")
@@ -175,6 +178,12 @@ def _verify_inference(model_dir: Path) -> None:
         if not query or len(documents) != 1 or len(query) != len(documents[0]):
             raise ValueError
     except Exception:
+        failed = True
+    finally:
+        # Do not let a suppressed third-party traceback retain the backend while
+        # the caller clears its process cache and removes the temporary model.
+        backend = None
+    if failed:
         raise ModelSetupError("MODEL_SMOKE_TEST_FAILED") from None
 
 
@@ -268,7 +277,13 @@ def prepare_model(output_dir: str | Path | None = None) -> dict[str, Any]:
             _download_sources(source, download_cache)
             _convert_sources(source, candidate)
             _write_manifest(candidate)
-            _verify_inference(candidate)
+            try:
+                _verify_inference(candidate)
+            finally:
+                # The one-shot smoke test uses the process-wide runtime cache.
+                # Release native handles after its call frame exits and before
+                # atomically promoting the candidate directory on Windows.
+                clear_openvino_runtime_cache()
             candidate.replace(output)
     except ModelSetupError:
         raise

@@ -1,8 +1,12 @@
 # AI Airlock Competition Story
 
-> 当前公开事实绑定 `v0.1.0-rc.1` / `495f89c6349afbdd741576439b3b85369d26671a`。
+> 核心 benchmark 与数值 claims 绑定 `v0.1.0-rc.1` /
+> `495f89c6349afbdd741576439b3b85369d26671a`。
 > 所有实测数字均受 [Claims Ledger](claims-ledger.md) 约束。本文是比赛叙事源，不是 Windows/Qoder
 > 验收报告。
+
+候选状态必须与 benchmark 数字分开：exact `v0.1.0-rc.3` 的正式 Windows verdict 为 `FAIL`，下一候选
+是尚未发布的 `v0.1.0-rc.4`。Qoder 和 Intel 性能仍未通过。
 
 ## 核心结论
 
@@ -42,15 +46,19 @@ Agent 要解决生产问题
 
 ## 当前事实边界
 
-| 层级 | rc.1 状态 | 正确表述 |
+| 层级 | 当前证据状态 | 正确表述 |
 |---|---|---|
 | Source RC | **PASS** | clean checkout；full pytest `212 passed / 6 skipped`，6 项均因 PowerShell 不可用 |
 | macOS OpenVINO | **PASS** | Apple M4 CPU 上固定 model/revision 的公开 CLI、strict Python response gate、flagship 和 A/B 已实跑 |
 | Python Qoder gate | **PASS** | response shape、OpenVINO metadata 与 fail-closed gate 通过；不是 Qoder host |
-| Windows / PowerShell | **PENDING** | wrapper 代码与 oracle 已准备，未运行 PowerShell 5.1/7 实机验收 |
-| Qoder host | **PENDING** | 12 个 positive 与 12 个 negative trigger spec 已定义；两组均 `0/12 REAL_QODER_EXECUTED` |
-| GitHub Python CI | **PASS（范围受限）** | Windows/Ubuntu Python 3.12、LF checkout、Ruff 与 benchmark smoke 已通过；不是宿主验收 |
-| Intel hardware | **NOT RUN** | 无 Intel 性能、NPU/GPU 或硬件加速证据 |
+| Windows / PowerShell | **rc.3 FAIL / rc.4 RETEST PENDING** | rc.3 的 PowerShell 5.1/7 cold health 均返回 `AIRLOCK_MODEL_PREPARATION_FAILED`；rc.4 必须 fresh-tag 重验 |
+| Qoder host | **NOT RUN** | 12 个 positive 与 12 个 negative trigger spec 已定义；两组均 `0/12 REAL_QODER_EXECUTED` |
+| GitHub Python CI | **rc.3 PASS（范围受限）/ rc.4 PENDING** | rc.3 Windows/Ubuntu Python 3.12、LF checkout、Ruff 与 benchmark smoke 已通过；rc.4 exact-SHA main/tag CI 尚未发生，且 Python CI 不是宿主验收 |
+| Intel hardware | **PERFORMANCE NOT RUN** | rc.3 主机识别到 Intel CPU，内部 OpenVINO inference smoke 已执行，但 model promotion 在 ready health/analyze 前失败；无 cold/warm、NPU/GPU 或硬件加速证据 |
+
+rc.3 的失败诊断（[Claims Ledger · C-WIN-01](claims-ledger.md)）定位到 OpenVINO inference smoke 后缓存的 native handles，它们阻止 candidate model
+directory 的原子 rename，并触发 `PermissionError` / WinError 5。该诊断不修补或改变 rc.3。当前工作树
+测试和 wrapper 探针也不能替代 rc.4 exact-tag CI 或正式 fresh-tag 验收。
 
 ## 为什么必须在本地做第一跳
 
@@ -186,13 +194,14 @@ OpenVINO flagship 的 `analyze` stdout、stderr 与 audit log 中，对从冻结
 ## Qoder 集成设计与验收分离
 
 正式设计入口要求 Windows wrapper 显式选择 OpenVINO，并由 Agent 只消费 `safe_context`。当前已验证
-Python strict response gate，但下列宿主层事实全部保持 `PENDING`：
+Python strict response gate；rc.3 Windows cold bootstrap 已正式失败，尚未进入 Qoder。下列宿主层事实
+对 rc.4 仍保持 `PENDING / NOT_RUN`：
 
 - Qoder 自动发现和自然语言触发；
 - 12/12 positive trigger 与 12/12 negative non-trigger；
 - 第一次内容访问动作确实是 wrapper；
 - 没有 workspace indexing、附件、raw read、shell、subagent 或 connector bypass；
-- Windows PowerShell 5.1/7、中文与带空格路径、冷/warm bootstrap；
+- exact rc.4 Windows PowerShell 5.1/7、中文与带空格路径、cold/warm bootstrap；
 - Qoder 只依据 Capsule 得出事故结论并完成最终回答；
 - 任务期零非预期网络和 wrapper 退出后无残留子进程。
 
@@ -207,13 +216,14 @@ CLI rehearsal 的画面只能标为：
 3. 可验证 Local AI：Apple M4 CPU 上 OpenVINO mode/model/revision/device 可见。
 4. 有 utility 的安全缩减：flagship required facts `3/3` 与 estimated-token context reduction 同时出现。
 5. 诚实 trade-off：Mean Recall@K 数值变化与 P95 latency 代价同图。
-6. 诚实未完成项：Windows、Intel、Qoder host、Agent Task Completed 清晰标记 PENDING。
+6. 诚实未完成项：Windows 标记 `rc.3 FAIL / rc.4 RETEST PENDING`；Intel 性能、Qoder host 与 Agent
+   Task Completed 标记 `NOT_RUN` 或 `PENDING`。
 
 ## 比赛材料映射
 
 - README Hero 与首屏事实：[README](../README.md)
 - 数字定义与准入位置：[Claims Ledger](claims-ledger.md)
-- 可直接发布的中文文章初稿：[ModelScope article](modelscope-article.md)
+- 已同步失败边界、尚未授权公开的中文文章初稿：[ModelScope article](modelscope-article.md)
 - 60 秒成片与未剪辑证据原片：[Demo script](demo-script.md)
 - 发布前硬门：[Submission checklist](submission-checklist.md)
 - Windows/Qoder 实机 oracle：[Qoder acceptance](qoder_acceptance.md)

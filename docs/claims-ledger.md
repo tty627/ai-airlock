@@ -17,6 +17,7 @@
 |---|---|---|---|---|---|:---:|:---:|:---:|
 | C-TEST-01 | Full pytest：`212 passed / 6 skipped` | OpenVINO 模型准备完成后，在 clean checkout 运行完整 pytest 的结果；6 项 skip 均因 PowerShell 不可用 | `release-evidence.md` → “Install, model preparation, and tests” → “Full pytest after prepare” / “Full skip reason” | macOS 26.5.2、arm64、Apple M4、Python 3.12.14；source RC 全量测试 | 不是 Windows/PowerShell/Qoder、远端 CI 或 Intel 结果；不得写成 `218/218 passed` | 是 | 是 | 可选 |
 | C-CI-01 | rc.3 GitHub Python CI：Windows 与 Ubuntu 各 `210 passed / 8 skipped`；Ruff、format、benchmark smoke 均 PASS | 对同一 tagged source commit 先运行 main push CI，再运行 annotated-tag push CI；四个 matrix job 必须全部成功 | Main run [`33264778975`](https://github.com/tty627/ai-airlock/actions/runs/33264778975)，jobs `99132798963` / `99132799076`；tag run [`33264852242`](https://github.com/tty627/ai-airlock/actions/runs/33264852242)，jobs `99132994364` / `99132994474` | `v0.1.0-rc.3`；commit `55eca4ceedb1f7e63e9444b86b32f58f2dccac3f`；tag object `31679f3afb8e3010413b01d7a42df35695b294d3`；GitHub `ubuntu-latest` / `windows-latest`；Python 3.12 | 8 项均因 prepared OpenVINO model/runtime unavailable 而 skip；Windows checkout gate 使用 `core.autocrlf=true`；没有运行 `scripts/run.ps1`、PowerShell 5.1/7、真实 Windows OpenVINO、Qoder 或 Intel hardware | 是，须写 scoped Python CI | 可选 | 否 |
+| C-WIN-01 | rc.3 正式 Windows wrapper verdict：`FAIL`；PowerShell 5.1 与 PowerShell 7 cold health 均返回 `AIRLOCK_MODEL_PREPARATION_FAILED` | 在全新 clone 中核对 exact annotated tag object/commit/tree 后，通过唯一生产 wrapper 执行 cold `health --json`；成功 oracle 要求 exit 0 和一个 ready OpenVINO JSON，实际两个 shell 均 exit 2、stdout 为空、stderr 为单个固定错误 JSON | checkout 外的脱敏 `validation-report.md`、环境摘要、两组 cold-health metadata/error 和顶层 `SHA256SUMS`；bundle 尚未发布，无 public evidence URL | `v0.1.0-rc.3` / commit `55eca4ceedb1f7e63e9444b86b32f58f2dccac3f`；Windows 11 Enterprise 25H2 build 26200.8457；Windows PowerShell 5.1.26100.8457；PowerShell 7.6.4 bundled portable runtime（无 system-wide PS7）；Intel Core i7-14700KF；OpenVINO 2026.3.1；首个继承非原生 `PSModulePath` 的 PS5.1 run 已排除，clean-environment rerun 才是权威结果 | 诊断把失败限定为 inference smoke 后缓存的 OpenVINO native handles 阻止 candidate directory 原子 rename（`PermissionError` / WinError 5）；内部 inference smoke 已执行，但 model promotion 在 ready health/analyze 前失败；Qoder `NOT_RUN`，未产生 Capsule、Agent Task Success 或 Intel 性能结论；该记录是失败证据，不是 rc.4 修复证据 | 是，必须写 FAIL | 可选，须写范围 | 否 |
 | C-UTIL-01 | Flagship required facts：rules-only `3/3`；OpenVINO `3/3` | 合成支付事故 Capsule 中三个预注册事实是否被保留：Redis pool exhaustion、retry storm、timeout/latency spike | `benchmark/latest.json#$['variants']['rules-only']['utility']['required_facts_retained']`、`['required_facts_total']`；OpenVINO 路径把 variant 换为 `openvino` | 同一 flagship fixture、task、policy 与 commit；两 variant 各一次 benchmark workflow | 只证明预注册事实保留，不等于真实 Agent 完成任务，也不证明建议正确或修复已部署 | 是 | 是 | 是 |
 | C-SEC-01 | Secret precision / recall：rules-only `1.0 / 1.0`；OpenVINO `1.0 / 1.0` | 文件级 `precision=TP/(TP+FP)`，`recall=TP/(TP+FN)`；本次 `TP/FP/TN/FN=6/0/2/0` | `benchmark/latest.json#$['variants']['rules-only']['security']['secret_detection']['classification']`；OpenVINO 路径把 variant 换为 `openvino` | 6 个 positive source files、2 个 negative source files；两 variant；7 个命名输出面另行检查 | 不是 span/unique-value 级指标；不能外推到未知 Secret 格式或通用检测能力 | 是 | 是 | 是，须带样本范围 |
 | C-SEC-02 | Injection precision / recall：rules-only `1.0 / 1.0`；OpenVINO `1.0 / 1.0` | `precision=TP/(TP+FP)`，`recall=TP/(TP+FN)`；本次 `TP/FP/TN/FN=13/0/12/0` | `benchmark/latest.json#$['variants']['rules-only']['security']['prompt_injection']['classification']`；OpenVINO 路径把 variant 换为 `openvino` | 25 个合成用例：13 malicious、12 benign；invocation failures `0` | 这是当前固定数据集上的确定性 detector 结果；OpenVINO 不负责 Injection 分类；不能声称防住所有 Prompt Injection | 是 | 是 | 是，须带 `n=25` |
@@ -44,13 +45,18 @@
 
 ## 禁止替换成数字的待验证项
 
-以下内容没有当前 SHA 绑定的实机证据，只能保留 `PENDING`：
+以下内容没有 exact rc.4 tag 绑定的通过证据。rc.3 的 Windows cold failure 必须保留为 `FAIL`，其余按
+实际情况保持 `PENDING / NOT_RUN`：
 
-- Windows PowerShell 5.1 / 7 cold start、warm start、中文路径、带空格路径与故障注入；
-- Intel AI PC 性能、设备选择、NPU/GPU 使用情况；
+- exact rc.4 Windows PowerShell 5.1 / 7 cold start、warm start、中文路径、带空格路径与故障注入；
+- Intel AI PC 性能、成功 inference、设备选择、NPU/GPU 使用情况；
 - Qoder 自动发现、12 个 positive triggers、12 个 negative triggers、Capsule-only non-bypass；
 - 真实 Qoder Agent 的最终回答、Task Completed、workspace bypass 次数和任务期网络计数；
 - ModelScope / 研习社 URL、真实截图和最终视频。
+
+当前 working-tree 测试计数、修复回归和 wrapper 探针不绑定 annotated rc.4 tag，不能进入本表作为
+rc.4 CI、Windows PASS 或 Qoder/Intel evidence。rc.4 必须先通过 exact-SHA main/tag CI，再从 fresh tag
+执行正式 Windows/Qoder 验收。
 
 ## 使用规则
 

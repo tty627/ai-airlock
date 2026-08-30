@@ -4,7 +4,9 @@
 > 技术基线：AI Airlock `v0.1.0-rc.1`，source commit
 > `495f89c6349afbdd741576439b3b85369d26671a`。
 > 实测范围：**Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1**。
-> Windows、PowerShell、Intel AI PC、真实 Qoder host 与 Capsule-only Agent Task Completed 尚未验收。
+> exact `v0.1.0-rc.3` 的 Windows PowerShell 5.1/7 cold health 已正式执行并 `FAIL`；下一候选 rc.4
+> 仍须 fresh-tag 重验。Intel 性能、真实 Qoder host 与 Capsule-only Agent Task Completed 为
+> `NOT_RUN / PENDING`。
 
 ![AI Airlock Hero](../assets/competition/hero-banner.svg)
 
@@ -158,6 +160,11 @@ P95 从 `103.052 ms` 上升至 `1204.529 ms`。这个代价是否
 当前 Python strict response gate 已验证：它会对白名单字段、schema、decision、相对 provenance、OpenVINO
 metadata 和输出大小做严格检查。这是集成合同的证据，但不是 Qoder host 的行为证据。
 
+exact rc.3 在 Qoder 之前的 Windows cold health 已失败：两个 PowerShell shell 均返回固定错误
+`AIRLOCK_MODEL_PREPARATION_FAILED`。外置诊断将其限定为 inference smoke 后缓存的 OpenVINO native
+handles 阻止 candidate model directory 原子 rename（`PermissionError` / WinError 5）；见
+[Claims Ledger · C-WIN-01](claims-ledger.md)。这不是 Windows PASS，也不是 rc.4 修复证据。
+
 真实验收矩阵已经定义 12 个 positive triggers 和 12 个 negative triggers；当前两组均为
 `0/12 REAL_QODER_EXECUTED`。还需要在真实 Windows/Qoder 上证明 Skill 自动发现、第一次内容访问就是
 wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule 给出最终回答。
@@ -176,14 +183,15 @@ wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule �
 - full pytest `212 passed / 6 skipped`，6 项均因 PowerShell unavailable；
 - Apple M4 CPU 上的 OpenVINO health、public CLI、strict Python response gate、flagship 与 full A/B；
 - frozen synthetic set 上的 Secret、Injection、relevance、context 和 CLI latency 指标。
+- exact rc.3 的 Windows PowerShell 5.1/7 cold health 失败，以及受限、尚未公开的根因诊断。
 
 尚未验证：
 
-- Windows PowerShell 5.1/7 cold/warm、中文与带空格路径、故障注入和进程清理；
+- exact rc.4 Windows PowerShell 5.1/7 cold/warm、中文与带空格路径、故障注入和进程清理；
 - Qoder Skill 自动发现、12+12 triggers、Capsule-only non-bypass、真实最终回答；
 - Intel AI PC、GPU/NPU 使用、跨硬件性能；
-- tagged source snapshot 不自证的外部 post-push CI、ModelScope 页面、文章和视频 URL；公开 GitHub
-  source 已存在，精确候选 CI 必须从绑定 SHA 的 GitHub run 核对；
+- rc.4 exact-SHA main/tag GitHub CI、ModelScope 页面、文章和视频 URL；rc.3 scoped CI 是历史 PASS，
+  不替代 rc.4 或宿主验收；
 - 未知 Secret、规避式 Injection、真实生产分布和跨领域 Agent utility。
 
 ## 10. 可复现方法
@@ -229,16 +237,18 @@ trace、设置证据和未剪辑录像证明，而不是靠文档承诺。
 
 若面向商用，下一步优先级不是增加更多宣传数字，而是补足证据层：
 
-1. 在真实 Windows PowerShell 5.1/7 和命名 Intel AI PC 上完成 cold/warm、路径、错误与进程验收；
+1. 从 exact rc.4 fresh tag 在 Windows PowerShell 5.1/7 和命名 Intel AI PC 上完成 cold/warm、路径、
+   错误与进程验收；
 2. 在 Qoder 新会话中完成 12+12 trigger matrix 和 Capsule-only flagship，并保存未剪辑证据；
 3. 建立独立 held-out 数据，覆盖更多 Secret、Injection、语言、任务和负缩减案例；
 4. 评估 latency budget，拆分 CLI 启动、tokenization、embedding、ranking 与 gate 的阶段成本；
 5. 冻结完整 transitive dependencies、LICENSE/NOTICE 和模型再分发方案；
 6. 根据组织环境补强宿主沙箱、审计、policy governance 与可轮换模型版本。
 
-项目 LICENSE、公开 author、仓库 URL、ModelScope URL 和转换模型托管方式目前都等待用户决定。第三方
-来源与许可证初稿见 [THIRD_PARTY_NOTICES](../THIRD_PARTY_NOTICES.md)，MIT 与 Apache-2.0 的项目许可
-决策见 [license-decision.md](license-decision.md)。
+项目 LICENSE（Apache-2.0）、公开 author“谭天晔”和 GitHub 仓库 URL 已确认；ModelScope URL、最终
+平台发布授权和转换模型托管方式仍待决定。第三方来源与许可证记录见
+[THIRD_PARTY_NOTICES](../THIRD_PARTY_NOTICES.md)，许可决策见
+[license-decision.md](license-decision.md)。
 
 AI Airlock 当前最可信的价值，不是宣称“安全问题已经解决”，而是把一个模糊承诺变成可检查的边界：
 原始内容先留在本机，安全变换先于相关性选择，只有 Capsule 进入下游；收益、代价和未完成项都由同一

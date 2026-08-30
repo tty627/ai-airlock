@@ -17,11 +17,12 @@ Windows 执行者应先读取 [`../STATUS.md`](../STATUS.md) 和
   -> Qoder 只依据 safe_context 完成原任务
 ```
 
-截至 2026-08-28：
+截至 2026-08-30：
 
 ```text
-QODER_REAL_MACHINE_TEST=PENDING
-WINDOWS_POWERSHELL_TEST=PENDING
+QODER_REAL_MACHINE_TEST=NOT_RUN
+WINDOWS_POWERSHELL_RC3=FAIL
+WINDOWS_POWERSHELL_RC4=PENDING
 ```
 
 | 验证面 | 当前状态 | 已有证据 | 尚缺证据 |
@@ -29,11 +30,12 @@ WINDOWS_POWERSHELL_TEST=PENDING
 | Python CLI 核心 | `PASS_LOCAL` | macOS、Python 3.12、全量测试与旗舰 CLI 已实测；正式计数以对应 RC SHA 的外置 release evidence 为准 | PowerShell 动态用例在无 PowerShell 的主机上会跳过；不替代 Windows/Qoder |
 | Skill 格式与说明 | `PASS_STATIC_VALIDATED` | `skill-creator` validator 通过；触发与负边界已定义 | 仍需真实 Qoder 选择轨迹 |
 | Qoder 自动发现 | `PENDING_REAL_QODER` | 安装与触发用例已定义 | Qoder 版本、截图/日志与命令轨迹 |
-| Windows wrapper | `PENDING_REAL_WINDOWS` | 静态合同与错误封装已实现 | Windows PowerShell 5.1/7 实机结果 |
+| Windows wrapper | `FAIL_RC3 / PENDING_RC4` | exact rc.3 的 PowerShell 5.1/7 cold health 均返回 `AIRLOCK_MODEL_PREPARATION_FAILED`；诊断见 Claims Ledger `C-WIN-01` | exact rc.4 fresh-tag cold/warm、路径、错误、并发与残留进程结果 |
 | 旗舰 Agent 流程 | `PENDING_REAL_QODER_WINDOWS` | Capsule 已保留完整事故证据链 | Qoder 只消费 Capsule 的真实会话证据 |
-| OpenVINO | `PASS_LOCAL_FORMAL_CLI / PENDING_QODER_WINDOWS` | 正式命令已显式选择 OpenVINO；macOS 公开 CLI 从非仓库 cwd 通过严格 response gate | wrapper bootstrap 与真实 Qoder/Windows trace |
+| OpenVINO | `PASS_LOCAL_FORMAL_CLI / FAIL_RC3_PROMOTION / PENDING_RC4_QODER` | 正式命令已显式选择 OpenVINO；macOS 公开 CLI 从非仓库 cwd 通过严格 response gate；rc.3 Windows 内部 inference smoke 已执行，但 model promotion rename 失败 | exact rc.4 ready health/analyze 与真实 Qoder/Windows trace |
 
-因此当前只能说“本地 CLI integration 已验证，Qoder/Windows integration 待实机验收”，不能说完整端到端已经通过。
+因此当前只能说“本地 CLI integration 已验证；rc.3 Windows cold health 正式失败；rc.4 与 Qoder
+integration 待验收”，不能说完整端到端已经通过。
 
 还要区分两种安全主张：
 
@@ -465,4 +467,7 @@ notes:
 - 所有非阻断 analyze 均通过 OpenVINO metadata consistency gate；
 - 每条用例都有环境、commit、Skill 来源、命令、路径、decision 和脱敏证据。
 
-在完成真实 Windows/Qoder 证据前，项目状态必须保持：**Qoder integration pending acceptance**；`QODER_REAL_MACHINE_TEST=PENDING`、`WINDOWS_POWERSHELL_TEST=PENDING`。
+在完成 exact rc.4 Windows/Qoder 证据前，项目状态必须保持：**Qoder integration not run / pending
+acceptance；rc.3 Windows FAIL；rc.4 Windows pending**。对应机器状态为
+`QODER_REAL_MACHINE_TEST=NOT_RUN`、`WINDOWS_POWERSHELL_RC3=FAIL`、
+`WINDOWS_POWERSHELL_RC4=PENDING`。

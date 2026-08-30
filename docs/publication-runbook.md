@@ -1,13 +1,18 @@
 # AI Airlock Publication Runbook
 
 > 状态：GitHub candidate 发布阶段。用户已授权创建公开 `tty627/ai-airlock`、使用 Apache-2.0、署名
-> “谭天晔”并创建不可变 `v0.1.0-rc.3`；既有 `v0.1.0-rc.1` 和 `v0.1.0-rc.2` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
+> “谭天晔”并准备新的不可变 `v0.1.0-rc.4`；既有 `v0.1.0-rc.1`、`v0.1.0-rc.2` 和
+> `v0.1.0-rc.3` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
 > 社交媒体发布。
 
 当前项目状态以 [`../STATUS.md`](../STATUS.md) 为入口。tagged commit 不能安全地把自己的 commit/tree
-哈希写回自身，因此 Windows 验收的精确 repository、tag、commit 与 tree 由 tag 解析后，通过 owner
+哈希或 tag object 写回自身，因此 Windows 验收的精确 repository、tag object、tag、commit 与 tree 由 tag 解析后，通过 owner
 handoff prompt 一次性提供；tag 内的 [Windows validation handoff](windows-validation-handoff.md) 负责规定
 解析与核对方法。
+
+`v0.1.0-rc.3` 的正式 Windows verdict 是 `FAIL`：PowerShell 5.1 与 7 cold health 均返回
+`AIRLOCK_MODEL_PREPARATION_FAILED`。诊断定位到 inference smoke 后缓存的 OpenVINO native handles
+阻止 candidate model directory 原子 rename（`PermissionError` / WinError 5）。Qoder 为 `NOT_RUN`。
 
 本 runbook 于 2026-08-28 复核以下一手资料：
 
@@ -26,11 +31,13 @@ Core source tag:    v0.1.0-rc.1
 Core source commit: 495f89c6349afbdd741576439b3b85369d26671a
 Core source tree:   4fe991ded88f38a6c1952c506d20005d2956a915
 Local evidence:     .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
-Candidate tag:      v0.1.0-rc.3
-Release commit:     resolve from the immutable candidate tag; verify against the owner handoff
+Candidate tag:      v0.1.0-rc.4 (not yet published)
+Candidate tag object: [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Release commit:     [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Release tree:       [OWNER_HANDOFF_AFTER_TAG_CREATION]
 ```
 
-不要移动、重打或修改 rc.1 tag。包装文件位于 core RC 之后的本地审核 diff；未来若创建包装 release
+不要移动、重打或修改 rc.1、rc.2 或 rc.3 tag。包装文件位于 core RC 之后的本地审核 diff；未来若创建包装 release
 commit/tag，必须记录新的 release identity，同时保留它与 core commit 的映射。rc.1 evidence 只能支持
 未被包装修改改变的 core claims，不能冒充后续源码的完整 evidence。
 
@@ -42,7 +49,7 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 2. **ModelScope Skill 必须添加自定义标签 `AI PC`。** 精确保留大小写与空格。
 3. **比赛文章必须添加专题标签 `Intel AI PC`。** 该标签是比赛归类，不得写成 Intel 实机已验证。
 4. Skill 必须发布到 ModelScope Skills Center，并在最终指定的生产力 Agent 中完成调用验证；AI Airlock
-   当前真实 Windows/Qoder 验收仍为 `PENDING / NOT RUN`。
+   当前 Windows 状态是 `rc.3 FAIL / rc.4 RETEST REQUIRED`，Qoder 仍为 `NOT_RUN`。
 5. ModelScope zip 根目录必须有且仅有一个 `SKILL.md`；若采用 CLI 发布路径，还要满足其 frontmatter
    与 5 MB 限制。官方同页对 frontmatter 的 `version` 要求存在表述差异，必须在真实上传路径的预检中
    解决，不能假设当前包一定被接受。
@@ -60,7 +67,7 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 Project LICENSE:          Apache-2.0
 Copyright holder/year:    谭天晔 / 2026
 Public author/byline:     谭天晔
-Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.3
+Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.4
 ModelScope owner:         [USER CONFIRM REQUIRED]
 ModelScope skill_name:    [USER CONFIRM REQUIRED; immutable after create]
 Category:                 [USER CONFIRM REQUIRED]
@@ -154,7 +161,7 @@ docs/windows-validation-report-template.md
 
 ```bash
 set -euo pipefail
-RELEASE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.3)"
+RELEASE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.4)"
 PACKAGE_OUT="$(mktemp -d)"
 ARCHIVE="$PACKAGE_OUT/ai-airlock-skill.zip"
 
@@ -267,7 +274,9 @@ anonymous_download_verified_at:
 
 ## 6. Windows / Qoder evidence 插入门
 
-真实原片出现前，以下内容保持 `PENDING / NOT RUN`：
+rc.3 已产生正式 Windows `FAIL`，不能再写成“从未运行”，也不能剪辑成 PASS。rc.4 必须在 annotated
+tag 创建、exact-SHA main/tag CI 成功且 owner handoff 回填 tag object/commit/tree 后，从 Qoder 从未打开
+的新 clone 执行。以下 rc.4 成功证据仍为 `PENDING / NOT_RUN`：
 
 - PowerShell 5.1/7 cold/warm、中文 task、带空格路径、错误 JSON、超时和残留进程；
 - Qoder 自动发现、12 个正向与 12 个负向 trigger；
@@ -280,6 +289,9 @@ anonymous_download_verified_at:
 non-bypass 时只能是 `INCONCLUSIVE`。新数字先进入 [Claims Ledger](claims-ledger.md)，绑定新的
 commit/evidence/environment，再替换文章与视频占位。Mac CLI rehearsal 永远不能写成 Qoder Task
 Completed。
+
+当前 working-tree 测试计数、回归测试和 wrapper 探针只能支持修复开发；它们不是 exact rc.4 tag CI，
+也不是 fresh-tag Windows/Qoder 验收证据。Intel CPU 被识别不等于 Intel inference 或性能已通过。
 
 ## 7. 文章、视频与表单
 
@@ -323,7 +335,9 @@ Completed。
 - Windows/Qoder 失败或 inconclusive：保留真实结果与 limitation，不剪辑成 PASS。
 - URL 失效或需登录：修复托管后从未登录环境重新验证。
 
-只有用户明确说“可以发布/提交”，且以下摘要全部处理后，才允许外部状态变更：
+以下门槛只约束 ModelScope、研习社、视频、比赛表单和其他最终公开动作；用户已单独授权本轮 GitHub
+rc.4 candidate commit、push 与不可变 tag。只有用户明确说“可以发布/提交”，且以下摘要全部处理后，
+才允许执行这些最终公开动作：
 
 ```text
 LICENSE / copyright / author confirmed   YES
@@ -341,4 +355,4 @@ Secret / PII review                      YES
 User publication authorization           YES
 ```
 
-本轮状态：`User publication authorization = NO`。
+本轮状态：`GitHub rc.4 candidate authorization = YES`；`User final publication authorization = NO`。

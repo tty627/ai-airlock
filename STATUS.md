@@ -14,20 +14,18 @@ Core commit:    495f89c6349afbdd741576439b3b85369d26671a
 Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
-Previous Windows candidate: v0.1.0-rc.2 (immutable; superseded for Windows validation)
-Windows candidate tag:      v0.1.0-rc.3 (annotated and published)
-Windows candidate tag object: 31679f3afb8e3010413b01d7a42df35695b294d3
-Windows candidate commit:   55eca4ceedb1f7e63e9444b86b32f58f2dccac3f
-Windows candidate tree:     a7392e3893eac83dddd53288785bed1defc1d5a0
+Previous Windows candidate: v0.1.0-rc.3 (immutable; formal Windows verdict FAIL)
+Windows candidate tag:      v0.1.0-rc.4 (candidate preparation; not yet published)
+Windows candidate tag object: [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Windows candidate commit:   [OWNER_HANDOFF_AFTER_TAG_CREATION]
+Windows candidate tree:     [OWNER_HANDOFF_AFTER_TAG_CREATION]
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1` and `v0.1.0-rc.2` remain immutable. `v0.1.0-rc.2` is superseded for formal Windows validation
-because canonical-LF checkout and Windows legacy-code-page benchmark defects were corrected after that tag.
-`v0.1.0-rc.3` freezes those portability corrections plus the reviewed documentation and Windows handoff. Run
-formal Windows acceptance only from the immutable `v0.1.0-rc.3` tag, and cross-check the resolved commit and tree
-plus the tag object against the owner's post-tag handoff; do not validate floating `main`. If this candidate
-fails, create a new tag rather than moving an existing one.
+`v0.1.0-rc.1`, `v0.1.0-rc.2` and `v0.1.0-rc.3` remain immutable. Formal Windows validation of exact rc.3
+failed during cold health on both Windows PowerShell 5.1 and PowerShell 7. The next candidate is
+`v0.1.0-rc.4`; its tag object, commit and tree are intentionally blocked above until an annotated tag is
+created and independently resolved. Do not infer them from floating `main`, and never move an existing tag.
 
 ## Status summary
 
@@ -37,11 +35,11 @@ fails, create a new tag rather than moving an existing one.
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
 | Competition docs and visuals | `READY_FOR_CANDIDATE_REVIEW` | README, article draft, seven SVG/PNG pairs, demo script | Validate from a clean candidate checkout and target renderers |
-| Windows PowerShell 5.1 / 7 | `NOT_RUN` | Static wrapper and acceptance oracle only | Cold/warm, paths, errors, concurrency and residual-process checks |
+| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_PENDING` | Exact rc.3 cold health returned `AIRLOCK_MODEL_PREPARATION_FAILED` on both shells | Exact rc.4 fresh-tag cold/warm, paths, errors, concurrency and residual-process checks |
 | Qoder host integration | `NOT_RUN` | 12 positive and 12 negative trigger specifications | Real discovery, tool trace, Capsule-only and non-bypass evidence |
-| Intel hardware | `NOT_RUN` | None | Named device and cold/warm performance evidence, or explicit limitation |
+| Intel hardware | `NOT_VERIFIED` | rc.3 host identified an Intel CPU and internal OpenVINO inference smoke ran, but model promotion failed before ready health or analyze | Named device and successful cold/warm performance evidence, or explicit limitation |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / Python CI | `VERIFIED_WITH_SCOPE` | Remote annotated rc.3 identity plus successful exact-SHA main/tag CI on Windows and Ubuntu Python 3.12 | Preserve tag object and run URLs; this is not wrapper/Qoder evidence |
+| GitHub / Python CI | `RC3_VERIFIED_WITH_SCOPE / RC4_PENDING` | Remote annotated rc.3 identity plus successful exact-SHA main/tag CI on Windows and Ubuntu Python 3.12 | Require exact-SHA rc.4 main and tag CI; this is not wrapper/Qoder evidence |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -113,6 +111,22 @@ PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task
   PowerShell 5.1/7 wrapper acceptance, a prepared Windows OpenVINO model, Qoder host integration or Intel
   hardware validation.
 
+## Formal Windows validation evidence for rc.3
+
+- The tested checkout reproduced the immutable rc.3 tag object, commit and tree and remained unmodified.
+- Cold `health --json` through `scripts/run.ps1` failed on both Windows PowerShell 5.1 and PowerShell 7 with
+  exit `2`, empty stdout and the fixed error code `AIRLOCK_MODEL_PREPARATION_FAILED`.
+- External diagnostics against the unchanged candidate isolated the failure after the OpenVINO inference smoke
+  test: cached OpenVINO native handles retained files in the candidate model directory, so the atomic directory
+  rename failed with `PermissionError` / WinError 5. This is a bounded root-cause diagnosis, not a repaired rc.3.
+- Qoder was not installed or discoverable, so discovery, the 12+12 trigger matrix and Capsule-only flagship are
+  `NOT_RUN`. The named Intel CPU does not constitute successful Intel inference or performance evidence.
+- The sanitized report and `SHA256SUMS` are stored outside the checkout and have not been published at a public
+  URL. Private diagnostic artifacts must not be copied into a public bundle.
+
+The rc.3 verdict is `FAIL`. Any current working-tree test count or wrapper probe is development evidence only;
+it must not be described as exact-tag rc.4 CI or formal fresh-tag Windows/Qoder evidence.
+
 ## Current blockers and decisions
 
 ### Confirmed public GitHub identity
@@ -121,7 +135,9 @@ PowerShell 5.1/7, Intel hardware, Qoder discovery, host non-bypass or Agent Task
 - Project license: Apache-2.0.
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
-- Candidate Tag: immutable `v0.1.0-rc.3` after exact-SHA main CI; `v0.1.0-rc.2` is never moved.
+- Previous Candidate: immutable `v0.1.0-rc.3`, with formal Windows verdict `FAIL`.
+- Next Candidate Tag: `v0.1.0-rc.4`; identity remains blocked until exact-SHA main CI succeeds and the annotated
+  tag is created and resolved. rc.1 through rc.3 are never moved.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -133,7 +149,7 @@ separately licensed hosted IR.
 - Confirm that the platform accepts `models=[]` and the current extra `info.json` fields.
 - Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
 - Publish a sanitized evidence bundle with URL and SHA-256; the local ignored `.release-evidence/` is not public.
-- Complete real Windows/Qoder validation and preserve sanitized traces plus uncut private recordings.
+- Complete exact rc.4 fresh-tag Windows/Qoder validation and preserve sanitized traces plus uncut private recordings.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
   resolution. Do not delete the test or weaken detection merely to silence a scanner.
@@ -155,11 +171,14 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Provide the exact rc.3 repository, tag object, tag, commit and tree in the owner handoff. On the formal
-   Windows/Qoder machine, clone and detach at that tag; do not test floating `main`.
-2. Return a sanitized validation report. A failure or inconclusive result creates a new candidate and never
-   moves rc.3.
-3. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
+1. Review the rc.3 root-cause fix and regression coverage without treating current working-tree results as
+   release evidence.
+2. Freeze the rc.4 candidate commit, require exact-SHA main CI, then create and publish a new annotated rc.4 tag;
+   never move rc.1 through rc.3.
+3. Resolve the remote rc.4 tag object, peeled commit and tree and supply all three through the owner handoff.
+4. From a new clone detached at exact rc.4, repeat formal Windows PowerShell and Qoder acceptance. Qoder and
+   Intel performance remain unverified until their declared oracles actually run.
+5. Only after evidence review, update this file, the Claims Ledger, public wording, article and visuals from the
    same run identity.
 
 ## Update rules

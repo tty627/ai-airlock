@@ -1,8 +1,13 @@
 # AI Airlock Windows Validation Handoff
 
-> Status: public repository and annotated candidate tag are published and frozen by release policy; tag object,
-> commit and tree are fixed. The Windows Agent prompt must repeat these values, and the tested checkout must
-> reproduce them exactly.
+> Status: `v0.1.0-rc.4` is being prepared but is not yet an annotated published tag. Its tag object, commit and
+> tree are deliberately blocked placeholders. Formal validation must not begin until the owner supplies the
+> post-tag values and the tested checkout reproduces them exactly.
+
+Exact `v0.1.0-rc.3` remains immutable. Its formal Windows verdict was `FAIL`: Windows PowerShell 5.1 and
+PowerShell 7 cold health both returned `AIRLOCK_MODEL_PREPARATION_FAILED`. Diagnostics isolated cached OpenVINO
+native handles retained after the inference smoke test, which blocked the atomic directory rename with
+`PermissionError` / WinError 5. Qoder was unavailable and remains `NOT_RUN`.
 
 ## 1. Mission and authority
 
@@ -27,17 +32,18 @@ identity and evidence handling; it does not replace that oracle.
 
 ```text
 SOURCE_REPOSITORY_URL:   https://github.com/tty627/ai-airlock
-CANDIDATE_TAG:           v0.1.0-rc.3
-CANDIDATE_TAG_OBJECT:    31679f3afb8e3010413b01d7a42df35695b294d3
-CANDIDATE_COMMIT:        55eca4ceedb1f7e63e9444b86b32f58f2dccac3f
-CANDIDATE_TREE:          a7392e3893eac83dddd53288785bed1defc1d5a0
+CANDIDATE_TAG:           v0.1.0-rc.4
+CANDIDATE_TAG_OBJECT:    [OWNER_HANDOFF_AFTER_TAG_CREATION]
+CANDIDATE_COMMIT:        [OWNER_HANDOFF_AFTER_TAG_CREATION]
+CANDIDATE_TREE:          [OWNER_HANDOFF_AFTER_TAG_CREATION]
 CORE_EVIDENCE_COMMIT:    495f89c6349afbdd741576439b3b85369d26671a
 EXPECTED_PROJECT_NAME:   ai-airlock
 ```
 
-Do not infer or replace identity values from floating `main`. Formal validation is `BLOCKED` if the Windows Agent
-prompt does not repeat all three exact tag object, commit and tree values or if the tested checkout does not
-reproduce them.
+Do not infer or replace identity values from floating `main` or the current working tree. Formal validation is
+`BLOCKED` while any placeholder remains, if exact-SHA main/tag CI has not succeeded, if the Windows Agent prompt
+does not repeat all three resolved values, or if the fresh tagged checkout does not reproduce them. Development
+test counts and wrapper probes before the tag are not formal rc.4 evidence.
 
 ## 3. Read before running
 
@@ -57,11 +63,12 @@ Use a new directory that Qoder has never opened. Use the fixed values from secti
 
 ```powershell
 $RepositoryUrl = 'https://github.com/tty627/ai-airlock'
-$CandidateTag = 'v0.1.0-rc.3'
-$ExpectedTagObject = '31679f3afb8e3010413b01d7a42df35695b294d3'
-$ExpectedCommit = '55eca4ceedb1f7e63e9444b86b32f58f2dccac3f'
-$ExpectedTree = 'a7392e3893eac83dddd53288785bed1defc1d5a0'
-$CheckoutRoot = 'C:\AI-Airlock-Acceptance\source'
+$CandidateTag = 'v0.1.0-rc.4'
+$ExpectedTagObject = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
+$ExpectedCommit = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
+$ExpectedTree = '[OWNER_HANDOFF_AFTER_TAG_CREATION]'
+$RunId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
+$CheckoutRoot = "C:\AI-Airlock-Acceptance\$RunId\source"
 
 git clone --no-tags $RepositoryUrl $CheckoutRoot
 Set-Location $CheckoutRoot
