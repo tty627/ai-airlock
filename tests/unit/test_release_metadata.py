@@ -62,3 +62,10 @@ def test_traecode_acceptance_reference_is_routed_from_the_skill() -> None:
     assert ".traecli\\skills\\ai-airlock" in skill
     assert "--continue" in skill
     assert "no cloud inference fallback" in skill.lower()
+
+
+def test_release_builder_includes_submission_and_intel_evidence() -> None:
+    builder = (PROJECT_ROOT / "scripts" / "build_release.ps1").read_text(encoding="utf-8")
+
+    assert "'docs/modelscope-article-submission.md'" in builder
+    assert "'docs/windows-intel-rc6-evidence.md'" in builder

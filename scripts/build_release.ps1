@@ -41,6 +41,7 @@ $Allowlist = @(
     'docs/demo-script.md',
     'docs/license-decision.md',
     'docs/modelscope-article.md',
+    'docs/modelscope-article-submission.md',
     'docs/modelscope-submission-fields.md',
     'docs/publication-runbook.md',
     'docs/qoder_acceptance.md',
@@ -50,7 +51,8 @@ $Allowlist = @(
     'docs/threat-model.md',
     'docs/trae-acceptance.md',
     'docs/windows-validation-handoff.md',
-    'docs/windows-validation-report-template.md'
+    'docs/windows-validation-report-template.md',
+    'docs/windows-intel-rc6-evidence.md'
 )
 
 function Invoke-Git {
