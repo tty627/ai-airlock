@@ -5,6 +5,7 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 import uuid
 from pathlib import Path
 
@@ -14,7 +15,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WRAPPER = PROJECT_ROOT / "scripts" / "run.ps1"
 WINDOWS_JOB_HELPER = PROJECT_ROOT / "scripts" / "windows_job.ps1"
 GATED_LAUNCHER = PROJECT_ROOT / "scripts" / "windows_gated_launcher.ps1"
-VENV_PYTHON = PROJECT_ROOT / ".venv" / "Scripts" / "python.exe"
+PYTHON_EXECUTABLE = Path(sys.executable).resolve()
 
 
 def _windows_powershells() -> tuple[str, ...]:
@@ -512,7 +513,7 @@ $InputText = [System.Text.UTF8Encoding]::new($false, $true).GetString(
     [System.Convert]::FromBase64String('{input_base64}')
 )
 $Invocation = Invoke-BoundedProcess `
-    -Executable {_ps_single_quoted(str(VENV_PYTHON))} `
+    -Executable {_ps_single_quoted(str(PYTHON_EXECUTABLE))} `
     -ProcessArguments @(
         '-c',
         'import sys; data=sys.stdin.read(); sys.stdout.write(data); sys.stderr.write("stderr:\\u4e2d\\u6587"); raise SystemExit(7)'
@@ -607,7 +608,7 @@ time.sleep(60)
         + f"""
 $Watch = [System.Diagnostics.Stopwatch]::StartNew()
 $Invocation = Invoke-BoundedProcess `
-    -Executable {_ps_single_quoted(str(VENV_PYTHON))} `
+    -Executable {_ps_single_quoted(str(PYTHON_EXECUTABLE))} `
     -ProcessArguments @(
         '-I',
         {_ps_single_quoted(str(fixture))},
@@ -722,7 +723,7 @@ time.sleep(60)
         + f"""
 $Watch = [System.Diagnostics.Stopwatch]::StartNew()
 $Invocation = Invoke-BoundedProcess `
-    -Executable {_ps_single_quoted(str(VENV_PYTHON))} `
+    -Executable {_ps_single_quoted(str(PYTHON_EXECUTABLE))} `
     -ProcessArguments @(
         '-I',
         {_ps_single_quoted(str(fixture))},
