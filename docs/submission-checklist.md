@@ -6,31 +6,34 @@
 
 > 包装基线：`v0.1.0-rc.1` · `495f89c6349afbdd741576439b3b85369d26671a`
 > 公开 `tty627/ai-airlock` 使用 Apache-2.0、署名“谭天晔”；annotated、unsigned、按流程不可变的
-> `v0.1.0-rc.4` 候选已发布。既有 rc.1/rc.2/rc.3 不移动；ModelScope、文章、视频和比赛表单尚未授权发布。
+> `v0.1.0-rc.5` 候选已发布。既有 rc.1–rc.4 不移动；ModelScope、文章、视频和比赛表单尚未授权发布。
 
 ## 当前结论
 
-技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，rc.4 精确身份和 scoped
+技术 RC 已具备 SHA 绑定的 macOS / Apple M4 / OpenVINO release evidence，rc.5 精确身份和 scoped
 Windows/Ubuntu Python 3.12 CI 也已固化。exact rc.3 的正式 Windows cold health `FAIL` 历史保持不变。
 rc.4 fresh-tag Windows regression subset 曾通过，但随后精确 rc.4 的 orphan-pipe fault oracle 发现 wrapper
 返回时仍有 `1` 个匹配后代进程存活，外部定向清理后才降为 `0`；因此 Windows candidate verdict 与 overall
-均为 `FAIL`。source-artifact cache 预填、网络 `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder
-缺席/`NOT_RUN` 与 Intel performance `NOT_RUN` 是独立缺口，不能把已观察到的 rc.4 失败降级为
-`INCONCLUSIVE`。post-rc.4 隔离修复目前仍是未打标签开发状态，必须由新的不可变候选重新验证。
+均为 `FAIL`。exact rc.5 已通过 PowerShell 5.1/7 orphan-pipe no-residual-process oracles，以及两壳 scoped
+health/analyze controls。source-artifact cache 预填、网络 `NOT_MEASURED`、其余 timeout/fault cases
+`NOT_RUN`、Qoder host evidence unavailable/`NOT_RUN` 与 Intel performance `NOT_RUN` 仍是独立缺口，因此 rc.5 full
+acceptance / overall 为 `INCONCLUSIVE`。
 
 ```text
 RC.1 CLEAN CHECKOUT                 PASS / HISTORICAL
-RC.4 SOURCE CANDIDATE               PUBLISHED / ANNOTATED UNSIGNED
+RC.5 SOURCE CANDIDATE               PUBLISHED / ANNOTATED UNSIGNED
 MAC OPENVINO CLI + A/B              PASS
 PYTHON QODER STRICT RESPONSE GATE   PASS
 WINDOWS POWERSHELL                  RC.3 FAIL / RC.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL
 RC.4 CANDIDATE / OVERALL            FAIL
-POST-RC.4 ISOLATION FIX             UNTAGGED / VALIDATION PENDING
+RC.5 WINDOWS SCOPED VALIDATION      PASS_WITH_SCOPE
+RC.5 FULL MATRIX / OVERALL          INCONCLUSIVE
 QODER HOST CAPSULE-ONLY             NOT RUN
 INTEL PERFORMANCE                   NOT RUN
 RC.3 PRE-CANDIDATE PYTHON CI        PASS / WINDOWS + UBUNTU / HISTORICAL
 EXACT RC.3 MAIN/TAG CI              PASS / WINDOWS + UBUNTU (HISTORICAL)
 EXACT RC.4 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
+EXACT RC.5 MAIN/TAG CI              PASS / WINDOWS + UBUNTU / SCOPED PYTHON CI
 GITHUB SOURCE                       PUBLIC / AUTHORIZED
 OTHER PUBLICATION                   NOT AUTHORIZED
 ```
@@ -60,30 +63,39 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 - [x] rc.4 外置脱敏报告没有 public URL；记录的 manifest 校验为 `99/99`，顶层 `SHA256SUMS` 文件的 SHA-256 为
   `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。
 - [x] exact rc.4 orphan-pipe fault run 在 PowerShell 7.6.4 中于 `32.164s` 返回 wrapper exit `2`，stdout
-  `0` bytes、单一固定错误 `AIRLOCK_INVALID_JSON`；返回前匹配后代残留为 `1`，外部定向清理后为 `0`，
+  `0` bytes、单一固定错误 `AIRLOCK_INVALID_JSON`；wrapper 返回后、external cleanup 前匹配后代残留为
+  `1`，外部定向清理后为 `0`，
   所以正式 contract 与 candidate verdict 均为 `FAIL`。
 - [x] rc.4 failure bundle manifest 校验为 `29/29`；顶层 `SHA256SUMS` 文件的 SHA-256 为
   `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`。
+- [x] exact rc.5 为 annotated、unsigned tag object
+  `7d4034f9e8575658190dacef53f9ba749de8ed6c`，commit
+  `9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`，tree
+  `88b914598de60fa385820860b13dc8bd6db26b7d`。
+- [x] exact rc.5 PowerShell 5.1/7 orphan-pipe faults 分别为 `3.352s / 3.937s`，均以 fixed error 返回，
+  residual `0`、`cleanup_performed=false`；两壳 health、post-fault health 与中文/空格路径 analyze controls
+  通过。该 scoped bundle manifest 为 `55/55`，顶层 `SHA256SUMS` 文件 SHA-256 为
+  `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`，尚无 public URL。
 
 ## GO / NO-GO 硬门
 
 | Gate | 当前状态 | 发布前所需证据 |
 |---|---|---|
-| G0 · Source identity | **PASS_WITH_LIMITATION** | rc.4 annotated、unsigned tag object `2a50625aa95443e328573704cf42e9c633621ffe`；commit `52a215727115f32937cb78561e88a63fdae5adf2`；tree `46bc0f55eed58b7234338d4ff4e32bc71c348f8a`；rc.1/rc.2/rc.3 未移动；unsigned 状态必须随引用保留 |
+| G0 · Source identity | **PASS_WITH_LIMITATION** | rc.5 annotated、unsigned tag object `7d4034f9e8575658190dacef53f9ba749de8ed6c`；commit `9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`；tree `88b914598de60fa385820860b13dc8bd6db26b7d`；rc.1–rc.4 未移动；unsigned 状态必须随引用保留 |
 | G1 · Evidence integrity | **PASS** | SHA256SUMS 与 JSON parse 持续通过 |
 | G2 · Mac OpenVINO path | **PASS** | rc.1 evidence 已覆盖固定模型、CPU、无 fallback、A/B |
-| G3 · Public claims | **PASS_WITH_UNPUBLISHED_WINDOWS_EVIDENCE** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描；rc.3 与 rc.4 Windows 外置脱敏 evidence 均尚无 public URL |
+| G3 · Public claims | **PASS_WITH_UNPUBLISHED_WINDOWS_EVIDENCE** | 所有数字进入 [Claims Ledger](claims-ledger.md)，公开文本已扫描；rc.3、rc.4 与 rc.5 Windows 外置脱敏 evidence 均尚无 public URL |
 | G4 · Packaging assets | **PASS** | SVG/PNG 全部渲染、解码与逐图检查；未见敏感信息 |
-| G5 · Article | **READY_WITH_LIMITATIONS** | 初稿已同步 rc.3 FAIL、rc.4 earlier subset PASS / orphan fault FAIL / candidate FAIL、Qoder/Intel NOT_RUN；尚未授权公开发布 |
+| G5 · Article | **READY_WITH_LIMITATIONS** | 初稿已同步 rc.3 FAIL、rc.4 candidate FAIL、rc.5 scoped PASS / overall INCONCLUSIVE、Qoder/Intel NOT_RUN；尚未授权公开发布 |
 | G6 · Project LICENSE / author | **PASS** | Apache-2.0；2026 谭天晔；公开 author/byline 已确认并同步 |
 | G6B · Release metadata | **BLOCKED** | icon URL、实测 `mem_need_gb`、timeout 语义、`models=[]` 平台接受度、额外字段 parser 行为 |
-| G7 · Windows PowerShell | **FAIL_RC3 / FAIL_RC4** | rc.4 fresh-tag regression subset 覆盖 5.1/7 独立 cold+warm、中文/空格路径、invalid/missing errors、cross-shell concurrent cold、covered residual `0`；随后 exact rc.4 orphan-pipe fault 于 deadline 内返回固定错误，但 wrapper 返回前仍有匹配后代残留 `1`，故 contract 与 candidate 均为 `FAIL`。network NOT_MEASURED 与 remaining fault cases NOT_RUN 是独立未知项；post-rc.4 修复尚未形成新候选 |
+| G7 · Windows PowerShell | **FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE** | rc.4 的 required orphan-pipe fault 与 candidate 保持 `FAIL`。exact rc.5 PS5.1/PS7 orphan-pipe residual 均为 `0`，health/analyze controls 通过；empty-cache、network 与 remaining external faults 未关闭，故只能写 scoped PASS |
 | G8 · Qoder host | **NOT_RUN** | discovery、12+12 triggers、Capsule-only non-bypass、最终回答 |
-| G9 · Intel hardware | **PERFORMANCE_NOT_RUN** | rc.4 functional regression subset 不等于命名 Intel device、runtime telemetry、cold/warm latency、p50/p95、吞吐或失败数 evidence；不得从 CPU 字符串或功能通过推导性能结论 |
-| G10 · GitHub source / Python CI | **RC4_PASS_WITH_SCOPE** | main run `33293985019`、tag run `33294040300` 均成功；Windows/Ubuntu 四个 Python 3.12 job 各 `212 passed / 8 skipped`，Ruff/format/benchmark smoke PASS；未覆盖 `.[openvino]`、wrapper、Qoder 或 Intel |
+| G9 · Intel hardware | **PERFORMANCE_NOT_RUN** | rc.5 scoped functional validation 不等于命名 Intel device、runtime telemetry、cold/warm latency、p50/p95、吞吐或失败数 evidence；不得从 CPU 字符串或功能通过推导性能结论 |
+| G10 · GitHub source / Python CI | **RC5_PASS_WITH_SCOPE** | main run `33298393856`、tag run `33298491017` 均成功；Windows 各 `225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`，Ruff/format/benchmark smoke PASS；未覆盖完整 wrapper、Qoder 或 Intel |
 | G10B · ModelScope / media / submission | **NOT AUTHORIZED / NOT RUN** | 平台 preflight、公开页面、文章/视频发布与比赛提交回执 |
 
-最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；GitHub rc.4 候选已发布不等于最终比赛发布获准。
+最终比赛发布必须等待 G6B–G10B 中仍未关闭的硬门；GitHub rc.5 候选已发布不等于最终比赛发布获准。
 
 ## 1. Diff 与冻结边界
 
@@ -91,7 +103,9 @@ OTHER PUBLICATION                   NOT AUTHORIZED
   分别保留，不能互相覆盖。
 - [x] rc.3 → rc.4 candidate diff 只包含审查后的 OpenVINO native-handle 生命周期修复、相应回归测试和
   候选文档；发布前已复核并冻结完整 diff。
-- [x] 不修改、移动或重打 `v0.1.0-rc.1`、`v0.1.0-rc.2` 或 `v0.1.0-rc.3`。
+- [x] rc.4 → rc.5 candidate diff 包含审查后的 gated launcher、Windows Job Object process-tree containment、
+  production wrapper integration 与回归测试；exact-tag scoped evidence 已独立复核。
+- [x] 不修改、移动或重打 `v0.1.0-rc.1` 至 `v0.1.0-rc.5` 的任何已发布 tag。
 - [x] 不修改 fixture、冻结期望值、detector、pipeline、token estimator 或安全边界；冻结前逐项确认。
 - [x] `meta.json` 与 `info.json` 仍可解析；`meta.json` 只收窄能力描述，未猜测 author、icon URL、
   model hosting、内存、timeout 或版本策略。
@@ -125,8 +139,9 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 - [x] 定位为 `Local Context Gateway / Context Compiler for AI Agents`，不回退成 scanner 故事。
 - [x] Hero 使用 `Your data stays. Your Agent works.`，并同时注明品牌语只覆盖 Airlock-controlled path、
   真实宿主 non-bypass 待验收。
-- [x] Mac/OpenVINO rc.1 明确为 verified；Windows 明确记录 rc.3 FAIL，以及 rc.4 earlier regression subset
-  PASS / orphan-pipe fault FAIL / candidate FAIL；Qoder absent/NOT_RUN 与 Intel performance NOT_RUN 不写成已通过。
+- [x] Mac/OpenVINO rc.1 明确为 verified；Windows 明确记录 rc.3 FAIL、rc.4 candidate FAIL，以及 rc.5
+  scoped PASS / full matrix INCONCLUSIVE；Qoder host evidence unavailable/NOT_RUN 与 Intel performance
+  NOT_RUN 不写成已通过。
 - [x] Python Qoder response gate 与真实 Qoder host 分开。
 - [x] 合成 benchmark 的范围、负面结果和延迟代价可见。
 - [x] 所有 README 相对链接目标存在，引用的 SVG/PNG 已在本地渲染复核。
@@ -150,8 +165,8 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 ## 5. 文章
 
 - [x] [ModelScope article draft](modelscope-article.md) 是完整中文初稿，不是提纲；已同步 rc.3 Windows
-  FAIL、rc.4 earlier regression subset PASS / orphan fault FAIL / candidate FAIL 与 Qoder/Intel NOT_RUN，
-  但尚未授权公开发布。
+  FAIL、rc.4 candidate FAIL、rc.5 scoped PASS / overall INCONCLUSIVE 与 Qoder/Intel NOT_RUN，但尚未
+  授权公开发布。
 - [x] 包含真实生产问题、普通脱敏不足、Capsule、安全边界、OpenVINO、flagship、A/B、Qoder
   设计、verified/pending、复现、limitations、商用路线。
 - [x] Mac/OpenVINO 数字来自 frozen evidence，并引用 Claims Ledger。
@@ -162,10 +177,12 @@ OTHER PUBLICATION                   NOT AUTHORIZED
 ## 6. Qoder / Windows 回填
 
 权威 oracle 为 [qoder_acceptance.md](qoder_acceptance.md)。rc.3 只执行到两个 shell 的 cold health，且
-均失败。rc.4 从精确 fresh tag 执行了 regression subset，随后正式 orphan-pipe fault oracle 观察到 wrapper
-返回前仍有匹配后代残留 `1`，因此 exact rc.4 Windows candidate 与 overall 均为 `FAIL`。source-artifact
-cache 预填、network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host 缺席与 Intel
-performance `NOT_RUN` 均是独立未知项：
+均失败。rc.4 从精确 fresh tag 执行了 regression subset，随后正式 orphan-pipe fault oracle 在 wrapper
+返回后、external cleanup 前观察到匹配后代残留 `1`，因此 exact rc.4 Windows candidate 与 overall 均为
+`FAIL`。exact rc.5 已通过
+两壳 orphan-pipe no-residual-process oracle 与 scoped health/analyze controls。source-artifact cache 预填、
+network `NOT_MEASURED`、其余 timeout/fault cases `NOT_RUN`、Qoder host evidence unavailable 与 Intel performance
+`NOT_RUN` 均是独立未知项：
 
 - [x] rc.3 PowerShell 5.1 cold health：`FAIL` / `AIRLOCK_MODEL_PREPARATION_FAILED`。
 - [x] rc.3 PowerShell 7 cold health：`FAIL` / `AIRLOCK_MODEL_PREPARATION_FAILED`。
@@ -175,10 +192,15 @@ performance `NOT_RUN` 均是独立未知项：
 - [x] fixed invalid/missing error JSON。
 - [x] cross-shell concurrent cold；covered cases residual child-process count `0`。
 - [x] known-marker scan：`252` markers × `26` stdout/stderr surfaces，`0 hits`；不构成通用零泄漏保证。
-- [x] exact rc.4 orphan-pipe fault：deadline/fixed-error oracle PASS；wrapper 返回前匹配后代残留 `1`，
+- [x] exact rc.4 orphan-pipe fault：deadline/fixed-error oracle PASS；wrapper 返回后、external cleanup 前匹配后代残留 `1`，
   no-residual oracle FAIL，外部定向清理后残留 `0`；candidate verdict `FAIL`。
+- [x] exact rc.5 PowerShell 5.1 orphan-pipe fault：`3.352s`、fixed error、residual `0`、
+  `cleanup_performed=false`。
+- [x] exact rc.5 PowerShell 7 orphan-pipe fault：`3.937s`、fixed error、residual `0`、
+  `cleanup_performed=false`。
+- [x] exact rc.5 两壳 health、post-fault health 与中文/空格路径 analyze controls：`PASS_WITH_SCOPE`。
 - [ ] cold-bootstrap / task-period network：`NOT_MEASURED`。
-- [ ] remaining timeout/fault cases（不含已失败的 orphan-pipe case）：`NOT_RUN`。
+- [ ] remaining timeout/fault cases（不含已执行的 rc.5 orphan-pipe case）：`NOT_RUN`。
 - [ ] Qoder Skill 安装、版本、实际加载路径与自动发现。
 - [ ] 12/12 positive triggers 正确触发。
 - [ ] 12/12 negative triggers 不误触发。
@@ -191,6 +213,8 @@ performance `NOT_RUN` 均是独立未知项：
   `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。
 - [x] rc.4 failure bundle 已返回：无 public URL；manifest `29/29`；顶层 `SHA256SUMS` 文件 SHA-256
   `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`。
+- [x] rc.5 scoped bundle 已返回：无 public URL；manifest `55/55`；顶层 `SHA256SUMS` 文件 SHA-256
+  `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`。
 - [ ] 保存完整 Qoder transcript、工具轨迹、环境、设置 hash 与未经剪辑原片。
 
 如果无法证明 Qoder 在调用前没有从索引、附件或 editor context 获得 raw，本次结果只能为
@@ -200,7 +224,8 @@ performance `NOT_RUN` 均是独立未知项：
 
 - [x] [Demo script](demo-script.md) 分为 Mac 可拍、Windows/Qoder 替换、最终 60 秒、未剪辑证据原片。
 - [x] Mac CLI 始终标 `not Windows/Qoder`。
-- [x] 当前 End Card 保留 `rc.3 Windows FAIL · rc.4 orphan fault / candidate FAIL · Qoder NOT_RUN`。
+- [ ] 最终 End Card 剪辑层加入 `rc.3/rc.4 Windows FAIL · rc.5 scoped PASS / overall INCONCLUSIVE · Qoder
+  NOT_RUN`；当前冻结 SVG/PNG 只有通用 `Windows / Qoder evidence pending`，尚未渲染该状态 overlay。
 - [ ] Mac 原片记录 tag/commit/tree/clean、SHA256、OpenVINO metadata、benchmark run ID。
 - [ ] Windows/Qoder 原片连续覆盖第一次目标访问到最终回答。
 - [ ] 60 秒成片无声可理解；字幕安全区、codec、分辨率和目标平台转码已检查。
@@ -213,7 +238,7 @@ performance `NOT_RUN` 均是独立未知项：
 - [x] **项目 LICENSE**：Apache-2.0；根目录标准文本已创建。
 - [x] **版权主体与年份**：谭天晔 / 2026。
 - [x] **公开 author**：谭天晔；`pyproject.toml` 与 `meta.json` 已同步。
-- [x] **版本展示**：package `0.1.0`；已发布 Windows 候选 Tag `v0.1.0-rc.4`；不移动 rc.1/rc.2/rc.3/rc.4。
+- [x] **版本展示**：package `0.1.0`；已发布 Windows 候选 Tag `v0.1.0-rc.5`；不移动 rc.1–rc.5。
 - [ ] **用户确认模型托管**：继续固定上游 revision + 本地转换，或另建公开转换模型仓库。
 - [ ] **只在 `meta.json` 填真实公开 icon URL**；不得使用本机路径或添加到 `info.json`。
 - [ ] **实测 `mem_need_gb`**：必须覆盖模型驻留 + 推理峰值；当前 `0.25` 不构成发布依据。
@@ -233,8 +258,8 @@ performance `NOT_RUN` 均是独立未知项：
 - [x] 用户已批准 Apache-2.0，项目 `LICENSE` 已纳入 tracked-file allowlist 与发布 archive。
 - [ ] 发布 Skill archive 同时包含代码、文档和测试用例，且根目录有且仅有一个 `SKILL.md`。
 - [ ] 真实 API / CLI 上传预检已解决官方“根目录仅一个 `SKILL.md`”与比赛完整包要求之间的规范歧义。
-- [x] GitHub / source repository URL：`https://github.com/tty627/ai-airlock`；远端 rc.4 tag、scoped CI、
-  fresh-tag earlier subset 与后续 blocking fault 均已核对；rc.4 candidate verdict 为 `FAIL`。
+- [x] GitHub / source repository URL：`https://github.com/tty627/ai-airlock`；远端 rc.4 历史失败身份和
+  rc.5 tag/scoped CI/Windows evidence 均已核对；rc.5 full acceptance 为 `INCONCLUSIVE`。
 - [ ] ModelScope Skill URL：`[PENDING_AFTER_PUBLICATION]`。
 - [ ] 研习社文章 URL：`[PENDING_AFTER_PUBLICATION]`。
 - [ ] Demo / video URL：`[PENDING_AFTER_PUBLICATION]`。
@@ -248,14 +273,14 @@ performance `NOT_RUN` 均是独立未知项：
   `1024×1024 RGBA`，其余六张为 `1600×900`。
 - [x] `meta.json`、`info.json`、evidence `benchmark/latest.json` 与本项目其他 JSON 均可解析。
 - [x] tracked diff 与未跟踪 Markdown/SVG 的 whitespace check 均通过。
-- [x] 本地 Markdown 链接目标全部存在；rc.3 精确身份只作为不可变历史失败证据保留，rc.4 owner
+- [x] 本地 Markdown 链接目标全部存在；rc.3/rc.4 精确身份只作为不可变历史失败证据保留，rc.5 owner
   handoff 已回填精确 tag object / commit / tree。
 - [x] 公开文本无本机用户名、账号、远程主机、真实 endpoint、机器特定绝对路径或未限定“零泄漏”；
   handoff 仅保留泛化且带唯一 run ID 的 Windows 验收模板路径。
 - [x] Secret / PII 扫描覆盖 submission-facing Markdown；SVG 做文本扫描，7 个 PNG 做逐图目检与字符串扫描。
-- [x] rc.1/rc.2/rc.3 tag、commit 与 tree 未变化；不得移动旧标签来承载修复。
-- [x] exact rc.4 tag CI 只算 scoped Python evidence；fresh-tag earlier regression subset 不覆盖后续已失败的
-  orphan-pipe oracle，也不等于 Qoder PASS；post-tag 文档提交不改变 candidate identity。
+- [x] rc.1–rc.5 tag、commit 与 tree 未变化；不得移动旧标签来承载修复。
+- [x] exact rc.5 tag CI 只算 scoped Python evidence；exact-tag Windows bundle 只覆盖指定 fault 与 controls，
+  不等于 complete matrix 或 Qoder PASS；post-tag 文档提交不改变 candidate identity。
 
 ## 11. 发布 Runbook
 
@@ -280,6 +305,7 @@ MAC_DOCS_AND_ASSETS_READY = YES
 CLAIMS_TRACEABLE = YES
 RC3_WINDOWS_PUBLIC_EVIDENCE_READY = NO
 RC4_WINDOWS_PUBLIC_EVIDENCE_READY = NO
+RC5_WINDOWS_PUBLIC_EVIDENCE_READY = NO
 VISUAL_RENDERING = PASS
 RELEASE_METADATA_READY = NO
 FINAL_PUBLICATION_READY = NO
@@ -290,8 +316,8 @@ WINDOWS_CANDIDATE_IDENTITY_READY = YES
 ```
 
 `RELEASE_METADATA_READY=NO` 是因为未测内存、icon URL、timeout、模型托管与 parser 接受度尚未关闭；
-`FINAL_PUBLICATION_READY=NO` 还包括 release metadata、未授权平台发布、rc.4 Windows candidate FAIL、
-Qoder 与 Intel 性能缺口。post-rc.4 修复必须先形成新的不可变候选并重跑正式 fault oracle；rc.4 scoped CI
-和 earlier Windows regression subset 都不能覆盖该失败或写成完整 host PASS。
-`CLAIMS_TRACEABLE=YES` 只表示本地 claim-to-evidence 映射完整；rc.3 与 rc.4 Windows 脱敏 evidence 尚未
-公开，公众当前不能独立下载复核。
+`FINAL_PUBLICATION_READY=NO` 还包括 release metadata、未授权平台发布、rc.5 full matrix
+`INCONCLUSIVE`、Qoder 与 Intel 性能缺口。rc.5 scoped CI 和 Windows fault/control PASS 都不能写成完整
+host PASS。
+`CLAIMS_TRACEABLE=YES` 只表示本地 claim-to-evidence 映射完整；rc.3、rc.4 与 rc.5 Windows 脱敏
+evidence 尚未公开，公众当前不能独立下载复核。

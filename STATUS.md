@@ -14,18 +14,18 @@ Core commit:    495f89c6349afbdd741576439b3b85369d26671a
 Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
-Previous Windows candidate: v0.1.0-rc.3 (immutable; formal Windows verdict FAIL)
-Windows candidate tag:      v0.1.0-rc.4 (annotated, unsigned, published; immutable by release policy)
-Windows candidate tag object: 2a50625aa95443e328573704cf42e9c633621ffe
-Windows candidate commit:   52a215727115f32937cb78561e88a63fdae5adf2
-Windows candidate tree:     46bc0f55eed58b7234338d4ff4e32bc71c348f8a
+Previous Windows candidates: v0.1.0-rc.3 and v0.1.0-rc.4 (immutable; formal Windows verdicts FAIL)
+Windows candidate tag:      v0.1.0-rc.5 (annotated, unsigned, published; immutable by release policy)
+Windows candidate tag object: 7d4034f9e8575658190dacef53f9ba749de8ed6c
+Windows candidate commit:   9abf825943f8f68f2bc6cd3afc1baa8717e0c01a
+Windows candidate tree:     88b914598de60fa385820860b13dc8bd6db26b7d
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1`, `v0.1.0-rc.2` and `v0.1.0-rc.3` remain immutable. Formal Windows validation of exact rc.3
-failed during cold health on both Windows PowerShell 5.1 and PowerShell 7. `v0.1.0-rc.4` is now an annotated,
-unsigned, published candidate with the exact identity above. The tag remains immutable by release policy; never
-infer candidate identity from floating `main`, and never move an existing tag.
+`v0.1.0-rc.1` through `v0.1.0-rc.5` remain immutable. Formal Windows validation of exact rc.3 failed during
+cold health on both Windows PowerShell 5.1 and PowerShell 7; exact rc.4 later failed its required orphan-pipe
+no-residual-process oracle. `v0.1.0-rc.5` is the current annotated, unsigned, published candidate with the exact
+identity above. Never infer candidate identity from floating `main`, and never move an existing tag.
 
 ## Status summary
 
@@ -35,12 +35,12 @@ infer candidate identity from floating `main`, and never move an existing tag.
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
 | Competition docs and visuals | `READY_FOR_CANDIDATE_REVIEW` | README, article draft, seven SVG/PNG pairs, demo script | Validate from a clean candidate checkout and target renderers |
-| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / RC4_FUNCTIONAL_SUBSET_PASS / RC4_ORPHAN_FAULT_FAIL / RC4_CANDIDATE_FAIL` | The earlier exact-rc.4 subset passed, but the required orphan-pipe oracle left one nonce-matched descendant alive after wrapper return | Validate the post-rc.4 untagged isolation fix, then create and test a new immutable candidate; never move rc.4 |
-| Qoder host integration | `NOT_RUN` | Qoder was absent/not discoverable in the rc.4 Windows run; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
-| Intel hardware | `PERFORMANCE_NOT_RUN` | rc.4 regression subset established bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
-| Overall candidate validation | `FAIL` | Exact rc.4 violated a required Windows no-residual-process oracle | Keep Qoder, Intel, empty-cache and network unknowns separate; none is the cause of this failure |
+| Windows PowerShell 5.1 / 7 | `FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE` | Exact rc.5 passed orphan-pipe no-residual-process oracles in PowerShell 5.1 and 7 plus scoped health/analyze controls | Run empty-cache, network and remaining external fault cases against exact rc.5; never move an earlier tag |
+| Qoder host integration | `NOT_RUN` | rc.5 evidence covers the production wrapper, not Qoder; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
+| Intel hardware | `PERFORMANCE_NOT_RUN` | rc.5 scoped Windows evidence establishes bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
+| Overall candidate validation | `INCONCLUSIVE` | Exact rc.5 closed the blocking rc.4 orphan-pipe regression, but the full Windows matrix, Qoder and Intel evidence remain incomplete | Keep each unknown explicit; a scoped pass is not full acceptance |
 | Release metadata | `BLOCKED` | Apache-2.0, copyright and author are confirmed; remaining issues are documented in the publication runbook | Memory, timeout, model and parser decisions |
-| GitHub / Python CI | `RC4_VERIFIED_WITH_SCOPE` | Exact-SHA rc.4 main/tag CI succeeded on Windows and Ubuntu Python 3.12; all four jobs reported `212 passed / 8 skipped` | Keep prepared-OpenVINO skips and wrapper/Qoder/Intel non-coverage explicit |
+| GitHub / Python CI | `RC5_VERIFIED_WITH_SCOPE` | Exact-SHA rc.5 main/tag CI succeeded; Windows reported `225 passed / 8 skipped` and Ubuntu `213 passed / 14 skipped` | Keep prepared-OpenVINO/Windows-Job skips and wrapper/Qoder/Intel non-coverage explicit |
 | ModelScope publication | `BLOCKED` | Local fields, article and runbook are prepared | Platform preflight, public URLs, real host evidence and user authorization |
 
 ## Verified rc.1 facts
@@ -171,8 +171,42 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
   its top-level `SHA256SUMS` file is `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`.
 - The later failure bundle is separate: manifest verification `29/29`, top-level `SHA256SUMS` file SHA-256
   `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`. Neither bundle has a public URL.
-- The working-tree process-isolation repair is only `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING`; it is not rc.4
-  evidence and must not be named as a new candidate until an immutable tag and exact-tag rerun exist.
+- The later rc.5 repair does not rewrite this history. rc.4 remains a formal failure even though a new immutable
+  candidate now closes the observed orphan-pipe defect.
+
+## GitHub publication evidence for rc.5
+
+- Remote annotated tag `v0.1.0-rc.5` has tag object
+  `7d4034f9e8575658190dacef53f9ba749de8ed6c`, peels to commit
+  `9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`, and resolves to tree
+  `88b914598de60fa385820860b13dc8bd6db26b7d`.
+- The tag is annotated but unsigned. Candidate immutability remains a release-process rule; handoffs verify the
+  exact tag object, peeled commit and tree.
+- Exact-SHA main CI: [GitHub Actions run 33298393856](https://github.com/tty627/ai-airlock/actions/runs/33298393856),
+  `success`; Windows job `99221893931` and Ubuntu job `99221893989`.
+- Candidate tag CI: [GitHub Actions run 33298491017](https://github.com/tty627/ai-airlock/actions/runs/33298491017),
+  `success`; Windows job `99222148261` and Ubuntu job `99222148090`.
+- Both runs passed Ruff, format and benchmark smoke. Each Windows job reported `225 passed / 8 skipped`; each
+  Ubuntu job reported `213 passed / 14 skipped`. The skips reflect unavailable prepared OpenVINO/runtime or
+  platform-specific Windows Job support, so this remains scoped Python CI.
+
+## Exact-tag Windows evidence for rc.5
+
+- A detached checkout verified the exact rc.5 tag object, commit and tree above and remained tracked-clean.
+- PowerShell 7 and Windows PowerShell 5.1 orphan-pipe fault runs returned the fixed `AIRLOCK_INVALID_JSON` error
+  in `3.937s` and `3.352s`. Both observed residual `0` before external cleanup, recorded
+  `cleanup_performed=false`, and left no candidate process alive after wrapper return.
+- Independent health and post-fault health controls passed in both shells. Chinese task text against a
+  Chinese-plus-space target path also passed in both shells with six files, eight facts, OpenVINO CPU metadata,
+  no fallback and `raw_sensitive_spans_forwarded=0`; the path was not forwarded.
+- The source-artifact cache was prefilled for this scoped run. Empty-cache source bootstrap is `NOT_RUN`, network
+  is `NOT_MEASURED`, and the remaining external timeout/fault cases are `NOT_RUN`. Qoder host and Intel
+  performance remain independent `NOT_RUN` items.
+- The checkout-external sanitized bundle has no public URL. Its manifest verifies `55/55`; the SHA-256 of its
+  top-level `SHA256SUMS` file is
+  `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`.
+- The bounded verdict is `RC5_WINDOWS_SCOPED_VALIDATION=PASS_WITH_SCOPE`; full rc.5 Windows/candidate acceptance
+  remains `INCONCLUSIVE`. This post-tag documentation update is not part of the frozen rc.5 identity.
 
 ## Current blockers and decisions
 
@@ -182,9 +216,9 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
 - Project license: Apache-2.0.
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
-- Previous Candidate: immutable `v0.1.0-rc.3`, with formal Windows verdict `FAIL`.
-- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.4`; exact tag object, commit and tree are recorded
-  above. rc.1 through rc.4 are never moved by release policy.
+- Previous Candidates: immutable `v0.1.0-rc.3` and `v0.1.0-rc.4`, both with formal Windows verdict `FAIL`.
+- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.5`; exact tag object, commit and tree are recorded
+  above. rc.1 through rc.5 are never moved by release policy.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -195,14 +229,14 @@ separately licensed hosted IR.
 - Confirm the host meaning of `server_alive_timeout=0`.
 - Confirm that the platform accepts `models=[]` and the current extra `info.json` fields.
 - Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
-- Publish the sanitized rc.4 Windows report bundle at a public URL after review; its manifest `99/99` and top-level
-  `SHA256SUMS` file hash are recorded above, but the current external copy is not public.
+- Publish the sanitized rc.3/rc.4 historical and rc.5 current Windows report bundles at public URLs after review;
+  the external copies are not public.
 - Preserve rc.4 remaining timeout/fault cases and network measurement as historical `NOT_RUN` / `NOT_MEASURED`;
   rerunning them on rc.4 can add diagnostic evidence but cannot reverse its blocking orphan-pipe `FAIL`.
-- Form a new immutable candidate from the post-rc.4 isolation fix, then run the complete Windows timeout/fault and
-  network matrix against that exact identity; publication requires its no-residual-process oracle to `PASS`.
-- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed against the new immutable
-  candidate. A later exact-rc.4 Qoder run would be historical evidence only and would not repair rc.4's verdict.
+- Complete the Windows empty-cache, network and remaining timeout/fault matrix against exact rc.5. The observed
+  orphan-pipe no-residual-process oracle already passes, but it does not substitute for the unexecuted cases.
+- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed against exact rc.5. A later
+  exact-rc.4 Qoder run would be historical evidence only and would not repair rc.4's verdict.
 - Run the declared Intel performance oracle; current bounded wrapper functionality is not performance evidence.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
@@ -225,17 +259,15 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Publish the rc.4 failure correction without moving `v0.1.0-rc.4`; preserve both the earlier subset evidence and
-   the later blocking fault evidence.
-2. Complete local and CI validation of the post-rc.4 untagged process-isolation fix. Only after those gates pass,
-   create a new immutable candidate and rerun the exact orphan-pipe oracle on both PowerShell 5.1 and 7.
-3. On that later candidate, run the empty source-cache/network and remaining timeout/fault cases without rewriting
-   rc.4 history.
-4. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
+1. Preserve rc.3/rc.4 failure history and the immutable rc.5 identity; do not move any published tag.
+2. On exact rc.5, run the empty source-cache/network and remaining timeout/fault cases without rewriting rc.4
+   history.
+3. Make Qoder available and execute the real discovery, 12+12 trigger, Capsule-only/non-bypass and Agent Task
    Completed oracle. Until then its state remains `NOT_RUN`.
-5. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
-6. Review and publish the sanitized report bundles, then update public URLs and any later claims from that same
-   evidence identity.
+4. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
+5. Review and publish the sanitized rc.3/rc.4/rc.5 report bundles, then update public URLs and any later claims from
+   the same evidence identities without copying private diagnostic artifacts.
+6. Close release metadata and platform preflight blockers before requesting final publication authorization.
 
 ## Update rules
 

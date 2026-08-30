@@ -29,8 +29,9 @@
 > 一个面向 AI Agent 的 Local Context Gateway：先在本机识别并变换当前策略覆盖的 Secret/PII、隔离
 > 当前 detector 识别的 Prompt Injection，
 > 再用 OpenVINO 从已净化内容中选择任务相关证据，只输出可追溯的 Safe Context Capsule。当前
-> `v0.1.0-rc.1` 已完成 Apple M4 CPU 上的 clean-checkout、OpenVINO CLI 与合成 A/B；真实
-> Windows/Qoder/Intel 验收仍待回填。
+> `v0.1.0-rc.1` 已完成 Apple M4 CPU 上的 clean-checkout、OpenVINO CLI 与合成 A/B；exact
+> `v0.1.0-rc.5` 已通过 PowerShell 5.1/7 scoped fault/health/analyze validation。完整 Windows matrix、
+> Qoder 与 Intel 验收仍待回填。
 
 如果平台字数更紧，可用：
 
@@ -50,8 +51,9 @@
 > context reduction 在 `utf8_bytes_div_4_ceil_v1` 下从 66.5564% 变为 75.3515%，同时 CLI P95
 > latency 从 103.052 ms 上升至 1204.529 ms。所有数字
 > 均限定为 Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1，不能外推为通用安全或真实 Agent
-> 成功率。真实 Windows、PowerShell、Qoder host、Capsule-only Agent answer 和 Intel 性能仍明确
-> 标记为 PENDING。
+> 成功率。exact rc.5 的两壳 orphan-pipe no-residual 和 scoped health/analyze controls 已通过；empty-cache、
+> remaining Windows faults、Qoder host、Capsule-only Agent answer 和 Intel 性能为 `NOT_RUN`，network 为
+> `NOT_MEASURED`，full matrix / overall 为 `INCONCLUSIVE`，不得概括成完整 Windows PASS。
 
 ## 推荐标签
 
@@ -105,8 +107,9 @@ cross-lingual relevance，同时显式报告 latency trade-off。
 
 ### 5. Agent Skill 安全入口
 
-通过稳定 JSON contract 把 Airlock 放在宿主 Agent 的 raw workspace 访问之前。当前 Python gate 已
-验证；Windows/Qoder host 的 Capsule-only non-bypass 尚待实机验收。
+通过稳定 JSON contract 把 Airlock 放在宿主 Agent 的 raw workspace 访问之前。当前 Python gate 与
+exact rc.5 Windows scoped wrapper controls 已验证；Qoder host 的 Capsule-only non-bypass 及完整 Windows
+matrix 尚待实机验收。
 
 ## 建议技术栈字段
 
@@ -136,16 +139,16 @@ Safe Context Capsule / stable JSON contract
 ## 链接占位
 
 ```text
-Source repository URL:   [USER_CONFIRM_REQUIRED]
+Source repository URL:   https://github.com/tty627/ai-airlock
 ModelScope Skill URL:    [PENDING_AFTER_PUBLICATION]
 ModelScope article URL:  [PENDING_AFTER_PUBLICATION]
 Demo video URL:          [PENDING_AFTER_PUBLICATION]
 Icon URL:                [PENDING_AFTER_ASSET_HOSTING]
 Documentation URL:       [PENDING_AFTER_PUBLICATION]
-Issue tracker URL:       [OPTIONAL_USER_DECISION]
+Issue tracker URL:       https://github.com/tty627/ai-airlock/issues
 ```
 
-当前 release evidence 明确没有 remote。不要根据项目名猜 GitHub、ModelScope 或个人主页 URL。
+公开源码仓库已确认并可匿名访问；ModelScope、文章、视频、icon 和文档发布 URL 仍不得猜测或提前回填。
 
 ## `meta.json` / `info.json` 规范复核
 
@@ -156,19 +159,20 @@ Issue tracker URL:       [OPTIONAL_USER_DECISION]
 
 | 字段 | 当前值 / 状态 | 必须由用户决定 |
 |---|---|---|
-| `meta.json.author` / `pyproject.toml authors` | `AI Airlock Team` | 正式公开个人、团队或组织署名；当前字符串不是可验证身份 |
+| `meta.json.author` / `pyproject.toml authors` | `谭天晔` | 已确认的公开 author/byline；发布前只需核对平台字段未被改写 |
 | `meta.json.icon` | 官方定义了该字段；当前缺失 | 资产公开托管后只在 `meta.json` 填可匿名访问的真实 URL；不要使用本机路径，也不要把 `icon` 加到 `info.json` |
 | `info.json.mem_need_gb` | `0.25`；没有模型 + 推理峰值实测支撑 | 先在目标环境测量模型驻留与推理峰值，再填写不低估的最低内存；当前为发布阻断 |
 | `info.json.server_alive_timeout` | `0`；官方说明只明确默认 `300`、`-1` 永不过期 | 通过目标 host 规范或实机确认 `0` 的语义；未确认前为发布阻断 |
 | `info.json.models` | `[]`；官方示例使用带 `model_id` / `dir_name` / `required_files` 的对象，未明确空数组是否接受 | 先验证平台 parser；继续“上游固定 revision + 本地转换”，或在完成授权/归属/哈希后建立公开转换模型仓库 |
-| package metadata version | `0.1.0` | 与比赛页面展示 `v0.1.0-rc.1` 的关系；不得移动或重打 frozen tag |
+| package metadata version | `0.1.0` | 当前源码候选展示为 `v0.1.0-rc.5`，frozen benchmark 仍绑定 rc.1；不得移动或重打任何 RC tag |
 | `info.json.name/version/stage/inference_mode` | 当前仓库扩展字段；不在所复核的官方 `info.json` 模板中 | 确认目标 parser 是否容忍；`deterministic_rules` 只表示通用/开发默认，正式 Qoder analyze 设计显式要求 OpenVINO，真实 host 仍 pending |
 | Skill 标识 / 未来目录 | 当前 `SKILL.md.name`、Python package、`meta.json.name` 与 `info.json.name` 标识为 `ai-airlock`；未来安装目录尚未创建；OpenVINO 文件规范与模板使用 `local-<function>` / `local-<skill-name>` | 在创建不可变 `skill_name` 前确认目标 host 是否接受该标识；如需迁移，由用户决定名称，不能本轮擅改 |
 | `SKILL.md` host 模板 | 当前缺少与真实 wrapper 对齐的 `--continue` 支持，且未完整采用官方要求的 Usage / Examples / unsupported-platform / no-cloud-fallback 结构 | 先确认比赛采用哪套 host contract；若要求 OpenVINO 模板，需另开实现与 Windows/Qoder 验收轮，不能只补宣称 |
-| project LICENSE | 不存在 | 用户选择 MIT、Apache-2.0 或其他，并确认版权主体/年份 |
-| public repository | 无 remote evidence | 用户确认真实公开仓库和可访问性 |
+| project LICENSE | Apache-2.0；copyright 2026 谭天晔 | 已确认；发布 archive 保留完整 `LICENSE` 与第三方 notices |
+| public repository | `https://github.com/tty627/ai-airlock`；public | 已确认；最终表单使用该 URL 并在匿名窗口复核 |
 
-本轮只收窄了 `meta.json` 的能力描述，没有填写 icon、内存、托管模型、作者、版本或许可证猜测值。
+本轮没有填写 icon、内存或托管模型猜测值；author、package version、Apache-2.0 与 public repository 使用
+已确认的项目事实。
 
 ### 模型下载、固定 revision、转换与再分发决策
 
@@ -195,14 +199,14 @@ Issue tracker URL:       [OPTIONAL_USER_DECISION]
 | `owner` | `[USER_CONFIRM_REQUIRED]`；创建后不可更改 |
 | `skill_name` | 候选 `ai-airlock`；仅小写字母、数字、连字符，创建后不可更改；同时存在 OpenVINO `local-<function>` 命名约定，必须先做目标 host 预检并由用户确认 |
 | `category` | 候选 `developer-tools` 或 `ai-automation`；由用户确认 |
-| `license` | `[USER_DECISION_REQUIRED]` |
-| `source_url` | `[USER_CONFIRM_REQUIRED]`，不得使用占位 URL |
+| `license` | `Apache-2.0`；已确认 |
+| `source_url` | `https://github.com/tty627/ai-airlock`；发布前做匿名访问复核 |
 | upload path | API / CLI 待确认；若使用 CLI，先解决 `SKILL.md` frontmatter 的 `version` 预检 |
 
 ## 表单提交前复核
 
 - [ ] 用户登录后记录真实必填字段、字数限制、文件格式和 URL 校验规则。
-- [ ] 标题、简介、标签、作者、LICENSE 与版本展示由用户确认。
+- [ ] 标题、简介、标签与版本展示由用户最终确认；author“谭天晔”和 Apache-2.0 保持已确认值。
 - [ ] Skill 自定义标签精确为 `AI PC`，文章专题标签精确为 `Intel AI PC`。
 - [ ] Skill archive 同时含代码、文档、测试，根目录有且仅有一个 `SKILL.md`。
 - [ ] 真实 API / CLI 上传预检已解决“根目录仅一个 `SKILL.md`”与完整代码/文档/测试包之间的规范歧义。

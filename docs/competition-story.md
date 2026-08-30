@@ -6,12 +6,12 @@
 > 验收报告。
 
 候选状态必须与 benchmark 数字分开：exact `v0.1.0-rc.3` 的正式 Windows verdict 保持为
-`FAIL`。`v0.1.0-rc.4` 已作为 annotated、unsigned tag 发布；tag object 为
-`2a50625aa95443e328573704cf42e9c633621ffe`，commit 为
-`52a215727115f32937cb78561e88a63fdae5adf2`，tree 为
-`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。rc.4 的 scoped Python CI 与早期 Windows functional
-subset 已通过；但同一 exact tag 的 orphan-pipe 必需 oracle 后续 `FAIL`，因此 rc.4 candidate 与 overall
-均为 `FAIL`。Qoder 和 Intel performance 仍分别为独立的 `NOT_RUN`。
+`FAIL`。`v0.1.0-rc.4` 的早期 Windows functional subset 已通过；但同一 exact tag 的 orphan-pipe 必需
+oracle 后续 `FAIL`，因此 rc.4 candidate 与 overall 均为 `FAIL`。当前 annotated、unsigned
+`v0.1.0-rc.5` 的 tag object 为 `7d4034f9e8575658190dacef53f9ba749de8ed6c`，commit 为
+`9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`，tree 为
+`88b914598de60fa385820860b13dc8bd6db26b7d`。它的双壳 orphan-pipe 和 scoped health/analyze controls
+通过；full matrix / overall 仍为 `INCONCLUSIVE`。Qoder 和 Intel performance 分别为独立的 `NOT_RUN`。
 
 ## 核心结论
 
@@ -56,10 +56,10 @@ Agent 要解决生产问题
 | Source RC | **PASS** | clean checkout；full pytest `212 passed / 6 skipped`，6 项均因 PowerShell 不可用 |
 | macOS OpenVINO | **PASS** | Apple M4 CPU 上固定 model/revision 的公开 CLI、strict Python response gate、flagship 和 A/B 已实跑 |
 | Python Qoder gate | **PASS** | response shape、OpenVINO metadata 与 fail-closed gate 通过；不是 Qoder host |
-| Windows / PowerShell | **rc.3 FAIL / rc.4 EARLIER SUBSET PASS / ORPHAN FAULT FAIL / CANDIDATE FAIL** | 早期 functional subset 通过；后续 exact-tag orphan-pipe fault 在 wrapper 返回后仍有 `1` 个 descendant，违反必需 no-residual oracle |
-| Qoder host | **NOT RUN** | rc.4 Windows 运行中 Qoder 缺失/不可发现；12 个 positive 与 12 个 negative trigger 均 `0/12 REAL_QODER_EXECUTED` |
-| GitHub Python CI | **rc.4 PASS（范围受限）** | exact-SHA main/tag Windows/Ubuntu Python 3.12 四个 job 各 `212 passed / 8 skipped`，Ruff、format 与 benchmark smoke 通过；只有 Windows jobs 另外通过 canonical-LF checkout gate；这不是 wrapper/Qoder/Intel 验收 |
-| Intel hardware | **PERFORMANCE NOT RUN** | rc.4 regression subset 只建立有界 wrapper 功能性；无命名 Intel device 的 cold/warm latency、NPU/GPU 或性能 oracle |
+| Windows / PowerShell | **rc.3 FAIL / rc.4 FAIL / rc.5 SCOPED PASS / FULL MATRIX INCONCLUSIVE** | rc.4 的 required orphan fault 保持失败；exact rc.5 的 PS5.1/PS7 orphan residual 均为 `0`，health/analyze controls 通过 |
+| Qoder host | **NOT RUN** | rc.5 wrapper evidence 不是 Qoder；12 个 positive 与 12 个 negative trigger 均 `0/12 REAL_QODER_EXECUTED` |
+| GitHub Python CI | **rc.5 PASS（范围受限）** | exact-SHA main/tag Windows 各 `225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`，Ruff、format 与 benchmark smoke 通过；这不是完整 wrapper/Qoder/Intel 验收 |
+| Intel hardware | **PERFORMANCE NOT RUN** | rc.5 scoped controls 只建立有界 wrapper 功能性；无命名 Intel device 的 cold/warm latency、NPU/GPU 或性能 oracle |
 
 rc.3 的失败诊断（[Claims Ledger · C-WIN-01](claims-ledger.md)）定位到 OpenVINO inference smoke 后缓存的 native handles，它们阻止 candidate model
 directory 的原子 rename，并触发 `PermissionError` / WinError 5。该诊断不修补或改变 rc.3。
@@ -76,6 +76,14 @@ markers 在 26 个 stdout/stderr 输出面上观察到 `0` hits。这只是有�
 candidate/overall 为 `FAIL`。source-artifact cache 预填、network `NOT_MEASURED`、其余 fault `NOT_RUN`、
 Qoder 与 Intel `NOT_RUN` 是另外的未知项。早期 subset bundle 为 `99/99`、hash `3f0a1791…29f3b`；后续
 failure bundle 为 `29/29`、hash `00b336f9…5677a`；两者均无 public URL。
+
+rc.5 的 exact-SHA main run [`33298393856`](https://github.com/tty627/ai-airlock/actions/runs/33298393856)
+和 tag run [`33298491017`](https://github.com/tty627/ai-airlock/actions/runs/33298491017) 均成功；Windows 各
+`225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`。exact-tag PS5.1/PS7 orphan-pipe faults
+分别在 `3.352s / 3.937s` 返回固定错误，residual 均为 `0`、`cleanup_performed=false`；两壳 health、
+post-fault health 与中文/空格路径 analyze controls 也通过。bundle manifest 为 `55/55`，顶层
+`SHA256SUMS` 文件 hash 为 `107ae4a8…82bb`，无 public URL。empty-cache、network、remaining faults、
+Qoder 和 Intel 未关闭，因此只能写 scoped PASS，overall 为 `INCONCLUSIVE`。
 
 ## 为什么必须在本地做第一跳
 
@@ -211,12 +219,12 @@ OpenVINO flagship 的 `analyze` stdout、stderr 与 audit log 中，对从冻结
 ## Qoder 集成设计与验收分离
 
 正式设计入口要求 Windows wrapper 显式选择 OpenVINO，并由 Agent 只消费 `safe_context`。当前已验证
-Python strict response gate。rc.4 早期 fresh-tag Windows functional subset 已覆盖双 shell 独立 cold/warm health、
-中文+空格路径 analyze、固定 invalid/missing errors、cross-shell concurrent cold、残留进程
-和有界 marker/surface 检查。但后续 required orphan-pipe fault 已违反 no-residual contract，rc.4
-candidate 为 `FAIL`。post-rc.4 修复仍为 `UNTAGGED / VALIDATION_PENDING`。
+Python strict response gate。rc.4 early subset 与后续 required orphan-pipe `FAIL` 均按历史保留。exact rc.5
+已通过双 shell orphan-pipe no-residual oracle、health 与中文/空格路径 analyze controls；clean
+source-artifact bootstrap、network 和 remaining fault matrix 尚未执行，所以 full acceptance 为
+`INCONCLUSIVE`。
 
-Qoder 在这台主机上缺失/不可发现，因此下列 Qoder 宿主事实对 rc.4 仍保持 `NOT_RUN`：
+rc.5 evidence 未采集 Qoder host 可用性或执行轨迹，因此下列 Qoder 宿主事实仍保持 `NOT_RUN`：
 
 - Qoder 自动发现和自然语言触发；
 - 12/12 positive trigger 与 12/12 negative non-trigger；
@@ -237,8 +245,9 @@ CLI rehearsal 的画面只能标为：
 3. 可验证 Local AI：Apple M4 CPU 上 OpenVINO mode/model/revision/device 可见。
 4. 有 utility 的安全缩减：flagship required facts `3/3` 与 estimated-token context reduction 同时出现。
 5. 诚实 trade-off：Mean Recall@K 数值变化与 P95 latency 代价同图。
-6. 诚实状态：Windows 标记 `rc.3 FAIL / rc.4 earlier subset PASS / orphan fault FAIL / candidate FAIL`；
-   Qoder host、Agent Task Completed 与 Intel performance 分别标记 `NOT_RUN`，项目 overall 标记 `FAIL`。
+6. 诚实状态：Windows 标记 `rc.3/rc.4 FAIL / rc.5 scoped PASS / full matrix INCONCLUSIVE`；Qoder host、
+   Agent Task Completed 与 Intel performance 分别标记 `NOT_RUN`，current candidate overall 标记
+   `INCONCLUSIVE`。
 
 ## 比赛材料映射
 

@@ -5,9 +5,10 @@
 > `495f89c6349afbdd741576439b3b85369d26671a`。
 > 实测范围：**Synthetic benchmark · Apple M4 CPU · v0.1.0-rc.1**。
 > exact `v0.1.0-rc.3` 的 Windows PowerShell 5.1/7 cold health 正式 verdict 为 `FAIL`，历史保持不变。
-> annotated、unsigned `v0.1.0-rc.4` 已发布且 scoped CI 通过；早期 fresh-tag Windows functional subset
-> 通过，但后续 required orphan-pipe fault `FAIL`，所以 rc.4 candidate 与 overall 为 `FAIL`。Intel 性能、真实 Qoder host 与
-> Capsule-only Agent Task Completed 为 `NOT_RUN`。
+> annotated、unsigned `v0.1.0-rc.4` 的 required orphan-pipe fault `FAIL`，所以 rc.4 candidate 与 overall
+> 为 `FAIL`。当前 annotated、unsigned `v0.1.0-rc.5` 的两壳 orphan-pipe 与 scoped health/analyze controls
+> 通过，但 full acceptance / overall 为 `INCONCLUSIVE`。Intel 性能、真实 Qoder host 与 Capsule-only
+> Agent Task Completed 为 `NOT_RUN`。
 
 ![AI Airlock Hero](../assets/competition/hero-banner.svg)
 
@@ -161,14 +162,14 @@ P95 从 `103.052 ms` 上升至 `1204.529 ms`。这个代价是否
 当前 Python strict response gate 已验证：它会对白名单字段、schema、decision、相对 provenance、OpenVINO
 metadata 和输出大小做严格检查。这是集成合同的证据，但不是 Qoder host 的行为证据。
 
-当前源码候选是 annotated、unsigned `v0.1.0-rc.4`：tag object
-`2a50625aa95443e328573704cf42e9c633621ffe`，commit
-`52a215727115f32937cb78561e88a63fdae5adf2`，tree
-`46bc0f55eed58b7234338d4ff4e32bc71c348f8a`。[main CI `33293985019`](https://github.com/tty627/ai-airlock/actions/runs/33293985019)
-与 [tag CI `33294040300`](https://github.com/tty627/ai-airlock/actions/runs/33294040300) 均成功；Windows/Ubuntu
-四个 Python 3.12 job 各为 `212 passed / 8 skipped`，Ruff、format、benchmark smoke 通过。8 个 skip
-来自 prepared OpenVINO model/runtime unavailable；CI 未覆盖 `.[openvino]`、真实模型 bootstrap、
-PowerShell wrapper、Qoder 或 Intel performance。
+当前源码候选是 annotated、unsigned `v0.1.0-rc.5`：tag object
+`7d4034f9e8575658190dacef53f9ba749de8ed6c`，commit
+`9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`，tree
+`88b914598de60fa385820860b13dc8bd6db26b7d`。[main CI `33298393856`](https://github.com/tty627/ai-airlock/actions/runs/33298393856)
+与 [tag CI `33298491017`](https://github.com/tty627/ai-airlock/actions/runs/33298491017) 均成功；Windows 各
+`225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`，Ruff、format、benchmark smoke 通过。
+skips 包含 prepared OpenVINO/runtime 或平台特定 Windows Job 不可用；CI 不等于完整 PowerShell wrapper、
+Qoder 或 Intel performance evidence。
 
 exact rc.3 在 Qoder 之前的 Windows cold health 已失败：两个 PowerShell shell 均返回固定错误
 `AIRLOCK_MODEL_PREPARATION_FAILED`。外置诊断将其限定为 inference smoke 后缓存的 OpenVINO native
@@ -187,6 +188,13 @@ exit `2`、空 stdout 和单一 `AIRLOCK_INVALID_JSON`，但 external cleanup �
 `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。在匿名发布并复验前，公众无法
 独立下载这份报告。后续 failure bundle 为 `29/29`，顶层 `SHA256SUMS` 文件 SHA-256 为
 `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`，同样无 public URL。
+
+exact rc.5 的 PowerShell 5.1/7 orphan-pipe faults 分别在 `3.352s / 3.937s` 返回固定
+`AIRLOCK_INVALID_JSON`，residual 都为 `0` 且 `cleanup_performed=false`；两壳 health、post-fault health
+与中文/空格路径 analyze controls 也通过。外置 bundle manifest 为 `55/55`，顶层 `SHA256SUMS` 文件
+SHA-256 为 `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`，无 public URL。该结果只支持
+`PASS_WITH_SCOPE`；empty-cache、network、remaining faults、Qoder 与 Intel 未关闭，因此 rc.5 full
+acceptance / overall 为 `INCONCLUSIVE`。
 
 真实验收矩阵已经定义 12 个 positive triggers 和 12 个 negative triggers；当前两组均为
 `0/12 REAL_QODER_EXECUTED`。还需要在真实 Windows/Qoder 上证明 Skill 自动发现、第一次内容访问就是
@@ -211,14 +219,15 @@ wrapper、没有索引/附件/raw read 绕过，以及 Agent 只依据 Capsule �
 - exact rc.4 fresh-tag 的 Windows regression subset：5.1/7 独立 cold+warm health、中文/空格 analyze、
   invalid/missing errors、cross-shell concurrent cold、covered residual `0` 与 scoped marker scan `0 hits`。
 - exact rc.4 PowerShell 7 orphan-pipe required fault `FAIL`；不得被上面的早期 subset PASS 覆盖。
+- exact rc.5 annotated tag object / commit / tree 与 scoped main/tag Windows/Ubuntu Python 3.12 CI；
+- exact rc.5 PowerShell 5.1/7 orphan-pipe no-residual oracles，以及两壳 scoped health/analyze controls。
 
 尚未验证：
 
-- 新 immutable post-rc.4 candidate 的 exact-tag isolation fix；以及 clean source-artifact bootstrap/network
-  和其余 timeout/fault cases；
+- exact rc.5 的 clean source-artifact bootstrap/network 和其余 timeout/fault cases；
 - Qoder Skill 自动发现、12+12 triggers、Capsule-only non-bypass、真实最终回答；
 - Intel AI PC、GPU/NPU 使用、跨硬件性能；
-- rc.4 外置脱敏报告、ModelScope 页面、文章和视频的可匿名访问 public URL；
+- rc.4/rc.5 外置脱敏报告、ModelScope 页面、文章和视频的可匿名访问 public URL；
 - 未知 Secret、规避式 Injection、真实生产分布和跨领域 Agent utility。
 
 ## 10. 可复现方法
@@ -264,8 +273,7 @@ trace、设置证据和未剪辑录像证明，而不是靠文档承诺。
 
 若面向商用，下一步优先级不是增加更多宣传数字，而是补足证据层：
 
-1. 不移动 rc.4；先把当前 `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING` 冻结为新 candidate，重跑
-   exact-tag orphan-pipe oracle，再补 clean source-artifact bootstrap/network 与其余 fault cases；
+1. 不移动 rc.1–rc.5；在 exact rc.5 上补 clean source-artifact bootstrap/network 与其余 fault cases；
 2. 在命名 Intel AI PC 上完成可限定引用的设备与性能验收；
 3. 在 Qoder 新会话中完成 12+12 trigger matrix 和 Capsule-only flagship，并保存未剪辑证据；
 4. 建立独立 held-out 数据，覆盖更多 Secret、Injection、语言、任务和负缩减案例；

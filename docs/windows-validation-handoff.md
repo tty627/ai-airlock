@@ -1,14 +1,16 @@
 # AI Airlock Windows Validation Handoff
 
-> Status: `v0.1.0-rc.4` is an annotated, unsigned, published candidate. Its tag object, commit and tree below are
-> frozen. Exact-SHA main/tag Python CI passed with limited scope. An earlier fresh-tag Windows functional subset
-> passed, but a later required orphan-pipe fault on the same exact tag failed the no-residual-process oracle.
-> Therefore rc.4 Windows wrapper/candidate and overall verdicts are `FAIL`; Qoder remains `NOT_RUN`.
+> Status: `v0.1.0-rc.5` is the current annotated, unsigned, published candidate. Its tag object, commit and tree
+> below are frozen. Exact-SHA main/tag Python CI passed with limited scope. Exact-tag PowerShell 5.1/7
+> orphan-pipe faults and scoped health/analyze controls passed; the complete external matrix remains
+> `INCONCLUSIVE`, and Qoder remains `NOT_RUN`.
 
 Exact `v0.1.0-rc.3` remains immutable. Its formal Windows verdict was `FAIL`: Windows PowerShell 5.1 and
 PowerShell 7 cold health both returned `AIRLOCK_MODEL_PREPARATION_FAILED`. Diagnostics isolated cached OpenVINO
 native handles retained after the inference smoke test, which blocked the atomic directory rename with
-`PermissionError` / WinError 5. Qoder was unavailable and remains `NOT_RUN`.
+`PermissionError` / WinError 5. Qoder was unavailable and remains `NOT_RUN`. Exact `v0.1.0-rc.4` also remains
+immutable: its earlier functional subset passed, but a later required orphan-pipe no-residual-process oracle
+failed, so its candidate verdict is formally `FAIL`. The rc.5 result does not rewrite either predecessor.
 
 ## 1. Mission and authority
 
@@ -33,19 +35,20 @@ identity and evidence handling; it does not replace that oracle.
 
 ```text
 SOURCE_REPOSITORY_URL:   https://github.com/tty627/ai-airlock
-CANDIDATE_TAG:           v0.1.0-rc.4
-CANDIDATE_TAG_OBJECT:    2a50625aa95443e328573704cf42e9c633621ffe
-CANDIDATE_COMMIT:        52a215727115f32937cb78561e88a63fdae5adf2
-CANDIDATE_TREE:          46bc0f55eed58b7234338d4ff4e32bc71c348f8a
+CANDIDATE_TAG:           v0.1.0-rc.5
+CANDIDATE_TAG_OBJECT:    7d4034f9e8575658190dacef53f9ba749de8ed6c
+CANDIDATE_COMMIT:        9abf825943f8f68f2bc6cd3afc1baa8717e0c01a
+CANDIDATE_TREE:          88b914598de60fa385820860b13dc8bd6db26b7d
 CORE_EVIDENCE_COMMIT:    495f89c6349afbdd741576439b3b85369d26671a
 EXPECTED_PROJECT_NAME:   ai-airlock
 ```
 
-The annotated tag is unsigned. [Main CI run `33293985019`](https://github.com/tty627/ai-airlock/actions/runs/33293985019)
-and [tag CI run `33294040300`](https://github.com/tty627/ai-airlock/actions/runs/33294040300) succeeded on Windows
-and Ubuntu; all four Python 3.12 jobs each reported `212 passed / 8 skipped`, plus Ruff, format and benchmark
-smoke. The eight skips were prepared OpenVINO model/runtime unavailable cases. This CI did not exercise
-`.[openvino]`, model bootstrap, `scripts/run.ps1`, Qoder or Intel performance.
+The annotated tag is unsigned. [Main CI run `33298393856`](https://github.com/tty627/ai-airlock/actions/runs/33298393856)
+and [tag CI run `33298491017`](https://github.com/tty627/ai-airlock/actions/runs/33298491017) succeeded on Windows
+and Ubuntu. Each Windows job reported `225 passed / 8 skipped`; each Ubuntu job reported
+`213 passed / 14 skipped`; Ruff, format and benchmark smoke also passed. The skips include unavailable prepared
+OpenVINO/runtime or platform-specific Windows Job support. This scoped CI does not replace production-wrapper,
+Qoder or Intel-performance evidence.
 
 Do not infer or replace identity values from floating `main` or the current working tree. Validation remains
 `BLOCKED` if the Windows Agent prompt does not repeat all three resolved values, or if the fresh tagged checkout
@@ -69,10 +72,10 @@ Use a new directory that Qoder has never opened. Use the fixed values from secti
 
 ```powershell
 $RepositoryUrl = 'https://github.com/tty627/ai-airlock'
-$CandidateTag = 'v0.1.0-rc.4'
-$ExpectedTagObject = '2a50625aa95443e328573704cf42e9c633621ffe'
-$ExpectedCommit = '52a215727115f32937cb78561e88a63fdae5adf2'
-$ExpectedTree = '46bc0f55eed58b7234338d4ff4e32bc71c348f8a'
+$CandidateTag = 'v0.1.0-rc.5'
+$ExpectedTagObject = '7d4034f9e8575658190dacef53f9ba749de8ed6c'
+$ExpectedCommit = '9abf825943f8f68f2bc6cd3afc1baa8717e0c01a'
+$ExpectedTree = '88b914598de60fa385820860b13dc8bd6db26b7d'
 $RunId = (Get-Date).ToUniversalTime().ToString('yyyyMMddTHHmmssZ')
 $CheckoutRoot = "C:\AI-Airlock-Acceptance\$RunId\source"
 
@@ -197,7 +200,7 @@ Check every externally visible surface available in the run:
 
 Report known-fixture marker denominators and hits. Do not claim universal zero leakage.
 
-### Returned rc.4 result
+### Historical returned rc.4 result
 
 The returned fresh-tag run is deliberately recorded at subset granularity:
 
@@ -213,7 +216,7 @@ The returned fresh-tag run is deliberately recorded at subset granularity:
 | Cold-bootstrap/task-period network | `NOT_MEASURED` | No network conclusion is available |
 | Orphan-pipe required fault | `FAIL` | PowerShell 7 exact rc.4 returned in `32.164s` with fixed `AIRLOCK_INVALID_JSON`, but residual before/after external cleanup was `1/0` |
 | Remaining timeout/fault cases | `NOT_RUN` | Other required fault/deadline cases remain open; they are not the cause of the observed failure |
-| Qoder discovery, triggers and Capsule-only answer | `NOT_RUN` | Qoder was absent on the validation host |
+| Qoder discovery, triggers and Capsule-only answer | `NOT_RUN` | Qoder was absent on the rc.4 validation host |
 | Intel performance | `NOT_RUN` | No Intel latency, device or throughput claim is available |
 | rc.4 Windows candidate | `FAIL` | One required no-residual-process oracle was violated; missing evidence cannot dilute this to `INCONCLUSIVE` |
 | Overall Windows/Qoder/Intel acceptance | `FAIL` | The rc.4 Windows candidate failure is decisive; Qoder/Intel unknowns remain independent |
@@ -225,8 +228,30 @@ published and reverified, readers cannot independently download it from this rep
 The later failure bundle is separate and also has no public URL. Its manifest verification is `29/29`, and the
 SHA-256 of its top-level `SHA256SUMS` file is
 `00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`. Preserve both bundles; one records the
-earlier scoped subset PASS and the other the decisive fault FAIL. Any post-rc.4 fix remains
-`POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING` until a new immutable candidate and exact-tag rerun exist.
+earlier scoped subset PASS and the other the decisive fault FAIL.
+
+### Returned rc.5 scoped result
+
+| Validation surface | Returned result | Scope / limitation |
+|---|---|---|
+| Identity and scoped GitHub CI | `PASS_WITH_SCOPE` | Exact rc.5 tag object, commit and tree matched; main/tag workflows passed on the declared Python surfaces |
+| PowerShell 5.1 orphan-pipe fault | `PASS` | `3.352s`, exit `2`, empty stdout, one `AIRLOCK_INVALID_JSON`, residual `0`, `cleanup_performed=false` |
+| PowerShell 7 orphan-pipe fault | `PASS` | `3.937s`, exit `2`, empty stdout, one `AIRLOCK_INVALID_JSON`, residual `0`, `cleanup_performed=false` |
+| Independent health and post-fault health | `PASS_WITH_SCOPE` | Both shells returned one valid health JSON with empty stderr |
+| Chinese task + Chinese/space target path analyze | `PASS_WITH_SCOPE` | Both shells returned eight facts from six files, OpenVINO CPU/no fallback, `raw_sensitive_spans_forwarded=0`; wrapper control, not Qoder |
+| Candidate process residual | `PASS` | Final candidate-matched residual count `0`; no external cleanup was required |
+| Empty source-artifact cache | `NOT_RUN` | Warmup used a prefilled source-artifact cache |
+| Task-period network | `NOT_MEASURED` | No network conclusion is available |
+| Remaining external timeout/fault cases | `NOT_RUN` | Not covered by this scoped rerun |
+| Qoder discovery, triggers and Capsule-only answer | `NOT_RUN` | No rc.5 Qoder availability or execution evidence was collected |
+| Intel performance | `NOT_RUN` | No named-device latency, device or throughput claim is available |
+| rc.5 Windows scoped validation | `PASS_WITH_SCOPE` | Only the named faults and controls are closed |
+| rc.5 full Windows/Qoder/Intel acceptance | `INCONCLUSIVE` | Required evidence remains missing; no observed rc.5 failure is claimed |
+
+The rc.5 checkout-external sanitized bundle has no public URL. Its manifest verifies `55/55`; the SHA-256 of
+its top-level `SHA256SUMS` file is
+`107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`. The tested source remained
+tracked-clean. Preserve this bundle separately from both rc.4 historical bundles; none may replace another.
 
 ## 8. Verdict rules
 

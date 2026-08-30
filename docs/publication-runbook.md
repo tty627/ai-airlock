@@ -1,8 +1,8 @@
 # AI Airlock Publication Runbook
 
 > 状态：GitHub candidate 发布已完成。公开 `tty627/ai-airlock` 使用 Apache-2.0、署名“谭天晔”，新的
-> annotated、unsigned `v0.1.0-rc.4` 已发布并按流程保持不可变；既有 `v0.1.0-rc.1`、`v0.1.0-rc.2` 和
-> `v0.1.0-rc.3` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
+> annotated、unsigned `v0.1.0-rc.5` 已发布并按流程保持不可变；既有 `v0.1.0-rc.1` 至
+> `v0.1.0-rc.4` 不移动。该授权不包含 ModelScope、研习社、视频、比赛表单或
 > 社交媒体发布。
 
 当前项目状态以 [`../STATUS.md`](../STATUS.md) 为入口。tagged commit 不能安全地把自己的 commit/tree
@@ -18,6 +18,11 @@
 orphan-pipe 必需 oracle `FAIL`：wrapper 返回后 external cleanup 前/后 residual 为 `1/0`。因此 rc.4
 Windows candidate 与 overall verdict 均为 `FAIL`；不得用 prefilled cache、network `NOT_MEASURED`、
 remaining faults `NOT_RUN`、Qoder 或 Intel 未执行项把决定性失败改写为 `INCONCLUSIVE`。
+
+`v0.1.0-rc.5` 已通过 exact-tag PowerShell 5.1/7 orphan-pipe no-residual-process oracles 和指定
+health/analyze controls，状态为 `RC5_WINDOWS_SCOPED_VALIDATION=PASS_WITH_SCOPE`。empty-cache、network、
+remaining external faults、Qoder 与 Intel performance 尚未关闭，因此当前 candidate overall 为
+`INCONCLUSIVE`，不是完整 Windows 或最终发布 `PASS`。
 
 本 runbook 于 2026-08-28 复核以下一手资料：
 
@@ -36,15 +41,17 @@ Core source tag:    v0.1.0-rc.1
 Core source commit: 495f89c6349afbdd741576439b3b85369d26671a
 Core source tree:   4fe991ded88f38a6c1952c506d20005d2956a915
 Local evidence:     .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
-Candidate tag:      v0.1.0-rc.4 (annotated, unsigned, published)
-Candidate tag object: 2a50625aa95443e328573704cf42e9c633621ffe
-Release commit:     52a215727115f32937cb78561e88a63fdae5adf2
-Release tree:       46bc0f55eed58b7234338d4ff4e32bc71c348f8a
+Candidate tag:      v0.1.0-rc.5 (annotated, unsigned, published)
+Candidate tag object: 7d4034f9e8575658190dacef53f9ba749de8ed6c
+Candidate commit:   9abf825943f8f68f2bc6cd3afc1baa8717e0c01a
+Candidate tree:     88b914598de60fa385820860b13dc8bd6db26b7d
+Packaging source:   exact reviewed post-tag commit or immutable packaging tag (required before archive)
 ```
 
-不要移动、重打或修改 rc.1、rc.2、rc.3 或已发布的 rc.4 tag。包装文件位于 core RC 之后的本地审核 diff；未来若创建包装 release
-commit/tag，必须记录新的 release identity，同时保留它与 core commit 的映射。rc.1 evidence 只能支持
-未被包装修改改变的 core claims，不能冒充后续源码的完整 evidence。
+不要移动、重打或修改 rc.1 至 rc.5 的任何已发布 tag。rc.5 含候选代码，但不含验证完成后的状态文档；
+因此最终 archive 不得直接从 rc.5 tag 生成。先冻结一个只含已审查 post-tag 文档回填的精确 packaging
+commit/tag，并记录 packaging identity 与 rc.5 candidate identity 的映射。rc.1 evidence 只能支持未被
+包装修改改变的 core claims，不能冒充后续源码的完整 evidence。
 
 ## 1. 比赛与平台强制门
 
@@ -54,8 +61,8 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 2. **ModelScope Skill 必须添加自定义标签 `AI PC`。** 精确保留大小写与空格。
 3. **比赛文章必须添加专题标签 `Intel AI PC`。** 该标签是比赛归类，不得写成 Intel 实机已验证。
 4. Skill 必须发布到 ModelScope Skills Center，并在最终指定的生产力 Agent 中完成调用验证；AI Airlock
-   当前 Windows 状态是 `rc.3 FAIL / rc.4 EARLIER FUNCTIONAL SUBSET PASS / ORPHAN FAULT FAIL /
-   CANDIDATE FAIL`，Qoder 仍为 `NOT_RUN`。
+   当前 Windows 状态是 `rc.3 FAIL / rc.4 CANDIDATE FAIL / rc.5 SCOPED PASS / FULL MATRIX
+   INCONCLUSIVE`，Qoder 仍为 `NOT_RUN`。
 5. ModelScope zip 根目录必须有且仅有一个 `SKILL.md`；若采用 CLI 发布路径，还要满足其 frontmatter
    与 5 MB 限制。官方同页对 frontmatter 的 `version` 要求存在表述差异，必须在真实上传路径的预检中
    解决，不能假设当前包一定被接受。
@@ -73,7 +80,7 @@ commit/tag，必须记录新的 release identity，同时保留它与 core commi
 Project LICENSE:          Apache-2.0
 Copyright holder/year:    谭天晔 / 2026
 Public author/byline:     谭天晔
-Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.4
+Version display strategy: package 0.1.0 / candidate tag v0.1.0-rc.5
 ModelScope owner:         [USER CONFIRM REQUIRED]
 ModelScope skill_name:    [USER CONFIRM REQUIRED; immutable after create]
 Category:                 [USER CONFIRM REQUIRED]
@@ -163,18 +170,31 @@ docs/windows-validation-report-template.md
 
 ### 3.2 生成 archive
 
-在 clean checkout 中设置未来真实值，并逐项核对：
+在 packaging identity 的 clean detached checkout 中设置未来真实值，并逐项核对。`PACKAGING_REF` 必须是
+完整 commit SHA 或新的 immutable packaging tag，不得使用 floating `main`，也不得设为
+`v0.1.0-rc.5`（该 tag 内仍是验证前文档）：
 
 ```bash
 set -euo pipefail
-RELEASE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.4)"
+CANDIDATE_COMMIT="$(git rev-list -n 1 v0.1.0-rc.5)"
+: "${PACKAGING_REF:?set PACKAGING_REF to the reviewed post-tag commit or immutable packaging tag}"
+RELEASE_COMMIT="$(git rev-parse "${PACKAGING_REF}^{commit}")"
 PACKAGE_OUT="$(mktemp -d)"
 ARCHIVE="$PACKAGE_OUT/ai-airlock-skill.zip"
 
 git diff --quiet
 git diff --cached --quiet
 test -z "$(git status --porcelain --untracked-files=all)"
+test "$(git rev-parse HEAD)" = "$RELEASE_COMMIT"
+test "$RELEASE_COMMIT" != "$CANDIDATE_COMMIT"
+git merge-base --is-ancestor "$CANDIDATE_COMMIT" "$RELEASE_COMMIT"
 git cat-file -e "${RELEASE_COMMIT}^{commit}"
+git diff --exit-code "$CANDIDATE_COMMIT" "$RELEASE_COMMIT" -- \
+  .qoderignore SKILL.md LICENSE THIRD_PARTY_NOTICES.md \
+  meta.json info.json pyproject.toml requirements.txt \
+  src scripts config demo tests \
+  benchmark/README.md benchmark/run_benchmark.py benchmark/variants.json benchmark/datasets \
+  assets/competition
 git archive --format=zip --output="$ARCHIVE" "$RELEASE_COMMIT" -- \
   .qoderignore STATUS.md README.md SKILL.md LICENSE THIRD_PARTY_NOTICES.md \
   meta.json info.json pyproject.toml requirements.txt \
@@ -188,8 +208,11 @@ git archive --format=zip --output="$ARCHIVE" "$RELEASE_COMMIT" -- \
   docs/windows-validation-handoff.md docs/windows-validation-report-template.md
 ```
 
-`git archive` 只读取该 commit 中已跟踪且在 allowlist 内的对象。任何仍未提交的包装文件都会缺失，
-因此必须检查 archive 清单，不能从当前 dirty working tree 补拷。
+`git archive` 只读取 packaging commit 中已跟踪且在 allowlist 内的对象。上面的 scoped `git diff` 必须
+证明 runtime、policy、tests、metadata 与 assets 和 rc.5 candidate 完全相同；若不同，停止并形成新的
+候选/证据，不能把代码变化伪装成文档包装。任何仍未提交的包装文件都会缺失，因此必须检查 archive
+清单，不能从当前 dirty working tree 补拷。最终 manifest 同时记录 packaging commit/tree 和 rc.5 tag
+object/commit/tree。
 
 ### 3.3 archive denylist 与结构检查
 
@@ -302,10 +325,29 @@ rc.4 fresh-tag 回传结果必须拆分记录：
 `3f0a17919118a858a29724752b5e68807b15a7ebadddbfdd9d81fa521ef29f3b`。在匿名发布并复验前，公众不能
 独立下载该报告。后续 failure bundle 与早期 subset bundle 分离：manifest `29/29`，顶层
 `SHA256SUMS` 文件 SHA-256 为
-`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`，同样无 public URL。当前修复
-只能写 `POST_RC4_FIX_UNTAGGED / VALIDATION_PENDING`；创建并验证新 immutable tag 前不得宣称新候选
-PASS。仍需完成的 Qoder 证据包括自动发现、12+12 triggers、首次内容访问 non-bypass、
-Capsule-only 最终回答、`source:local_ref` 与未经剪辑 trajectory。
+`00b336f9193ba3fd4bad4aa3df157d5d08132c46e64c6ae3d4418c05dca5677a`，同样无 public URL。
+
+rc.5 annotated、unsigned tag 已发布；tag object
+`7d4034f9e8575658190dacef53f9ba749de8ed6c`，commit
+`9abf825943f8f68f2bc6cd3afc1baa8717e0c01a`，tree
+`88b914598de60fa385820860b13dc8bd6db26b7d`。exact-SHA [main run
+`33298393856`](https://github.com/tty627/ai-airlock/actions/runs/33298393856) 与 [tag run
+`33298491017`](https://github.com/tty627/ai-airlock/actions/runs/33298491017) 均通过：Windows 各
+`225 passed / 8 skipped`，Ubuntu 各 `213 passed / 14 skipped`，Ruff、format、benchmark smoke 通过。
+
+rc.5 exact-tag external Windows scoped evidence 必须拆分记录：
+
+- `PASS`：PowerShell 5.1/7 orphan-pipe faults 分别为 `3.352s / 3.937s`、固定
+  `AIRLOCK_INVALID_JSON`、residual `0`、`cleanup_performed=false`；
+- `PASS_WITH_SCOPE`：两壳 health、post-fault health 与中文/空格路径 analyze controls；
+- `NOT_RUN`：empty source-cache、remaining external faults、Qoder 与 Intel performance；
+- `NOT_MEASURED`：network；
+- `INCONCLUSIVE`：rc.5 full Windows/candidate acceptance，不得写成 complete matrix PASS。
+
+rc.5 外置 bundle 也没有 public URL；manifest `55/55`，顶层 `SHA256SUMS` 文件 SHA-256 为
+`107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`。仍需完成的 Qoder 证据包括
+自动发现、12+12 triggers、首次内容访问 non-bypass、Capsule-only 最终回答、`source:local_ref` 与未经
+剪辑 trajectory。
 
 按 [qoder_acceptance.md](qoder_acceptance.md) 执行，先判断 `PASS / FAIL / INCONCLUSIVE`。无法证明
 non-bypass 时只能是 `INCONCLUSIVE`。新数字先进入 [Claims Ledger](claims-ledger.md)，绑定新的
@@ -313,8 +355,9 @@ commit/evidence/environment，再替换文章与视频占位。Mac CLI rehearsal
 Completed。
 
 exact rc.4 tag CI 与早期 fresh-tag Windows functional subset 已存在，但后续 required fault 已决定 rc.4
-candidate `FAIL`。source-artifact cache、网络、remaining faults 和 host non-bypass 的未知状态仍须随每次
-引用保留；Intel CPU 被识别不等于 Intel inference 或性能已通过。
+candidate `FAIL`。exact rc.5 关闭了该 orphan-pipe defect，但 source-artifact cache、网络、remaining
+faults 和 host non-bypass 的未知状态仍须随每次引用保留；Intel CPU 被识别不等于 Intel inference 或
+性能已通过。
 
 ## 7. 文章、视频与表单
 
@@ -359,7 +402,7 @@ candidate `FAIL`。source-artifact cache、网络、remaining faults 和 host no
 - URL 失效或需登录：修复托管后从未登录环境重新验证。
 
 以下门槛只约束 ModelScope、研习社、视频、比赛表单和其他最终公开动作；用户已单独授权本轮 GitHub
-rc.4 candidate commit、push 与不可变 tag。只有用户明确说“可以发布/提交”，且以下摘要全部处理后，
+rc.5 candidate commit、push 与不可变 tag。只有用户明确说“可以发布/提交”，且以下摘要全部处理后，
 才允许执行这些最终公开动作：
 
 ```text
@@ -371,7 +414,7 @@ Controlled archive + manifests verified  YES
 Public evidence anonymous check          YES
 Public URLs verified                     YES
 Remote CI verified                       YES
-Windows evidence for new immutable RC    PASS
+Windows full-matrix evidence             PASS
 Qoder evidence                           PASS or explicitly accepted NOT_RUN limitation
 Intel evidence                           PASS or explicitly accepted NOT_RUN limitation
 Claims Ledger final review               YES
@@ -379,4 +422,5 @@ Secret / PII review                      YES
 User publication authorization           YES
 ```
 
-本轮状态：`GitHub rc.4 candidate publication = COMPLETE`；`User final publication authorization = NO`。
+本轮状态：`GitHub rc.5 candidate publication = COMPLETE`；`RC5 overall = INCONCLUSIVE`；
+`User final publication authorization = NO`。
