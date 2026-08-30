@@ -1,6 +1,6 @@
 # AI Airlock ModelScope Submission Fields
 
-> 状态：本地发布字段草稿，尚未登录或提交。
+> 状态：ModelScope 创建表单已在登录态预填，owner 为 `Ararag1`；尚未上传或提交。
 > 不在本文中填写虚假 URL、作者、截图、CI、Windows/Qoder 或 Intel 实机结果。
 
 ## 推荐标题
@@ -30,8 +30,8 @@
 > 当前 detector 识别的 Prompt Injection，
 > 再用 OpenVINO 从已净化内容中选择任务相关证据，只输出可追溯的 Safe Context Capsule。当前
 > `v0.1.0-rc.1` 已完成 Apple M4 CPU 上的 clean-checkout、OpenVINO CLI 与合成 A/B；exact
-> `v0.1.0-rc.5` 已通过 PowerShell 5.1/7 scoped fault/health/analyze validation。完整 Windows matrix、
-> Qoder 与 Intel 验收仍待回填。
+> `v0.1.0-rc.6` 已通过 Windows/Ubuntu CI、干净归档安装和 Intel Core i7-14700KF 上的 OpenVINO wrapper
+> 功能/七次 warm latency 验证。真实 TraeCode Capsule-only host 验收仍待回填。
 
 如果平台字数更紧，可用：
 
@@ -195,7 +195,7 @@ icon 使用不可变公开资产，内存使用 Windows 实测峰值上取整，
 
 | 字段 | 状态 |
 |---|---|
-| `owner` | 登录后从 `/users/me` 读取真实 owner；创建后不可更改，禁止猜测 |
+| `owner` | 登录态创建表单权威显示 `Ararag1`；创建后不可更改 |
 | `skill_name` | `ai-airlock`；用户已确认，创建后不可更改 |
 | `category` | `developer-tools`；用户已确认 |
 | `license` | `Apache-2.0`；已确认 |
@@ -204,7 +204,7 @@ icon 使用不可变公开资产，内存使用 Windows 实测峰值上取整，
 
 ## 表单提交前复核
 
-- [ ] 用户登录后记录真实必填字段、字数限制、文件格式和 URL 校验规则。
+- [x] 登录态创建表单已确认 owner、名称、License、公开状态、描述、类型、标签、文件上传和创建按钮。
 - [ ] 标题、简介、标签与版本展示由用户最终确认；author“谭天晔”和 Apache-2.0 保持已确认值。
 - [ ] Skill 自定义标签精确为 `AI PC`，文章专题标签精确为 `Intel AI PC`。
 - [ ] Skill archive 同时含代码、文档、测试，根目录有且仅有一个 `SKILL.md`。

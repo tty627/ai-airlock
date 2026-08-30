@@ -10,7 +10,7 @@
 
 Capsule 在部分输入上可以更小，但这不是必然结果或数学全局最小；是否缩减必须逐个输入实测。当前
 公开结果只覆盖冻结的合成数据。品牌语描述的是 Airlock-controlled path；真实宿主能否完全阻止 raw
-read、索引和附件旁路仍待 Qoder 验收，不能外推为通用安全保证。
+read、索引和附件旁路仍待 TraeCode/Qoder 验收，不能外推为通用安全保证。
 
 ## 当前验证状态
 
@@ -23,9 +23,10 @@ read、索引和附件旁路仍待 Qoder 验收，不能外推为通用安全保
 | macOS / Apple M4 / OpenVINO CPU | **PASS** | 固定模型与 revision 的公开 CLI、严格 Python response gate、flagship 和完整 A/B 已实跑 | 不等于 Intel AI PC、Windows wrapper 或 Qoder host 通过 |
 | Python Qoder strict response gate | **PASS** | `safe_context` JSON 的严格字段、模式和 OpenVINO metadata gate 已验证 | 不是 Qoder 界面、Skill 自动发现或 Capsule-only 宿主行为 |
 | Windows PowerShell 5.1 / 7 | **rc.3 FAIL · rc.4 FAIL · rc.5 SCOPED PASS / FULL MATRIX INCONCLUSIVE** | exact rc.5 的两套 orphan-pipe oracle 均为 residual `0`、无需 external cleanup；health 与中文/空格路径 analyze 也通过 | empty-cache、network 与其余 external fault 项仍未跑，不能写成完整 Windows PASS |
-| Qoder host / Agent Task Completed | **NOT RUN** | 12 个正向和 12 个负向触发 oracle 已定义；rc.5 只验证 wrapper，不是宿主 | 正向与负向均为 `0/12 REAL_QODER_EXECUTED` |
-| GitHub Python CI | **rc.5 PASS · scoped** | exact-SHA main/tag CI 均通过；Windows `225 passed / 8 skipped`，Ubuntu `213 passed / 14 skipped`，Ruff、format、benchmark smoke 通过 | skips 包含 prepared OpenVINO 或 Windows Job 不可用；CI 不是 Qoder host 或 Intel performance evidence |
-| Intel hardware | **PERFORMANCE NOT RUN** | rc.5 scoped Windows run 执行了 ready health/analyze 与进程隔离功能检查 | 未执行命名 Intel device 的 cold/warm latency、NPU/GPU 使用或性能 oracle |
+| rc.6 clean archive | **PASS · 228 passed / 9 skipped** | 138-entry archive 在独立 Python 3.12 环境安装；cold bootstrap 与真实 OpenVINO analyze 通过 | skips 包含未预置模型与 Windows symlink 条件；不是 Agent host evidence |
+| TraeCode/Qoder host / Agent Task Completed | **NOT RUN** | exact rc.6 已安装到 fresh TraeCode workspace 并预热；宿主 oracle 已定义 | 登录、Skill discovery、wrapper-first、Capsule-only 和最终回答待真实连续轨迹 |
+| GitHub Python CI | **rc.6 PASS** | main run `33304754194` 与 tag run `33304834373` 的 Windows/Ubuntu jobs 全绿 | CI 不是完整 PowerShell fault matrix 或 Agent host evidence |
+| Intel hardware | **CPU FUNCTIONAL + WARM LATENCY PASS_WITH_SCOPE** | Intel Core i7-14700KF 上 7/7 contract-valid；P50 `5021.900 ms`、P95 `5193.160 ms` | 小样本；不包含 NPU/GPU、冷启动或通用性能声明 |
 
 完整冻结证据见 [release evidence protocol](docs/release-evidence.md)；本次机器可读结果由
 [Claims Ledger](docs/claims-ledger.md) 约束。
@@ -57,6 +58,14 @@ harness 核验中 residual 均为 `0`，`cleanup_performed=false`；两壳 healt
 `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`，尚无 public URL。该结果只能写
 `RC5_WINDOWS_SCOPED_VALIDATION=PASS_WITH_SCOPE`；empty-cache、network、remaining external faults、Qoder
 与 Intel performance 未关闭，所以 rc.5 full acceptance / overall 仍为 `INCONCLUSIVE`。
+
+当前发布候选是 annotated、unsigned `v0.1.0-rc.6`：tag object
+`ce81652ad107c59c52184c33417d1e9922d44281`，commit
+`2ea713a99053dae5ff96f8e9927c300d36439c0e`，tree
+`3a1554d94892baf8b32dbbdaedbe6f334d6f952c`。它增加 TraeCode/ModelScope 发布适配与可复验 archive；
+main/tag CI、clean archive install 和 Intel CPU wrapper sample 已通过。Skill archive SHA-256 为
+`8be21cf914a1488c09435e2c242c97e54fdb5cad63dbc783bed8c6e175055d09`。详见
+[Windows Intel rc.6 evidence](docs/windows-intel-rc6-evidence.md)。
 
 当前项目进度、发布阻断与下一步见 [STATUS](STATUS.md)。Windows Agent 必须使用 owner handoff 提供的
 精确 tag object、commit 与 tree，并按 [Windows validation handoff](docs/windows-validation-handoff.md)
@@ -156,9 +165,8 @@ python -m airlock.cli analyze \
   --json
 ```
 
-Qoder on Windows 的设计入口如下；rc.3 在进入 Qoder 任务前已因 Windows cold health 失败，rc.4
-后续因 orphan-pipe no-residual oracle 失败。rc.5 只完成了不含 Qoder 的 Windows scoped validation；
-本轮没有采集 Qoder host 可用性或执行证据，真实 host 验收仍为 `NOT_RUN`：
+TraeCode/Qoder on Windows 的正式设计入口如下。exact rc.6 已安装到 fresh TraeCode workspace，并在任务
+窗口之外完成模型预热；真实 host 仍需登录后的连续 discovery、wrapper-first 与 Capsule-only 轨迹：
 
 ```powershell
 & '<skill-root>\scripts\run.ps1' analyze `
@@ -168,9 +176,9 @@ Qoder on Windows 的设计入口如下；rc.3 在进入 Qoder 任务前已因 Wi
   --json
 ```
 
-正式 Qoder 合同要求下游只消费 `safe_context`；`BLOCK`、非零退出、非法 JSON、空 facts 或 coverage
-warning 时必须停止。完整安装、参数限制和 12+12 触发矩阵见
-[Qoder acceptance](docs/qoder_acceptance.md)。
+正式宿主合同要求下游只消费 `safe_context`；`BLOCK`、非零退出、非法 JSON、空 facts 或 coverage
+warning 时必须停止。TraeCode deadline oracle 见 [TraeCode acceptance](docs/trae-acceptance.md)，完整
+12+12 触发矩阵见 [Qoder acceptance](docs/qoder_acceptance.md)。
 
 ## 安全边界与 limitations
 
@@ -189,7 +197,10 @@ warning 时必须停止。完整安装、参数限制和 12+12 触发矩阵见
   `107ae4a8954e0a7965a48e3b9248b74789850e1a2b6793ac422a4d7b62cc82bb`；它证明两壳 orphan-pipe
   no-residual oracle 与指定 health/analyze controls 通过，但不覆盖 empty-cache/network/remaining faults、
   Qoder host 或 Intel performance。
-- 项目 LICENSE、author 与公开源码仓库已确认；ModelScope URL、提交身份和独立模型托管方式仍待决定。
+- rc.6 在 Intel Core i7-14700KF 上的 7 次 warm wrapper sample 为 P50 `5021.900 ms`、P95
+  `5193.160 ms`，全部 contract-valid；这不是 NPU/GPU 或 Agent host evidence。
+- 项目 LICENSE、author、公开源码仓库和 ModelScope owner `Ararag1` 已确认；Skill/文章/比赛公开 URL
+  仍待发布，独立模型托管仍未建立。
 
 更多细节见 [architecture](docs/architecture.md)、[threat model](docs/threat-model.md) 和
 [license decision](docs/license-decision.md)。

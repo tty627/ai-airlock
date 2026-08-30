@@ -8,12 +8,12 @@ static screenshot or another Agent's result into TraeCode evidence.
 1. Resolve and record the immutable candidate tag object, commit and tree.
 2. Build or extract the reviewed package without editing it after hashing.
 3. Install the complete package at one of these locations:
-   - TraeCode project Skill: `<workspace>\.trae\skills\ai-airlock\${bt}
-   - TraeCode CLI project Skill: `<workspace>\.traecli\skills\ai-airlock\${bt}
-   - TraeCode global Skill: `%USERPROFILE%\.trae-cn\skills\ai-airlock\${bt}
+   - TraeCode project Skill: `<workspace>\.trae\skills\ai-airlock\`
+   - TraeCode CLI project Skill: `<workspace>\.traecli\skills\ai-airlock\`
+   - TraeCode global Skill: `%USERPROFILE%\.trae-cn\skills\ai-airlock\`
 4. Restart TraeCode. Run `/skills` and record the discovered `ai-airlock` name, version and path.
 
-The installed directory must contain the root `SKILL.md`, `scripts\run.ps1`, `src\${bt}, `config\${bt},
+The installed directory must contain the root `SKILL.md`, `scripts\run.ps1`, `src\`, `config\`,
 `requirements.txt` and `pyproject.toml`. Do not install a second nested copy or a standalone `SKILL.md`.
 
 ## Required flagship trajectory

@@ -15,17 +15,18 @@ Core tree:      4fe991ded88f38a6c1952c506d20005d2956a915
 Core evidence:  .release-evidence/495f89c6349afbdd741576439b3b85369d26671a/
 
 Previous Windows candidates: v0.1.0-rc.3 and v0.1.0-rc.4 (immutable; formal Windows verdicts FAIL)
-Windows candidate tag:      v0.1.0-rc.5 (annotated, unsigned, published; immutable by release policy)
-Windows candidate tag object: 7d4034f9e8575658190dacef53f9ba749de8ed6c
-Windows candidate commit:   9abf825943f8f68f2bc6cd3afc1baa8717e0c01a
-Windows candidate tree:     88b914598de60fa385820860b13dc8bd6db26b7d
+Release candidate tag:      v0.1.0-rc.6 (annotated, unsigned, published; immutable by release policy)
+Release candidate tag object: ce81652ad107c59c52184c33417d1e9922d44281
+Release candidate commit:   2ea713a99053dae5ff96f8e9927c300d36439c0e
+Release candidate tree:     3a1554d94892baf8b32dbbdaedbe6f334d6f952c
 GitHub remote:               https://github.com/tty627/ai-airlock (public)
 ```
 
-`v0.1.0-rc.1` through `v0.1.0-rc.5` remain immutable. Formal Windows validation of exact rc.3 failed during
+`v0.1.0-rc.1` through `v0.1.0-rc.6` remain immutable. Formal Windows validation of exact rc.3 failed during
 cold health on both Windows PowerShell 5.1 and PowerShell 7; exact rc.4 later failed its required orphan-pipe
-no-residual-process oracle. `v0.1.0-rc.5` is the current annotated, unsigned, published candidate with the exact
-identity above. Never infer candidate identity from floating `main`, and never move an existing tag.
+no-residual-process oracle. rc.5 closed that scoped defect. `v0.1.0-rc.6` is the current annotated, unsigned,
+published packaging/TraeCode candidate with the exact identity above. Never infer candidate identity from
+floating `main`, and never move an existing tag.
 
 ## Status summary
 
@@ -34,14 +35,14 @@ identity above. Never infer candidate identity from floating `main`, and never m
 | Python security core | `VERIFIED` | Frozen rc.1 clean-checkout evidence | Re-run on the future release candidate |
 | macOS / Apple M4 / OpenVINO CPU | `VERIFIED` | Fixed model revision, public CLI, strict Python response gate, flagship and synthetic A/B | Do not extrapolate to Windows, Intel or Qoder |
 | Numerical public claims | `VERIFIED_WITH_SCOPE` | [Claims Ledger](docs/claims-ledger.md) and frozen JSON | Keep estimator, fixture, device and commit qualifiers |
-| Competition docs and visuals | `READY_FOR_CANDIDATE_REVIEW` | README, article draft, seven SVG/PNG pairs, demo script | Validate from a clean candidate checkout and target renderers |
+| Competition docs and visuals | `READY_WITH_HOST_PLACEHOLDER` | README, submission article, seven SVG/PNG pairs, demo script | Replace the TraeCode placeholder with real screenshot/transcript and validate target renderers |
 | Windows PowerShell 5.1 / 7 | `FAIL_RC3 / FAIL_RC4 / RC5_SCOPED_PASS / FULL_MATRIX_INCONCLUSIVE` | Exact rc.5 passed orphan-pipe no-residual-process oracles in PowerShell 5.1 and 7 plus scoped health/analyze controls | Run empty-cache, network and remaining external fault cases against exact rc.5; never move an earlier tag |
-| Qoder host integration | `NOT_RUN` | rc.5 evidence covers the production wrapper, not Qoder; 12 positive and 12 negative trigger specifications remain unexecuted | Real discovery, tool trace, Capsule-only and non-bypass evidence |
-| Intel hardware | `PERFORMANCE_NOT_RUN` | rc.5 scoped Windows evidence establishes bounded wrapper functionality only | Named Intel device, cold/warm latency and successful device/performance oracle, or explicit limitation |
-| Overall candidate validation | `INCONCLUSIVE` | Exact rc.5 closed the blocking rc.4 orphan-pipe regression, but the full Windows matrix, Qoder and Intel evidence remain incomplete | Keep each unknown explicit; a scoped pass is not full acceptance |
+| TraeCode/Qoder host integration | `NOT_RUN` | rc.6 is installed and prewarmed in a fresh TraeCode workspace; no authenticated host trajectory exists | Real discovery, wrapper-first tool trace, Capsule-only answer and non-bypass evidence |
+| Intel hardware | `CPU_FUNCTIONAL_AND_WARM_LATENCY_PASS_WITH_SCOPE` | Intel Core i7-14700KF; seven of seven contract-valid OpenVINO wrapper runs; P50 `5021.900 ms`, P95 `5193.160 ms` | Do not claim NPU/GPU, cold-start or general performance |
+| Overall candidate validation | `INCONCLUSIVE` | Exact rc.6 package/CI/Intel CPU wrapper evidence passes, but production-Agent host acceptance and publication remain incomplete | Keep each unknown explicit; a wrapper pass is not host acceptance |
 | Release metadata | `PASS_WITH_PLATFORM_PREFLIGHT` | Public immutable icon, measured `mem_need_gb=1.0`, documented timeout `300`, and template-only `info.json` fields | Confirm `models=[]` on the real upload parser |
-| GitHub / Python CI | `RC5_VERIFIED_WITH_SCOPE` | Exact-SHA rc.5 main/tag CI succeeded; Windows reported `225 passed / 8 skipped` and Ubuntu `213 passed / 14 skipped` | Keep prepared-OpenVINO/Windows-Job skips and wrapper/Qoder/Intel non-coverage explicit |
-| ModelScope publication | `LOGIN_REQUIRED` | Local fields, article, package builder and authorization are prepared | Authenticate ModelScope, run platform preflight, publish URLs and save receipt |
+| GitHub / Python CI | `RC6_VERIFIED` | Exact-SHA rc.6 main run `33304754194` and tag run `33304834373` succeeded on Windows and Ubuntu | CI does not substitute for TraeCode host acceptance |
+| ModelScope publication | `AUTHENTICATED_FORM_PREFILLED` | Owner `Ararag1`; name, Apache-2.0, public, developer-tools, `AI PC` and description are filled | Enable Chrome extension local-file access, upload archive, then obtain action-time confirmation for final create |
 
 ## Verified rc.1 facts
 
@@ -208,6 +209,29 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
 - The bounded verdict is `RC5_WINDOWS_SCOPED_VALIDATION=PASS_WITH_SCOPE`; full rc.5 Windows/candidate acceptance
   remains `INCONCLUSIVE`. This post-tag documentation update is not part of the frozen rc.5 identity.
 
+## GitHub, package and Intel CPU evidence for rc.6
+
+- Remote annotated tag `v0.1.0-rc.6` has tag object
+  `ce81652ad107c59c52184c33417d1e9922d44281`, peels to commit
+  `2ea713a99053dae5ff96f8e9927c300d36439c0e`, and resolves to tree
+  `3a1554d94892baf8b32dbbdaedbe6f334d6f952c`.
+- Exact-SHA main CI [run 33304754194](https://github.com/tty627/ai-airlock/actions/runs/33304754194) and tag CI
+  [run 33304834373](https://github.com/tty627/ai-airlock/actions/runs/33304834373) succeeded on Windows and
+  Ubuntu.
+- The exact-commit Skill archive is 1,297,879 bytes, contains 138 entries and exactly one root `SKILL.md`, and
+  has SHA-256 `8be21cf914a1488c09435e2c242c97e54fdb5cad63dbc783bed8c6e175055d09`.
+- A clean extracted archive and clean Python 3.12 environment passed `228 passed / 9 skipped`. The skips were
+  limited to prepared-model availability and Windows symlink conditions. Cold bootstrap then produced an
+  OpenVINO-ready health response, and a real analyze returned `ALLOW_WITH_TRANSFORM`, CPU, no fallback, 71
+  chunks and eight facts.
+- The same archive was installed in a fresh TraeCode project Skill directory and prewarmed outside the task
+  window. The external six-file synthetic target is separate from the TraeCode workspace.
+- On Windows 11 Enterprise with an Intel Core i7-14700KF, seven sequential warm production-wrapper analyzes
+  were all contract-valid. P50 was `5021.900 ms`, P95 `5193.160 ms`, range `4960.695–5193.160 ms`.
+- This Intel evidence is CPU-only. It is not NPU/GPU evidence, cold-start performance, a universal benchmark or
+  authenticated TraeCode host acceptance. Exact per-run evidence and scope are in
+  [windows-intel-rc6-evidence.md](docs/windows-intel-rc6-evidence.md).
+
 ## Current blockers and decisions
 
 ### Confirmed public GitHub identity
@@ -217,8 +241,8 @@ The rc.3 verdict is `FAIL`. Later rc.4 evidence does not repair, replace or rein
 - Copyright: 2026 谭天晔.
 - Public author/byline: 谭天晔.
 - Previous Candidates: immutable `v0.1.0-rc.3` and `v0.1.0-rc.4`, both with formal Windows verdict `FAIL`.
-- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.5`; exact tag object, commit and tree are recorded
-  above. rc.1 through rc.5 are never moved by release policy.
+- Current Candidate Tag: annotated, unsigned, published `v0.1.0-rc.6`; exact tag object, commit and tree are
+  recorded above. rc.1 through rc.6 are never moved by release policy.
 
 Model distribution remains a later publication decision: fixed upstream revision plus local conversion, or a
 separately licensed hosted IR.
@@ -228,16 +252,17 @@ separately licensed hosted IR.
 - `mem_need_gb=1.0` now rounds above the observed `0.702 GiB` Windows OpenVINO analyze process-tree peak.
 - `server_alive_timeout=300` now uses the documented default and non-template `info.json` fields are removed.
 - Confirm that the real upload parser accepts the intentional self-managed-model declaration `models=[]`.
-- Resolve Skill frontmatter, zip-root and naming behavior using the real ModelScope upload/preflight path.
+- Complete the real ModelScope archive upload/parser preflight. The authenticated form already confirms owner
+  `Ararag1`, `ai-airlock`, Apache-2.0, public visibility, developer-tools and `AI PC`.
 - Publish the sanitized rc.3/rc.4 historical and rc.5 current Windows report bundles at public URLs after review;
   the external copies are not public.
 - Preserve rc.4 remaining timeout/fault cases and network measurement as historical `NOT_RUN` / `NOT_MEASURED`;
   rerunning them on rc.4 can add diagnostic evidence but cannot reverse its blocking orphan-pipe `FAIL`.
 - Complete the Windows empty-cache, network and remaining timeout/fault matrix against exact rc.5. The observed
   orphan-pipe no-residual-process oracle already passes, but it does not substitute for the unexecuted cases.
-- Run Qoder discovery, 12+12 triggers, Capsule-only/non-bypass and Agent Task Completed against exact rc.5. A later
-  exact-rc.4 Qoder run would be historical evidence only and would not repair rc.4's verdict.
-- Run the declared Intel performance oracle; current bounded wrapper functionality is not performance evidence.
+- Complete TraeCode login, then run discovery, wrapper-first, Capsule-only/non-bypass and Agent Task Completed
+  against exact rc.6. Qoder's larger 12+12 matrix remains post-deadline hardening.
+- Treat the recorded Intel CPU warm sample as scoped evidence only; NPU/GPU and cold-start remain unmeasured.
 - GitHub preflight must account for the deliberately synthetic AWS-shaped detector fixture in
   `tests/unit/test_detectors.py`; it is not a credential, but push protection may still require an explicit safe
   resolution. Do not delete the test or weaken detection merely to silence a scanner.
@@ -261,15 +286,15 @@ must not be included in the public Skill archive.
 
 ## Next actions in order
 
-1. Preserve rc.3/rc.4 failure history and the immutable rc.5 identity; do not move any published tag.
-2. On exact rc.5, run the empty source-cache/network and remaining timeout/fault cases without rewriting rc.4
-   history.
-3. Complete TraeCode login and execute real discovery, the deadline-critical trigger set, Capsule-only/non-bypass
-   and Agent Task Completed against the next immutable candidate. Qoder's larger 12+12 matrix remains hardening.
-4. Execute the named-device Intel performance oracle; do not infer performance from functional health/analyze.
-5. Review and publish the sanitized rc.3/rc.4/rc.5 report bundles, then update public URLs and any later claims from
-   the same evidence identities without copying private diagnostic artifacts.
-6. Use the existing publication authorization after closing login and platform preflight blockers.
+1. Preserve rc.3/rc.4 failure history and all immutable rc.1–rc.6 identities; do not move any published tag.
+2. Complete TraeCode login and execute real discovery, wrapper-first, Capsule-only/non-bypass and Agent Task
+   Completed against exact rc.6. Qoder's larger 12+12 matrix remains hardening.
+3. Enable Chrome extension local-file access, upload the exact rc.6 archive, and stop immediately before the
+   representational `创建` action for action-time confirmation.
+4. Replace the article's TraeCode placeholder with the real screenshot/transcript, publish the Skill and article,
+   then submit the competition entry and save every receipt/URL.
+5. Create a new immutable final tag/release only if post-evidence repository changes require it; never move rc.1–rc.6.
+6. Perform anonymous download and link verification before marking the submission complete.
 
 ## Update rules
 
