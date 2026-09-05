@@ -1,10 +1,34 @@
 # AI Airlock Project Status
 
-> Last reviewed: 2026-08-30 (Asia/Shanghai)
+> Last reviewed: 2026-09-05 (Asia/Shanghai; finals plan added, runtime evidence unchanged)
 >
 > This file is the current project-state entry point. It records what is verified, pending, or blocked.
 > Numerical release claims remain authoritative only in
 > [`docs/claims-ledger.md`](docs/claims-ledger.md).
+
+## 2026 finals — current execution plan
+
+The owner has reported advancement from the preliminary round and approved an upgrade plan targeting first
+prize. The active strategy, task IDs, acceptance criteria and deadlines are now in
+[2026 finals strategy and execution plan](docs/finals-2026-plan.md).
+
+- **Official submission deadline:** September 10, 2026, 24:00; the plan uses Asia/Shanghai.
+  Final Skill, ModelScope article and the embedded real-host Demo video are required.
+- **Immediate unresolved prerequisites:** a usable Intel Core Ultra device, a qualifying productivity-Agent
+  host, and organizer clarification on whether embedding-only local inference satisfies the model requirement.
+- **Planned differentiators:** verified access boundaries, bounded follow-up evidence retrieval, and an
+  evidence-cited incident report. These are planned work, not completed runtime capabilities.
+- **Internal checkpoints:** working flow and feature freeze target September 8; recording and material QA
+  September 9; submission target September 10 at 20:00 to leave a buffer.
+- **Later official dates:** on-site shortlist September 14; conference registration September 15;
+  slides September 18; Suzhou exhibition and presentations September 22–23.
+- The existing September 9 material-check reminder remains in place; the task table is not an automated
+  development or submission schedule.
+
+The records below preserve the preliminary-round and rc.7 evidence state. Their publication TODOs and
+historical next-action ordering are not the current finals schedule and do not prove the owner's entry was
+not submitted. Follow the finals plan for new priorities and confirm current platform state before acting.
+This documentation update changes no runtime code, validation verdict, existing tag or release.
 
 ## Current identities
 
