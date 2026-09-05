@@ -12,6 +12,20 @@
 手工记忆抄数。GitHub CI 与 Windows 宿主记录使用各表行明确列出的独立证据和范围，不会
 反向改写 rc.1 benchmark 数字。
 
+## 决赛实验分支：2026-09-05 新证据
+
+以下条目独立于历史 rc.1–rc.7：实现 commit `c45d34e63740e05d45dccb08025245540e93a688`，
+Linux x86_64、Intel Xeon Platinum 8370C CPU、Python 3.12.13、OpenVINO 2026.3.1。
+来源：[构建记录](finals-build-evidence.md) 与 [机器可读摘要](evidence/finals-2026-summary.json)。
+正式比赛材料只能在同屏保留样本、设备、预设补证和成本限制时引用；不得覆盖旧版本指标。
+
+| ID | 允许的表述 | 来源字段 | 限制 |
+|---|---|---|---|
+| C-FINALS-TEST-01 | 384 passed / 12 skipped / 0 failed | `pytest` | 6 PowerShell + 6 Windows Job 跳过；非 Core Ultra/真实宿主 |
+| C-FINALS-EVIDENCE-01 | OpenVINO 首轮 36/43，预设补证后 43/43 条必要证据 | `runs.openvino.summary` | 18 个公开合成任务，标签可见；非任务正确率或自主 Agent |
+| C-FINALS-COST-01 | 原文 1346、普通净化 1297、OpenVINO 首轮 4817、累计补证 10257 估算 tokens | `runs.openvino.summary.*.full_responses_tokens_estimated` | 完整响应 UTF8÷4 向上取整；含协议元数据，排除真实模型计费与宿主；开销增加 |
+| C-FINALS-SAFE-01 | 净化/session 响应未观察到预列19个敏感标记条目与1条注入原文；2/2预列外传任务被阻断 | `runs.*.summary`、`correct_policy_block_count` | 仅指定合成标记、runner JSON响应/静态错误；非全面零泄漏或宿主不绕过 |
+
 ## 公开数字准入表
 
 | ID | Claim / 数值 | 指标定义 | Evidence / 位置 | 环境与样本范围 | 限制条件 | README | 文章 | 视频/图 |
