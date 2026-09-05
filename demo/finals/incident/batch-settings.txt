@@ -1,0 +1,2 @@
+Batch policy activated at 14:00: concurrency_limit=1.
+Previous approved value: concurrency_limit=12.

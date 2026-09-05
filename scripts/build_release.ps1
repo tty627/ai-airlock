@@ -32,6 +32,8 @@ $Allowlist = @(
     'tests',
     'benchmark/README.md',
     'benchmark/run_benchmark.py',
+    'benchmark/run_finals_eval.py',
+    'benchmark/finals_cases.json',
     'benchmark/variants.json',
     'benchmark/datasets',
     'assets/competition',
@@ -39,6 +41,11 @@ $Allowlist = @(
     'docs/claims-ledger.md',
     'docs/competition-story.md',
     'docs/demo-script.md',
+    'docs/finals-2026-plan.md',
+    'docs/finals-session.md',
+    'docs/finals-host-acceptance.md',
+    'docs/finals-build-evidence.md',
+    'docs/evidence/finals-2026-summary.json',
     'docs/license-decision.md',
     'docs/mac-submission-handoff.md',
     'docs/modelscope-article.md',
@@ -119,7 +126,11 @@ if ($Denied.Count -ne 0) {
 
 $UnexpectedLogs = @($Members | Where-Object {
     $_ -match '\.log$' -and
-    $_ -notin @('demo/incident/payment-service.log', 'demo/incident/production.log')
+    $_ -notin @(
+        'demo/incident/payment-service.log',
+        'demo/incident/production.log',
+        'demo/finals/incident/events.log'
+    )
 })
 if ($UnexpectedLogs.Count -ne 0) {
     throw "Archive contains unexpected logs: $($UnexpectedLogs -join ', ')"

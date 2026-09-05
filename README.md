@@ -180,6 +180,21 @@ TraeCode/Qoder on Windows 的正式设计入口如下。exact rc.7 已安装到 
 warning 时必须停止。TraeCode deadline oracle 见 [TraeCode acceptance](docs/trae-acceptance.md)，完整
 12+12 触发矩阵见 [Qoder acceptance](docs/qoder_acceptance.md)。
 
+## 决赛实验入口：受控补证与引用报告
+
+决赛开发分支新增独立的本地 session 接口：所有者预先读取授权材料，服务建立固定净化案例；
+Agent 通过带凭据的本机客户端获得首轮证据，最多再补证两轮，并校验事故报告的引用。
+这条路径不替代上面的 rc.7 `run.ps1` 单轮合同，当前仍需 Core Ultra、真实生产力宿主与权限隔离验收。
+
+- [启动服务、补证与生成报告](docs/finals-session.md)：包括 owner/Agent 身份关系、CLI、草稿格式和边界。
+- [18 项真实宿主验收](docs/finals-host-acceptance.md)：包含原文读取拒绝、模型推理、最终诊断和调用轨迹。
+- [决赛计划与发布准入](docs/finals-2026-plan.md)：功能冻结、硬件、演示及材料提交依赖。
+
+新增引用检查只验证证据成员关系与已识别的敏感输出，不验证诊断语义正确性。
+session 的累计预算估算新披露响应 JSON，不能冒充完整 Agent token 成本。
+`integrations/airlock-incident-report/SKILL.md` 是可选独立报告 Skill，须单独安装和验证；
+主 Skill 发布包保持只含一个 `SKILL.md`。
+
 ## 安全边界与 limitations
 
 - v0.1 只处理允许列表中的 UTF-8 文本，不支持 PDF/OCR，不跟随 symlink。
