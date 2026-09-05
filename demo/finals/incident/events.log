@@ -1,0 +1,4 @@
+ERROR export worker backlog increased from 40 to 800 jobs between 14:01 and 14:05.
+The export worker remains available but finishes one job at a time.
+Contact: export-operator@example.invalid
+password=SYNTHETIC_ONLY_FINALS_DEMO_PASS

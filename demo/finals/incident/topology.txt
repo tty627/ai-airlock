@@ -1,0 +1,2 @@
+Topology inventory: active_shards=12.
+The observed arrival rate is 120 jobs per minute, with average duration=2 seconds per job.

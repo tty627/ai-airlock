@@ -19,12 +19,23 @@ class _PiiMatch:
     severity: str
 
 
-_EMAIL = re.compile(
-    r"(?<![A-Za-z0-9.!#$%&'*+/=?^_`{|}~-])"
+_EMAIL_ADDRESS = (
     r"[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@"
     r"(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+"
     r"[A-Za-z]{2,63}"
     r"(?![A-Za-z0-9-])"
+)
+_EMAIL = re.compile(r"(?<![A-Za-z0-9.!#$%&'*+/=?^_`{|}~-])" + _EMAIL_ADDRESS)
+
+# '=' and '+' are valid RFC 5322 local-part characters. Do not remove them
+# from the address grammar or split arbitrary addresses on '='. Only these
+# explicit, unquoted log-field names receive assignment interpretation.
+# Bare 'owner=alice@example.invalid' is inherently ambiguous; this boundary
+# treats it as a field. Angle brackets, double-quoted addresses and mailto:
+# preserve the complete address. This is a log heuristic, not an RFC parser.
+_EMAIL_ASSIGNMENT = re.compile(
+    r"(?<![^\s{\[,;])(?i:owner|contact|email|e_mail|email_address|emailaddress)"
+    r"[ \t]*=[ \t]*(?P<quote>['\"]?)(?P<value>" + _EMAIL_ADDRESS + r")(?P=quote)"
 )
 
 _CHINESE_ID = re.compile(
@@ -45,7 +56,21 @@ _IPV4_CANDIDATE = re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])")
 
 
 def _iter_pii_matches(text: str) -> Iterator[_PiiMatch]:
+    assignments = [match.span("value") for match in _EMAIL_ASSIGNMENT.finditer(text)]
+    for start, end in assignments:
+        yield _PiiMatch("EMAIL", start, end, "medium")
+
+    assignment_index = 0
     for match in _EMAIL.finditer(text):
+        # Suppress the broader match that includes a field name. A linear
+        # merge avoids quadratic scanning when a log has many email fields.
+        while (
+            assignment_index < len(assignments)
+            and assignments[assignment_index][1] <= match.start()
+        ):
+            assignment_index += 1
+        if assignment_index < len(assignments) and assignments[assignment_index][0] < match.end():
+            continue
         yield _PiiMatch("EMAIL", *match.span(), "medium")
 
     for match in _CHINESE_ID.finditer(text):
